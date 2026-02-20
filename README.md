@@ -1,10 +1,12 @@
 # schemastore-catalog
 
+[![Update SchemaStore Catalog](https://github.com/lintel-rs/lintel/actions/workflows/schemastore-catalog.yml/badge.svg)](https://github.com/lintel-rs/lintel/actions/workflows/schemastore-catalog.yml)
+
 A mirror of the [SchemaStore](https://www.schemastore.org/) catalog, providing a version-controlled copy of the catalog index and all schema files for use by [lintel](https://github.com/lintel-rs/lintel).
 
 ## How it works
 
-This repo is automatically updated daily by a [CI workflow](https://github.com/lintel-rs/lintel/blob/master/.github/workflows/schemastore-catalog.yml) in the lintel repo that runs `lintel-schemastore-catalog update`. That command:
+This repo is automatically updated daily by the [Update SchemaStore Catalog](https://github.com/lintel-rs/lintel/actions/workflows/schemastore-catalog.yml) workflow in the lintel repo. That workflow runs `lintel-schemastore-catalog update`, which:
 
 1. Fetches the [SchemaStore catalog](https://www.schemastore.org/api/json/catalog.json)
 2. Downloads every referenced schema concurrently
