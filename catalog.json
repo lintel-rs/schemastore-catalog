@@ -578,7 +578,7 @@
         "*asyncapi*.yaml"
       ],
       "name": "AsyncAPI",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/asyncapi.json"
+      "url": "https://www.asyncapi.com/schema-store/all.schema-store.json"
     },
     {
       "description": "A validating AsyncAPI tool files",
@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://json-stat.org/format/schema/2.0/"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -9545,7 +9545,7 @@
         "updatecli-compose.yaml"
       ],
       "name": "Updatecli Compose",
-      "url": "https://www.updatecli.io/schema/latest/compose/config.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-compose.json"
     },
     {
       "description": "Updatecli Policy Manifest",
@@ -9557,7 +9557,7 @@
         "updatecli.yaml"
       ],
       "name": "Updatecli Policy Manifest",
-      "url": "https://www.updatecli.io/schema/latest/policy/manifest/config.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-manifest.json"
     },
     {
       "description": "Updatecli Policy Metadata",
@@ -11246,7 +11246,7 @@
         "**/jj/config.toml"
       ],
       "name": "Jujutsu (jj) VCS config",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/jujutsu-jj-vcs-config.json"
+      "url": "https://jj-vcs.github.io/jj/latest/config-schema.json"
     },
     {
       "description": "Manifest YAML files for AWS Copilot services, environments, and pipelines. Documentation: https://aws.github.io/copilot-cli/docs/manifest/overview/",
