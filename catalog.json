@@ -36,7 +36,7 @@
         "**/.upsun/*.yaml"
       ],
       "name": "Upsun config",
-      "url": "https://meta.upsun.com/schema/upsun"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/upsun-config.json"
     },
     {
       "description": "Platform.sh application configuration file",
@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
+      "url": "https://json-stat.org/format/schema/2.0/"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -9124,7 +9124,7 @@
         "taskrc.yml"
       ],
       "name": ".taskrc.yaml",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/taskrc-yaml.json"
+      "url": "https://taskfile.dev/schema-taskrc.json"
     },
     {
       "description": "hammerkit files",
@@ -9565,7 +9565,7 @@
         "**/updatecli/**/Policy.yaml"
       ],
       "name": "Updatecli Policy Metadata",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-metadata.json"
+      "url": "https://www.updatecli.io/schema/latest/policy/metadata/config.json"
     },
     {
       "description": "GeoJSON format for representing geographic data. Newest version from GeoJSON org",
@@ -9624,7 +9624,7 @@
         "cicstags.yml"
       ],
       "name": "CICS TS region tagging",
-      "url": "https://public.dhe.ibm.com/ibmdl/export/pub/software/htp/cics/schemas/json/cicstags.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cics-ts-region-tagging.json"
     },
     {
       "description": "resource import in IBM CICS Transaction Server for z/OS",
@@ -9633,7 +9633,7 @@
         "*.cicsresourceimport.yml"
       ],
       "name": "CICS TS resource import",
-      "url": "https://public.dhe.ibm.com/ibmdl/export/pub/software/htp/cics/schemas/json/cicsts-resourceimport.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cics-ts-resource-import.json"
     },
     {
       "description": "resource model in IBM CICS Transaction Server for z/OS",
@@ -9644,7 +9644,7 @@
         "*.cicsappconstraints.yml"
       ],
       "name": "CICS TS resource model",
-      "url": "https://public.dhe.ibm.com/ibmdl/export/pub/software/htp/cics/schemas/json/cicsts-resourcemodel.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cics-ts-resource-model.json"
     },
     {
       "description": "resource overrides in IBM CICS Transaction Server for z/OS",
@@ -9655,7 +9655,7 @@
         "*.cicsoverrides.yml"
       ],
       "name": "CICS TS resource overrides",
-      "url": "https://public.dhe.ibm.com/ibmdl/export/pub/software/htp/cics/schemas/json/resourceoverrides.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cics-ts-resource-overrides.json"
     },
     {
       "description": "YAML a webman package",
