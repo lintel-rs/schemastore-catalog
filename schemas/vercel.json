@@ -181,6 +181,16 @@
               "maxLength": 256,
               "type": "string"
             },
+            "regions": {
+              "description": "An array of regions this Serverless Function should be deployed to.",
+              "items": {
+                "maxLength": 256,
+                "type": "string"
+              },
+              "maxItems": 1000,
+              "minItems": 1,
+              "type": "array"
+            },
             "functionFailoverRegions": {
               "description": "An array of passive regions this Serverless Function can fail over to during a lambda outage.",
               "items": {

@@ -36,7 +36,7 @@
         "**/.upsun/*.yaml"
       ],
       "name": "Upsun config",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/upsun-config.json"
+      "url": "https://meta.upsun.com/schema/upsun"
     },
     {
       "description": "Platform.sh application configuration file",
@@ -9124,7 +9124,7 @@
         "taskrc.yml"
       ],
       "name": ".taskrc.yaml",
-      "url": "https://taskfile.dev/schema-taskrc.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/taskrc-yaml.json"
     },
     {
       "description": "hammerkit files",
@@ -9624,7 +9624,7 @@
         "cicstags.yml"
       ],
       "name": "CICS TS region tagging",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cics-ts-region-tagging.json"
+      "url": "https://public.dhe.ibm.com/ibmdl/export/pub/software/htp/cics/schemas/json/cicstags.json"
     },
     {
       "description": "resource import in IBM CICS Transaction Server for z/OS",
@@ -9633,7 +9633,7 @@
         "*.cicsresourceimport.yml"
       ],
       "name": "CICS TS resource import",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cics-ts-resource-import.json"
+      "url": "https://public.dhe.ibm.com/ibmdl/export/pub/software/htp/cics/schemas/json/cicsts-resourceimport.json"
     },
     {
       "description": "resource model in IBM CICS Transaction Server for z/OS",
@@ -9644,7 +9644,7 @@
         "*.cicsappconstraints.yml"
       ],
       "name": "CICS TS resource model",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cics-ts-resource-model.json"
+      "url": "https://public.dhe.ibm.com/ibmdl/export/pub/software/htp/cics/schemas/json/cicsts-resourcemodel.json"
     },
     {
       "description": "resource overrides in IBM CICS Transaction Server for z/OS",
@@ -9655,7 +9655,7 @@
         "*.cicsoverrides.yml"
       ],
       "name": "CICS TS resource overrides",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cics-ts-resource-overrides.json"
+      "url": "https://public.dhe.ibm.com/ibmdl/export/pub/software/htp/cics/schemas/json/resourceoverrides.json"
     },
     {
       "description": "YAML a webman package",
