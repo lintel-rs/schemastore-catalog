@@ -578,7 +578,7 @@
         "*asyncapi*.yaml"
       ],
       "name": "AsyncAPI",
-      "url": "https://www.asyncapi.com/schema-store/all.schema-store.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/asyncapi.json"
     },
     {
       "description": "A validating AsyncAPI tool files",
@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
+      "url": "https://json-stat.org/format/schema/2.0/"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -9565,7 +9565,7 @@
         "**/updatecli/**/Policy.yaml"
       ],
       "name": "Updatecli Policy Metadata",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-metadata.json"
+      "url": "https://www.updatecli.io/schema/latest/policy/metadata/config.json"
     },
     {
       "description": "GeoJSON format for representing geographic data. Newest version from GeoJSON org",
@@ -11246,7 +11246,7 @@
         "**/jj/config.toml"
       ],
       "name": "Jujutsu (jj) VCS config",
-      "url": "https://jj-vcs.github.io/jj/latest/config-schema.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/jujutsu-jj-vcs-config.json"
     },
     {
       "description": "Manifest YAML files for AWS Copilot services, environments, and pipelines. Documentation: https://aws.github.io/copilot-cli/docs/manifest/overview/",
