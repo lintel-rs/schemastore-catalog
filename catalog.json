@@ -2439,7 +2439,7 @@
         "sam.yaml"
       ],
       "name": "AWS CloudFormation Serverless Application Model (SAM)",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/aws-cloudformation-serverless-application-model-sam.json"
+      "url": "https://raw.githubusercontent.com/aws/serverless-application-model/main/samtranslator/schema/schema.json"
     },
     {
       "description": "AWS SAM CLI samconfig configuration file",
@@ -5318,7 +5318,7 @@
         "*.aac.yaml"
       ],
       "name": "Network-as-Code Data Model",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/network-as-code-data-model.json"
+      "url": "https://raw.githubusercontent.com/netascode/schema/main/schema.json"
     },
     {
       "description": "Next Gen UI Agent A2A Server configuration. Documentation: https://redhat-ux.github.io/next-gen-ui-agent/spec/a2a/#agent-configuration",
@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
+      "url": "https://json-stat.org/format/schema/2.0/"
     },
     {
       "description": "The .version file format for KSP-AVC",
