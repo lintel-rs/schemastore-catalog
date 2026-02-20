@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Clawject configuration schema",
+  "additionalItems": false,
+  "additionalProperties": false,
+  "type": "object",
+  "properties": {
+    "unsafeTSVersion": {
+      "type": "boolean",
+      "default": false,
+      "title": "Allows using TypeScript version not officially supported by this version of Clawject.",
+      "examples": [
+        true,
+        false
+      ]
+    },
+    "mode": {
+      "type": "string",
+      "default": "production",
+      "title": "Defines how clawject emit metadata, in development mode for support of watch mode - clawject will emit additional metadata with information about the source file (e.g full file name), in production mode - clawject will not emit \"extra\" metadata.",
+      "examples": [
+        "development",
+        "production"
+      ]
+    },
+    "typeSystem": {
+      "type": "string",
+      "default": "nominal",
+      "title": "Defines which strategy of type comparison should be used. Typescript uses structural comparison by default, clawject uses nominal comparison.",
+      "examples": [
+        "nominal",
+        "structural"
+      ]
+    },
+    "beans": {
+      "type": "object",
+      "properties": {
+        "defaultExternal": {
+          "type": "boolean",
+          "default": true,
+          "title": "Defines whether beans should be considered external by default in all configuration and application classes.",
+          "examples": [
+            true,
+            false
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "imports": {
+      "type": "object",
+      "properties": {
+        "defaultExternal": {
+          "type": "boolean",
+          "default": true,
+          "title": "Defines whether import of configuration should be considered external by default in all configuration and application classes.",
+          "examples": [
+            true,
+            false
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "logLevel": {
+      "type": "string",
+      "default": "none",
+      "title": "Defines the level of logging.",
+      "examples": [
+        "error",
+        "warn",
+        "info",
+        "debug",
+        "verbose",
+        "none"
+      ]
+    }
+  }
+}

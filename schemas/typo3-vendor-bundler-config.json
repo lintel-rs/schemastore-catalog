@@ -1,0 +1,129 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"type": "object",
+	"title": "TYPO3 Vendor Bundler config file schema",
+	"properties": {
+		"autoload": {
+			"$ref": "#/definitions/autoload"
+		},
+		"dependencies": {
+			"$ref": "#/definitions/dependencies"
+		},
+		"dependencyExtraction": {
+			"$ref": "#/definitions/dependencyExtraction"
+		},
+		"pathToVendorLibraries": {
+			"type": "string",
+			"title": "Absolute or relative path to composer.json where vendor libraries are managed",
+			"default": "Resources/Private/Libs"
+		},
+		"rootPath": {
+			"type": "string",
+			"title": "Relative or absolute path to project root",
+			"description": "This path will be used to calculate paths to configured files if they are configured as relative paths. If the root path is configured as relative path, it is calculated based on the config file path."
+		}
+	},
+	"additionalProperties": false,
+	"definitions": {
+		"autoload": {
+			"type": "object",
+			"title": "Set of options used to bundle autoload configuration",
+			"properties": {
+				"enabled": {
+					"type": "boolean",
+					"title": "Define whether autoload bundling is enabled",
+					"description": "When enabled, the autoload bundler will be included when executing `composer bundle`.",
+					"default": true
+				},
+				"backup": {
+					"type": "boolean",
+					"title": "Define whether to backup source files",
+					"description": "When enabled, original contents of the root composer.json file will be backed up in a separate file",
+					"default": false
+				},
+				"excludeFromClassMap": {
+					"type": "array",
+					"title": "List of files to exclude from vendor libraries class map",
+					"description": "Absolute or relative paths to files to remove from parsed vendor libraries class map",
+					"items": {
+						"type": "string",
+						"minLength": 1
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"dependencies": {
+			"type": "object",
+			"title": "Set of options used to bundle dependency information",
+			"properties": {
+				"enabled": {
+					"type": "boolean",
+					"title": "Define whether dependency bundling is enabled",
+					"description": "When enabled, the dependency bundler will be included when executing `composer bundle`.",
+					"default": true
+				},
+				"sbom": {
+					"$ref": "#/definitions/sbom"
+				},
+				"backup": {
+					"type": "boolean",
+					"title": "Define whether to backup source files",
+					"description": "When enabled, original contents of the root composer.json file will be backed up in a separate file",
+					"default": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"sbom": {
+			"type": "object",
+			"title": "Set of options used to define SBOM file generation",
+			"properties": {
+				"file": {
+					"type": "string",
+					"title": "File where to write the serialized SBOM",
+					"description": "Can be a JSON or XML file. Relative paths are resolved based on the vendor libraries path.",
+					"default": "sbom.json"
+				},
+				"version": {
+					"default": "1.7",
+					"type": "string",
+					"title": "CycloneDX BOM version to use",
+					"description": "All BOM versions supported by CycloneDX can be used."
+				},
+				"includeDev": {
+					"type": "boolean",
+					"title": "Define whether to include dev dependencies in the serialized SBOM",
+					"description": "When enabled, all dev dependencies will be included in the generated SBOM. Otherwise, only production dependencies will be included.",
+					"default": true
+				},
+				"overwrite": {
+					"type": "boolean",
+					"title": "Define whether to overwrite the SBOM file, if it already exists",
+					"description": "When enabled, the configured SBOM file will be overwritten with serialized SBOM, if the file already exists.",
+					"default": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"dependencyExtraction": {
+			"type": "object",
+			"title": "Set of options used to configure automatic dependency extraction of vendor libraries from root composer.json",
+			"properties": {
+				"enabled": {
+					"type": "boolean",
+					"title": "Define whether automatic dependency extraction is enabled",
+					"description": "When enabled, vendor libraries will be extracted from root composer.json, if no separate composer.json for vendor libraries exists already.",
+					"default": true
+				},
+				"failOnProblems": {
+					"type": "boolean",
+					"title": "Define whether extraction should fail if problems are encountered",
+					"description": "When enabled, extraction will fail if problems are encountered during extraction, e.g. if packages cannot be resolved.",
+					"default": true
+				}
+			},
+			"additionalProperties": false
+		}
+	}
+}

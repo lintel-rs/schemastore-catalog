@@ -1,0 +1,380 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Snippets Imports",
+  "$id": "https://github.com/cloudcannon/configuration-types/releases/latest/download/cloudcannon-snippets-imports.schema.json",
+  "allOf": [
+    {
+      "$ref": "#/definitions/type._snippets_imports"
+    }
+  ],
+  "definitions": {
+    "type._snippets_imports": {
+      "title": "Snippets Imports",
+      "type": "object",
+      "properties": {
+        "hugo": {
+          "$ref": "#/definitions/_snippets_imports.hugo"
+        },
+        "jekyll": {
+          "$ref": "#/definitions/_snippets_imports.jekyll"
+        },
+        "mdx": {
+          "$ref": "#/definitions/_snippets_imports.mdx"
+        },
+        "eleventy_liquid": {
+          "$ref": "#/definitions/_snippets_imports.eleventy_liquid"
+        },
+        "eleventy_nunjucks": {
+          "$ref": "#/definitions/_snippets_imports.eleventy_nunjucks"
+        },
+        "markdoc": {
+          "$ref": "#/definitions/_snippets_imports.markdoc"
+        },
+        "python_markdown_extensions": {
+          "$ref": "#/definitions/_snippets_imports.python_markdown_extensions"
+        },
+        "docusaurus_mdx": {
+          "$ref": "#/definitions/_snippets_imports.docusaurus_mdx"
+        }
+      },
+      "additionalProperties": false,
+      "documented": true,
+      "description": "This key defines snippet templates or libraries for your Site.\n\nSome libraries are SSG specific while others work for most SSGs.\n\nFor more information, please read our documentation on [Docusaurus Components](https://cloudcannon.com/documentation/articles/snippets-using-docusaurus-components/),\n[Eleventy Shortcodes](https://cloudcannon.com/documentation/articles/snippets-using-eleventy-shortcodes/), [Hugo Shortcodes](https://cloudcannon.com/documentation/articles/snippets-using-hugo-shortcodes/), [MDX Components](https://cloudcannon.com/documentation/articles/snippets-using-mdx-components/), or [Python Markdown](https://cloudcannon.com/documentation/articles/snippets-using-python-markdown/).\n\n## Examples\n\nIn this example, we have configured Hugo shortcode imports for the Site.\n\n```yaml\n_snippets_imports:\n  hugo:\n    include:\n      - figure\n      - youtube\n```",
+      "markdownDescription": "This key defines snippet templates or libraries for your Site.\n\nSome libraries are SSG specific while others work for most SSGs.\n\nFor more information, please read our documentation on [Docusaurus Components](https://cloudcannon.com/documentation/articles/snippets-using-docusaurus-components/),\n[Eleventy Shortcodes](https://cloudcannon.com/documentation/articles/snippets-using-eleventy-shortcodes/), [Hugo Shortcodes](https://cloudcannon.com/documentation/articles/snippets-using-hugo-shortcodes/), [MDX Components](https://cloudcannon.com/documentation/articles/snippets-using-mdx-components/), or [Python Markdown](https://cloudcannon.com/documentation/articles/snippets-using-python-markdown/).\n\n## Examples\n\nIn this example, we have configured Hugo shortcode imports for the Site.\n\n```yaml\n_snippets_imports:\n  hugo:\n    include:\n      - figure\n      - youtube\n```"
+    },
+    "_snippets_imports.hugo": {
+      "uniqueItems": true,
+      "anyOf": [
+        {
+          "$ref": "#/definitions/type._snippets_imports.*.(full-import)"
+        },
+        {
+          "title": "Snippets Imports Exclude List",
+          "type": "object",
+          "properties": {
+            "exclude": {
+              "$ref": "#/definitions/SnippetImportExclude"
+            }
+          },
+          "required": [
+            "exclude"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        },
+        {
+          "title": "Snippets Imports Include List",
+          "type": "object",
+          "properties": {
+            "include": {
+              "$ref": "#/definitions/SnippetImportInclude"
+            }
+          },
+          "required": [
+            "include"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        }
+      ],
+      "documented": true,
+      "title": "hugo"
+    },
+    "type._snippets_imports.*.(full-import)": {
+      "title": "Snippets Imports Full Import",
+      "type": "boolean",
+      "documented": true
+    },
+    "SnippetImportExclude": {
+      "description": "This key defines the list of excluded snippets.\n\nIf unset, all snippets are excluded unless defined in `include`.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "documented": true,
+        "title": "exclude[*]"
+      },
+      "documented": true,
+      "title": "exclude",
+      "markdownDescription": "This key defines the list of excluded snippets.\n\nIf unset, all snippets are excluded unless defined in `include`."
+    },
+    "SnippetImportInclude": {
+      "description": "This key defines the list of included snippets.\n\nIf unset, all snippets are included unless defined in `exclude`.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "documented": true,
+        "title": "include[*]"
+      },
+      "documented": true,
+      "title": "include",
+      "markdownDescription": "This key defines the list of included snippets.\n\nIf unset, all snippets are included unless defined in `exclude`."
+    },
+    "_snippets_imports.jekyll": {
+      "uniqueItems": true,
+      "anyOf": [
+        {
+          "$ref": "#/definitions/type._snippets_imports.*.(full-import)"
+        },
+        {
+          "title": "Snippets Imports Exclude List",
+          "type": "object",
+          "properties": {
+            "exclude": {
+              "$ref": "#/definitions/SnippetImportExclude"
+            }
+          },
+          "required": [
+            "exclude"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        },
+        {
+          "title": "Snippets Imports Include List",
+          "type": "object",
+          "properties": {
+            "include": {
+              "$ref": "#/definitions/SnippetImportInclude"
+            }
+          },
+          "required": [
+            "include"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        }
+      ],
+      "documented": true,
+      "title": "jekyll"
+    },
+    "_snippets_imports.mdx": {
+      "uniqueItems": true,
+      "anyOf": [
+        {
+          "$ref": "#/definitions/type._snippets_imports.*.(full-import)"
+        },
+        {
+          "title": "Snippets Imports Exclude List",
+          "type": "object",
+          "properties": {
+            "exclude": {
+              "$ref": "#/definitions/SnippetImportExclude"
+            }
+          },
+          "required": [
+            "exclude"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        },
+        {
+          "title": "Snippets Imports Include List",
+          "type": "object",
+          "properties": {
+            "include": {
+              "$ref": "#/definitions/SnippetImportInclude"
+            }
+          },
+          "required": [
+            "include"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        }
+      ],
+      "documented": true,
+      "title": "mdx"
+    },
+    "_snippets_imports.eleventy_liquid": {
+      "uniqueItems": true,
+      "anyOf": [
+        {
+          "$ref": "#/definitions/type._snippets_imports.*.(full-import)"
+        },
+        {
+          "title": "Snippets Imports Exclude List",
+          "type": "object",
+          "properties": {
+            "exclude": {
+              "$ref": "#/definitions/SnippetImportExclude"
+            }
+          },
+          "required": [
+            "exclude"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        },
+        {
+          "title": "Snippets Imports Include List",
+          "type": "object",
+          "properties": {
+            "include": {
+              "$ref": "#/definitions/SnippetImportInclude"
+            }
+          },
+          "required": [
+            "include"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        }
+      ],
+      "documented": true,
+      "title": "eleventy_liquid"
+    },
+    "_snippets_imports.eleventy_nunjucks": {
+      "uniqueItems": true,
+      "anyOf": [
+        {
+          "$ref": "#/definitions/type._snippets_imports.*.(full-import)"
+        },
+        {
+          "title": "Snippets Imports Exclude List",
+          "type": "object",
+          "properties": {
+            "exclude": {
+              "$ref": "#/definitions/SnippetImportExclude"
+            }
+          },
+          "required": [
+            "exclude"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        },
+        {
+          "title": "Snippets Imports Include List",
+          "type": "object",
+          "properties": {
+            "include": {
+              "$ref": "#/definitions/SnippetImportInclude"
+            }
+          },
+          "required": [
+            "include"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        }
+      ],
+      "documented": true,
+      "title": "eleventy_nunjucks"
+    },
+    "_snippets_imports.markdoc": {
+      "uniqueItems": true,
+      "anyOf": [
+        {
+          "$ref": "#/definitions/type._snippets_imports.*.(full-import)"
+        },
+        {
+          "title": "Snippets Imports Exclude List",
+          "type": "object",
+          "properties": {
+            "exclude": {
+              "$ref": "#/definitions/SnippetImportExclude"
+            }
+          },
+          "required": [
+            "exclude"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        },
+        {
+          "title": "Snippets Imports Include List",
+          "type": "object",
+          "properties": {
+            "include": {
+              "$ref": "#/definitions/SnippetImportInclude"
+            }
+          },
+          "required": [
+            "include"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        }
+      ],
+      "documented": true,
+      "title": "markdoc"
+    },
+    "_snippets_imports.python_markdown_extensions": {
+      "uniqueItems": true,
+      "anyOf": [
+        {
+          "$ref": "#/definitions/type._snippets_imports.*.(full-import)"
+        },
+        {
+          "title": "Snippets Imports Exclude List",
+          "type": "object",
+          "properties": {
+            "exclude": {
+              "$ref": "#/definitions/SnippetImportExclude"
+            }
+          },
+          "required": [
+            "exclude"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        },
+        {
+          "title": "Snippets Imports Include List",
+          "type": "object",
+          "properties": {
+            "include": {
+              "$ref": "#/definitions/SnippetImportInclude"
+            }
+          },
+          "required": [
+            "include"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        }
+      ],
+      "documented": true,
+      "title": "python_markdown_extensions"
+    },
+    "_snippets_imports.docusaurus_mdx": {
+      "uniqueItems": true,
+      "anyOf": [
+        {
+          "$ref": "#/definitions/type._snippets_imports.*.(full-import)"
+        },
+        {
+          "title": "Snippets Imports Exclude List",
+          "type": "object",
+          "properties": {
+            "exclude": {
+              "$ref": "#/definitions/SnippetImportExclude"
+            }
+          },
+          "required": [
+            "exclude"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        },
+        {
+          "title": "Snippets Imports Include List",
+          "type": "object",
+          "properties": {
+            "include": {
+              "$ref": "#/definitions/SnippetImportInclude"
+            }
+          },
+          "required": [
+            "include"
+          ],
+          "additionalProperties": false,
+          "documented": true
+        }
+      ],
+      "documented": true,
+      "title": "docusaurus_mdx"
+    }
+  },
+  "documented": false
+}

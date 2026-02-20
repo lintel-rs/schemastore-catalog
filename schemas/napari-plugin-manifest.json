@@ -1,0 +1,3066 @@
+{
+  "$defs": {
+    "Category": {
+      "description": "Broad plugin categories, values for PluginManifest.categories.",
+      "enum": [
+        "Acquisition",
+        "Annotation",
+        "Dataset",
+        "Image Processing",
+        "IO",
+        "Measurement",
+        "Registration",
+        "Segmentation",
+        "Simulation",
+        "Themes",
+        "Transformations",
+        "Utilities",
+        "Visualization"
+      ],
+      "title": "Category",
+      "type": "string"
+    },
+    "CommandContribution": {
+      "additionalProperties": false,
+      "description": "Contribute a **command** (a python callable) consisting of a unique `id`,\na `title` and (optionally) a `python_path` that points to a fully qualified python\ncallable.  If a `python_path` is not included in the manifest, it *must* be\nregistered during activation with `register_command`.\n\nNote, some other contributions (e.g. `readers`, `writers` and `widgets`) will\n*point* to a specific command.  The command itself (i.e. the callable python\nobject) will always appear in the `contributions.commands` section, but those\ncontribution types may add additional contribution-specific metadata.\n\n```{admonition} Future Plans\nCommand contributions will eventually include an **icon**, **category**, and\n**enabled** state. Enablement is expressed with *when clauses*, that capture a\nconditional expression determining whether the command should be enabled or not,\nbased on the current state of the program.  (i.e. \"*If the active layer is a\n`Labels` layer*\")\n\nCommands will eventually be availble in a Command Palette (accessible with a\nhotkey) but they can also show in other menus.\n```",
+      "properties": {
+        "id": {
+          "description": "A unique identifier used to reference this command. While this may look like a python fully qualified name this does *not* refer to a python object; this identifier is specific to napari.  It must begin with the name of the package, and include only alphanumeric characters, plus dashes and underscores.",
+          "title": "Id",
+          "type": "string"
+        },
+        "title": {
+          "description": "User facing title representing the command. This might be used, for example, when searching in a command palette. Examples: 'Generate lily sample', 'Read tiff image', 'Open gaussian blur widget'. ",
+          "title": "Title",
+          "type": "string"
+        },
+        "python_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Fully qualified name to a callable python object implementing this command. This usually takes the form of `{obj.__module__}:{obj.__qualname__}` (e.g. `my_package.a_module:some_function`)",
+          "title": "Python Name"
+        },
+        "short_title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Short title by which the command is represented in the UI. Menus pick either `title` or `short_title` depending on the context in which they show commands.",
+          "title": "Short Title"
+        },
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Category string by which the command may be grouped in the UI.",
+          "title": "Category"
+        },
+        "icon": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/Icon"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Icon used to represent this command in the UI, on buttons or in menus. These may be [superqt](https://github.com/napari/superqt) fonticon keys, such as `'fa6s.arrow_down'`; though note that plugins are expected to depend on any fonticon libraries they use, e.g [fonticon-fontawesome6](https://github.com/tlambert03/fonticon-fontawesome6).",
+          "title": "Icon"
+        },
+        "enablement": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Expression which must evaluate as true to enable the command in the UI (menu and keybindings). Does not prevent executing the command by other means, like the `execute_command` api.",
+          "title": "Enablement"
+        }
+      },
+      "required": [
+        "id",
+        "title"
+      ],
+      "title": "CommandContribution",
+      "type": "object"
+    },
+    "ConfigurationContribution": {
+      "description": "A configuration contribution for a plugin.\n\nThis enables plugins to provide a schema for their configurables.\nConfiguration contributions are used to generate the settings UI.",
+      "properties": {
+        "title": {
+          "description": "The heading used for this configuration category. Words like \"Plugin\", \"Configuration\", and \"Settings\" are redundant and should not beused in your title.",
+          "title": "Title",
+          "type": "string"
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/ConfigurationProperty"
+          },
+          "description": "Configuration properties. In the settings UI, your configuration key will be used to namespace and construct a title. Though a plugin can contain multiple categories of settings, each plugin setting must still have its own unique key. Capital letters in your key are used to indicate word breaks. For example, if your key is 'gitMagic.blame.dateFormat', the generated title for the setting will look like 'Blame: Date Format'",
+          "title": "Properties"
+        }
+      },
+      "required": [
+        "title",
+        "properties"
+      ],
+      "title": "ConfigurationContribution",
+      "type": "object"
+    },
+    "ConfigurationProperty": {
+      "description": "Configuration for a single property in the plugin settings.\n\nThis is a super-set of the JSON Schema (draft 7) specification.\nhttps://json-schema.org/understanding-json-schema/reference/index.html",
+      "properties": {
+        "$schema": {
+          "default": "http://json-schema.org/draft-07/schema#",
+          "title": "$Schema",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Your `description` appears after the title and before the input field, except for booleans, where the description is used as the label for the checkbox. See also `markdown_description`.",
+          "title": "Description"
+        },
+        "default": {
+          "default": null,
+          "description": "The default value for this property.",
+          "title": "Default"
+        },
+        "multiple_of": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Multiple Of"
+        },
+        "maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum"
+        },
+        "max_length": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Length"
+        },
+        "min_length": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0,
+          "title": "Min Length"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern"
+        },
+        "max_items": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Items"
+        },
+        "min_items": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0,
+          "title": "Min Items"
+        },
+        "unique_items": {
+          "default": false,
+          "title": "Unique Items",
+          "type": "boolean"
+        },
+        "max_properties": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Properties"
+        },
+        "min_properties": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0,
+          "title": "Min Properties"
+        },
+        "enum": {
+          "anyOf": [
+            {
+              "items": {},
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A list of valid options for this field. If you provide this field,the settings UI will render a dropdown menu.",
+          "title": "Enum"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "array",
+                "boolean",
+                "integer",
+                "null",
+                "number",
+                "object",
+                "string"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "array",
+                  "boolean",
+                  "integer",
+                  "null",
+                  "number",
+                  "object",
+                  "string"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          ],
+          "default": null,
+          "description": "The type of this variable. Either JSON Schema type names ('array', 'boolean', 'object', ...) or python type names ('list', 'bool', 'dict', ...) may be used, but they will be coerced to JSON Schema types. Numbers, strings, and booleans will be editable in the UI, other types (lists, dicts) *may* be editable in the UI depending on their content, but maby will only be editable as text in the napari settings file. For boolean entries, the description (or markdownDescription) will be used as the label for the checkbox.",
+          "title": "Type"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        },
+        "$id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "$Id"
+        },
+        "examples": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Examples"
+        },
+        "exclusive_maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusive Maximum"
+        },
+        "exclusive_minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusive Minimum"
+        },
+        "contains": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft06JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "required": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Required"
+        },
+        "dependencies": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/Draft06JsonSchema"
+                  },
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dependencies"
+        },
+        "property_names": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft06JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "const": {
+          "default": null,
+          "title": "Const"
+        },
+        "$comment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "$Comment"
+        },
+        "read_only": {
+          "default": false,
+          "title": "Read Only",
+          "type": "boolean"
+        },
+        "write_only": {
+          "default": false,
+          "title": "Write Only",
+          "type": "boolean"
+        },
+        "content_media_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Media Type"
+        },
+        "content_encoding": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Encoding"
+        },
+        "if": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "then": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "else": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "additional_items": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Additional Items"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "items": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Items"
+        },
+        "additional_properties": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Additional Properties"
+        },
+        "properties": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Properties"
+        },
+        "pattern_properties": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern Properties"
+        },
+        "all_of": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "All Of"
+        },
+        "any_of": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Any Of"
+        },
+        "one_of": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "One Of"
+        },
+        "not": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "description_format": {
+          "default": "markdown",
+          "description": "By default (`markdown`) your `description`, will be parsed as CommonMark (with `markdown_it`) and rendered as rich text. To render as plain text, set this value to `plain`.",
+          "enum": [
+            "markdown",
+            "plain"
+          ],
+          "title": "Description Format",
+          "type": "string"
+        },
+        "enum_descriptions": {
+          "description": "If you provide a list of items under the `enum` field, you may provide `enum_descriptions` to add descriptive text for each enum.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Enum Descriptions",
+          "type": "array"
+        },
+        "enum_descriptions_format": {
+          "default": "markdown",
+          "description": "By default (`markdown`) your `enum_description`s, will be parsed as CommonMark (with `markdown_it`) and rendered as rich text. To render as plain text, set this value to `plain`.",
+          "enum": [
+            "markdown",
+            "plain"
+          ],
+          "title": "Enum Descriptions Format",
+          "type": "string"
+        },
+        "deprecation_message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "If you set deprecationMessage, the setting will get a warning underline with your specified message. It won't show up in the settings UI unless it is configured by the user.",
+          "title": "Deprecation Message"
+        },
+        "deprecation_message_format": {
+          "default": "markdown",
+          "description": "By default (`markdown`) your `deprecation_message`, will be parsed as CommonMark (with `markdown_it`) and rendered as rich text. To render as plain text, set this value to `plain`.",
+          "enum": [
+            "markdown",
+            "plain"
+          ],
+          "title": "Deprecation Message Format",
+          "type": "string"
+        },
+        "edit_presentation": {
+          "default": "singleline",
+          "description": "By default, string settings will be rendered with a single-line editor. To render with a multi-line editor, set this value to `multiline`.",
+          "enum": [
+            "singleline",
+            "multiline"
+          ],
+          "title": "Edit Presentation",
+          "type": "string"
+        },
+        "order": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "When specified, gives the order of this setting relative to other settings within the same category. Settings with an order property will be placed before settings without this property set; and settings without `order` will be placed in alphabetical order.",
+          "title": "Order"
+        },
+        "pattern_error_message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "When restricting string types to a given regular expression with the `pattern` field, this field may be used to provide a custom error when the pattern does not match.",
+          "title": "Pattern Error Message"
+        }
+      },
+      "title": "ConfigurationProperty",
+      "type": "object"
+    },
+    "ContributionPoints": {
+      "properties": {
+        "commands": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/CommandContribution"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Commands"
+        },
+        "readers": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ReaderContribution"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Readers"
+        },
+        "writers": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/WriterContribution"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Writers"
+        },
+        "widgets": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/WidgetContribution"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Widgets"
+        },
+        "sample_data": {
+          "anyOf": [
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/SampleDataGenerator"
+                  },
+                  {
+                    "$ref": "#/$defs/SampleDataURI"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sample Data"
+        },
+        "themes": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/ThemeContribution"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Themes"
+        },
+        "menus": {
+          "additionalProperties": {
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/MenuCommand"
+                },
+                {
+                  "$ref": "#/$defs/Submenu"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "description": "Add menu items to existing napari menus.A menu item can be a command, such as open a widget, or a submenu.Using menu items, nested hierarchies can be created within napari menus.This allows you to organize your plugin's contributions withinnapari's menu structure.",
+          "title": "Menus",
+          "type": "object"
+        },
+        "submenus": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/SubmenuContribution"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Submenus"
+        },
+        "keybindings": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/KeyBindingContribution"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "hide_docs": true,
+          "title": "Keybindings"
+        },
+        "configuration": {
+          "description": "Configuration options for this plugin.This section can either be a single object, representing a single category ofsettings, or an array of objects, representing multiple categories ofsettings. If there are multiple categories of settings, the Settings editorwill show a submenu in the table of contents for that extension, and the titlekeys will be used for the submenu entry names.",
+          "hide_docs": true,
+          "items": {
+            "$ref": "#/$defs/ConfigurationContribution"
+          },
+          "title": "Configuration",
+          "type": "array"
+        }
+      },
+      "title": "ContributionPoints",
+      "type": "object"
+    },
+    "Draft06JsonSchema": {
+      "description": "Model for Draft 6 JSON Schema.",
+      "properties": {
+        "$schema": {
+          "default": "http://json-schema.org/draft-06/schema#",
+          "title": "$Schema",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "default": {
+          "default": null,
+          "title": "Default"
+        },
+        "multiple_of": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Multiple Of"
+        },
+        "maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum"
+        },
+        "max_length": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Length"
+        },
+        "min_length": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0,
+          "title": "Min Length"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern"
+        },
+        "max_items": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Items"
+        },
+        "min_items": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0,
+          "title": "Min Items"
+        },
+        "unique_items": {
+          "default": false,
+          "title": "Unique Items",
+          "type": "boolean"
+        },
+        "max_properties": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Properties"
+        },
+        "min_properties": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0,
+          "title": "Min Properties"
+        },
+        "enum": {
+          "anyOf": [
+            {
+              "items": {},
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Enum"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "array",
+                "boolean",
+                "integer",
+                "null",
+                "number",
+                "object",
+                "string"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "array",
+                  "boolean",
+                  "integer",
+                  "null",
+                  "number",
+                  "object",
+                  "string"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          ],
+          "default": null,
+          "title": "Type"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        },
+        "$id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "$Id"
+        },
+        "examples": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Examples"
+        },
+        "exclusive_maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusive Maximum"
+        },
+        "exclusive_minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusive Minimum"
+        },
+        "contains": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft06JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "required": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Required"
+        },
+        "dependencies": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/Draft06JsonSchema"
+                  },
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dependencies"
+        },
+        "property_names": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft06JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "const": {
+          "default": null,
+          "title": "Const"
+        },
+        "additional_items": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/$defs/Draft06JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Additional Items"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft06JsonSchema"
+            },
+            {
+              "items": {
+                "$ref": "#/$defs/Draft06JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Items"
+        },
+        "additional_properties": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/$defs/Draft06JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Additional Properties"
+        },
+        "properties": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/Draft06JsonSchema"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Properties"
+        },
+        "pattern_properties": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/Draft06JsonSchema"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern Properties"
+        },
+        "all_of": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Draft06JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "All Of"
+        },
+        "any_of": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Draft06JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Any Of"
+        },
+        "one_of": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Draft06JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "One Of"
+        },
+        "not": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft06JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Draft06JsonSchema",
+      "type": "object"
+    },
+    "Draft07JsonSchema": {
+      "description": "Model for Draft 7 JSON Schema.",
+      "properties": {
+        "$schema": {
+          "default": "http://json-schema.org/draft-07/schema#",
+          "title": "$Schema",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Description"
+        },
+        "default": {
+          "default": null,
+          "title": "Default"
+        },
+        "multiple_of": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Multiple Of"
+        },
+        "maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum"
+        },
+        "minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum"
+        },
+        "max_length": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Length"
+        },
+        "min_length": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0,
+          "title": "Min Length"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern"
+        },
+        "max_items": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Items"
+        },
+        "min_items": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0,
+          "title": "Min Items"
+        },
+        "unique_items": {
+          "default": false,
+          "title": "Unique Items",
+          "type": "boolean"
+        },
+        "max_properties": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Properties"
+        },
+        "min_properties": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": 0,
+          "title": "Min Properties"
+        },
+        "enum": {
+          "anyOf": [
+            {
+              "items": {},
+              "minItems": 1,
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Enum"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "array",
+                "boolean",
+                "integer",
+                "null",
+                "number",
+                "object",
+                "string"
+              ],
+              "type": "string"
+            },
+            {
+              "items": {
+                "enum": [
+                  "array",
+                  "boolean",
+                  "integer",
+                  "null",
+                  "number",
+                  "object",
+                  "string"
+                ],
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            }
+          ],
+          "default": null,
+          "title": "Type"
+        },
+        "format": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format"
+        },
+        "$id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "$Id"
+        },
+        "examples": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Examples"
+        },
+        "exclusive_maximum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusive Maximum"
+        },
+        "exclusive_minimum": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusive Minimum"
+        },
+        "contains": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft06JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "required": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Required"
+        },
+        "dependencies": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/Draft06JsonSchema"
+                  },
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dependencies"
+        },
+        "property_names": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft06JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "const": {
+          "default": null,
+          "title": "Const"
+        },
+        "$comment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "$Comment"
+        },
+        "read_only": {
+          "default": false,
+          "title": "Read Only",
+          "type": "boolean"
+        },
+        "write_only": {
+          "default": false,
+          "title": "Write Only",
+          "type": "boolean"
+        },
+        "content_media_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Media Type"
+        },
+        "content_encoding": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Encoding"
+        },
+        "if": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "then": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "else": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "additional_items": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Additional Items"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "items": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Items"
+        },
+        "additional_properties": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Additional Properties"
+        },
+        "properties": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Properties"
+        },
+        "pattern_properties": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern Properties"
+        },
+        "all_of": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "All Of"
+        },
+        "any_of": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Any Of"
+        },
+        "one_of": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Draft07JsonSchema"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "One Of"
+        },
+        "not": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Draft07JsonSchema"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Draft07JsonSchema",
+      "type": "object"
+    },
+    "Icon": {
+      "properties": {
+        "light": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Light"
+        },
+        "dark": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Dark"
+        }
+      },
+      "title": "Icon",
+      "type": "object"
+    },
+    "KeyBindingContribution": {
+      "properties": {
+        "command": {
+          "description": "Identifier of the command to run when keybinding is triggered.",
+          "title": "Command",
+          "type": "string"
+        },
+        "key": {
+          "description": "Key or key sequence (separate simultaneous key presses with a plus-sign e.g. Ctrl+O and sequences with a space e.g. Ctrl+L L for a chord).",
+          "title": "Key",
+          "type": "string"
+        },
+        "mac": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Mac specific key or key sequence.",
+          "title": "Mac"
+        },
+        "linux": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Linux specific key or key sequence.",
+          "title": "Linux"
+        },
+        "win": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Windows specific key or key sequence.",
+          "title": "Win"
+        },
+        "when": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "Condition when the key is active.",
+          "title": "When"
+        }
+      },
+      "required": [
+        "command",
+        "key",
+        "mac",
+        "linux",
+        "win",
+        "when"
+      ],
+      "title": "KeyBindingContribution",
+      "type": "object"
+    },
+    "MenuCommand": {
+      "description": "Contributes a command in a menu.",
+      "properties": {
+        "command": {
+          "description": "Identifier of the command to execute. The command must be declared in the 'commands' section",
+          "title": "Command",
+          "type": "string"
+        },
+        "when": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Condition which must be true to *show* this item in the menu. Note that ``when`` clauses apply to menus and ``enablement`` clauses to commands. The ``enablement`` applies to all menus and even keybindings while the ``when`` only applies to a single menu.",
+          "title": "When"
+        },
+        "group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The `group` property defines sorting and grouping of menu items. The `'navigation'` group is special: it will always be sorted to the top/beginning of a menu. By default, the order *inside* a group depends on the `title`. The group-local order of a menu item can be specified by appending @<int> to the group identifier: e.g. `group: 'myGroup@2'`.",
+          "title": "Group"
+        },
+        "alt": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Identifier of an alternative command to execute. It will be shown and invoked when pressing Alt while opening a menu.The command must be declared in the 'commands' section",
+          "title": "Alt"
+        }
+      },
+      "required": [
+        "command"
+      ],
+      "title": "MenuCommand",
+      "type": "object"
+    },
+    "PackageMetadata": {
+      "description": "Pydantic model for standard python package metadata.\n\nhttps://www.python.org/dev/peps/pep-0566/\nhttps://packaging.python.org/pattern/core-metadata/\n\nThe `importlib.metadata` provides the `metadata()` function,\nbut it returns a somewhat awkward `email.message.Message` object.",
+      "properties": {
+        "metadata_version": {
+          "anyOf": [
+            {
+              "enum": [
+                "1.0",
+                "1.1",
+                "1.2",
+                "2.0",
+                "2.1",
+                "2.2",
+                "2.3"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "default": "1.0",
+          "description": "Version of the file format",
+          "title": "Metadata Version"
+        },
+        "name": {
+          "description": "The name of the distribution. The name field is the primary identifier for a distribution.",
+          "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]$",
+          "title": "Name",
+          "type": "string"
+        },
+        "version": {
+          "description": "A string containing the distribution's version number. This field must be in the format specified in PEP 440.",
+          "title": "Version",
+          "type": "string"
+        },
+        "dynamic": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A string containing the name of another core metadata field. The field names Name and Version may not be specified in this field.",
+          "min_ver": "2.2",
+          "title": "Dynamic"
+        },
+        "platform": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A Platform specification describing an operating system supported by the distribution which is not listed in the \u201cOperating System\u201d Trove classifiers. See \u201cClassifier\u201d below.",
+          "title": "Platform"
+        },
+        "supported_platform": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Binary distributions containing a PKG-INFO file will use the Supported-Platform field in their metadata to specify the OS and CPU for which the binary distribution was compiled",
+          "min_ver": "1.1",
+          "title": "Supported Platform"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A one-line summary of what the distribution does.",
+          "title": "Summary"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A longer description of the distribution that can run to several paragraphs.",
+          "title": "Description"
+        },
+        "description_content_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A string stating the markup syntax (if any) used in the distribution's description, so that tools can intelligently render the description. The type/subtype part has only a few legal values: text/plain, text/x-rst, text/markdown",
+          "min_ver": "2.1",
+          "title": "Description Content Type"
+        },
+        "keywords": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A list of additional keywords, separated by commas, to be used to assist searching for the distribution in a larger catalog.",
+          "title": "Keywords"
+        },
+        "home_page": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A string containing the URL for the distribution's home page.",
+          "title": "Home Page"
+        },
+        "download_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A string containing the URL from which THIS version of the distribution can be downloaded.",
+          "min_ver": "1.1",
+          "title": "Download Url"
+        },
+        "author": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A string containing the author's name at a minimum; additional contact information may be provided.",
+          "title": "Author"
+        },
+        "author_email": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A string containing the author's e-mail address. It can contain a name and e-mail address in the legal forms for a RFC-822 From: header.",
+          "title": "Author Email"
+        },
+        "maintainer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A string containing the maintainer's name at a minimum; additional contact information may be provided.",
+          "min_ver": "1.2",
+          "title": "Maintainer"
+        },
+        "maintainer_email": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A string containing the maintainer's e-mail address. It can contain a name and e-mail address in the legal forms for a RFC-822 From: header.",
+          "min_ver": "1.2",
+          "title": "Maintainer Email"
+        },
+        "license": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Text indicating the license covering the distribution where the license is not a selection from the \u201cLicense\u201d Trove classifiers. See \u201cClassifier\u201d below. This field may also be used to specify a particular version of a license which is named via the Classifier field, or to indicate a variation or exception to such a license.",
+          "title": "License"
+        },
+        "classifier": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Each entry is a string giving a single classification value for the distribution. Classifiers are described in PEP 301, and the Python Package Index publishes a dynamic list of currently defined classifiers.",
+          "min_ver": "1.1",
+          "title": "Classifier"
+        },
+        "requires_dist": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The field format specification was relaxed to accept the syntax used by popular publishing tools. Each entry contains a string naming some other distutils project required by this distribution.",
+          "min_ver": "1.2",
+          "title": "Requires Dist"
+        },
+        "requires_python": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "This field specifies the Python version(s) that the distribution is guaranteed to be compatible with. Installation tools may look at this when picking which version of a project to install. The value must be in the format specified in Version specifiers (PEP 440).",
+          "min_ver": "1.2",
+          "title": "Requires Python"
+        },
+        "requires_external": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The field format specification was relaxed to accept the syntax used by popular publishing tools. Each entry contains a string describing some dependency in the system that the distribution is to be used. This field is intended to serve as a hint to downstream project maintainers, and has no semantics which are meaningful to the distutils distribution.",
+          "min_ver": "1.2",
+          "title": "Requires External"
+        },
+        "project_url": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A string containing a browsable URL for the project and a label for it, separated by a comma.",
+          "min_ver": "1.2",
+          "title": "Project Url"
+        },
+        "provides_extra": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A string containing the name of an optional feature. Must be a valid Python identifier. May be used to make a dependency conditional on whether the optional feature has been requested.",
+          "min_ver": "2.1",
+          "title": "Provides Extra"
+        },
+        "provides_dist": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "min_ver": "1.2",
+          "title": "Provides Dist"
+        },
+        "obsoletes_dist": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "min_ver": "1.2",
+          "title": "Obsoletes Dist"
+        }
+      },
+      "required": [
+        "name",
+        "version"
+      ],
+      "title": "PackageMetadata",
+      "type": "object"
+    },
+    "ReaderContribution": {
+      "additionalProperties": false,
+      "description": "Contribute a file reader.\n\nReaders may be associated with specific **filename_patterns** (e.g. \"*.tif\",\n\"*.zip\") and are invoked whenever `viewer.open('some/path')` is used on the\ncommand line, or when a user opens a file in the graphical user interface by\ndropping a file into the canvas, or using `File -> Open...`",
+      "properties": {
+        "command": {
+          "description": "Identifier of the command providing `napari_get_reader`.",
+          "title": "Command",
+          "type": "string"
+        },
+        "filename_patterns": {
+          "description": "List of filename patterns (for fnmatch) that this reader can accept. Reader will be tried only if `fnmatch(filename, pattern) == True`. Use `['*']` to match all filenames.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Filename Patterns",
+          "type": "array"
+        },
+        "accepts_directories": {
+          "default": false,
+          "description": "Whether this reader accepts directories",
+          "title": "Accepts Directories",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "command",
+        "filename_patterns"
+      ],
+      "title": "ReaderContribution",
+      "type": "object"
+    },
+    "SampleDataGenerator": {
+      "description": "Contribute a callable command that creates data on demand.",
+      "properties": {
+        "command": {
+          "description": "Identifier of a command that returns layer data tuple. Note that this command cannot return `[(None,)]`.",
+          "title": "Command",
+          "type": "string"
+        },
+        "key": {
+          "description": "A unique key to identify this sample.",
+          "title": "Key",
+          "type": "string"
+        },
+        "display_name": {
+          "description": "String to show in the UI when referring to this sample",
+          "title": "Display Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "command",
+        "key",
+        "display_name"
+      ],
+      "title": "Sample Data Function",
+      "type": "object"
+    },
+    "SampleDataURI": {
+      "description": "Contribute a URI to static local or remote data. This can be data included in\nthe plugin package, or a URL to remote data.  The URI must be readable by either\nnapari's builtin reader, or by a plugin that is included/required.",
+      "properties": {
+        "key": {
+          "description": "A unique key to identify this sample.",
+          "title": "Key",
+          "type": "string"
+        },
+        "display_name": {
+          "description": "String to show in the UI when referring to this sample",
+          "title": "Display Name",
+          "type": "string"
+        },
+        "uri": {
+          "description": "Path or URL to a data resource. This URI should be a valid input to `io_utils.read`",
+          "title": "Uri",
+          "type": "string"
+        },
+        "reader_plugin": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Name of plugin to use to open URI",
+          "title": "Reader Plugin"
+        }
+      },
+      "required": [
+        "key",
+        "display_name",
+        "uri"
+      ],
+      "title": "Sample Data URI",
+      "type": "object"
+    },
+    "Submenu": {
+      "description": "Contributes a submenu placement in a menu.",
+      "properties": {
+        "when": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Condition which must be true to *show* this item in the menu. Note that ``when`` clauses apply to menus and ``enablement`` clauses to commands. The ``enablement`` applies to all menus and even keybindings while the ``when`` only applies to a single menu.",
+          "title": "When"
+        },
+        "group": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The `group` property defines sorting and grouping of menu items. The `'navigation'` group is special: it will always be sorted to the top/beginning of a menu. By default, the order *inside* a group depends on the `title`. The group-local order of a menu item can be specified by appending @<int> to the group identifier: e.g. `group: 'myGroup@2'`.",
+          "title": "Group"
+        },
+        "submenu": {
+          "description": "Identifier of the submenu to display in this item.The submenu must be declared in the 'submenus' -section",
+          "title": "Submenu",
+          "type": "string"
+        }
+      },
+      "required": [
+        "submenu"
+      ],
+      "title": "Submenu",
+      "type": "object"
+    },
+    "SubmenuContribution": {
+      "description": "Contributes a submenu that can contain menu items or other submenus.\n\nSubmenus allow you to organize menu items into hierarchical structures.\nEach submenu defines an id, label, and optional icon that can be\nreferenced by menu items to create nested menu structures.",
+      "properties": {
+        "id": {
+          "description": "Identifier of the menu to display as a submenu.",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "description": "The label of the menu item which leads to this submenu.",
+          "title": "Label",
+          "type": "string"
+        },
+        "icon": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/Icon"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "(Optional) Icon which is used to represent the command in the UI. Either a file path, an object with file paths for dark and lightthemes, or a theme icon references, like `$(zap)`",
+          "title": "Icon"
+        }
+      },
+      "required": [
+        "id",
+        "label"
+      ],
+      "title": "SubmenuContribution",
+      "type": "object"
+    },
+    "ThemeColors": {
+      "properties": {
+        "canvas": {
+          "anyOf": [
+            {
+              "format": "color",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Canvas"
+        },
+        "console": {
+          "anyOf": [
+            {
+              "format": "color",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Console"
+        },
+        "background": {
+          "anyOf": [
+            {
+              "format": "color",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Background"
+        },
+        "foreground": {
+          "anyOf": [
+            {
+              "format": "color",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Foreground"
+        },
+        "primary": {
+          "anyOf": [
+            {
+              "format": "color",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Primary"
+        },
+        "secondary": {
+          "anyOf": [
+            {
+              "format": "color",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Secondary"
+        },
+        "highlight": {
+          "anyOf": [
+            {
+              "format": "color",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Highlight"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "format": "color",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "icon": {
+          "anyOf": [
+            {
+              "format": "color",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Icon"
+        },
+        "warning": {
+          "anyOf": [
+            {
+              "format": "color",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Warning"
+        },
+        "current": {
+          "anyOf": [
+            {
+              "format": "color",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Current"
+        }
+      },
+      "title": "ThemeColors",
+      "type": "object"
+    },
+    "ThemeContribution": {
+      "description": "Contribute a color theme to napari.\n\nYou must specify an **id**, **label**, and whether the theme is a dark theme or a\nlight theme **type** (such that the rest of napari changes to match your theme).\nAny color keys omitted from the theme contribution will use the default napari\ndark/light theme colors.",
+      "properties": {
+        "id": {
+          "description": "Identifier of the color theme as used in the user settings.",
+          "title": "Id",
+          "type": "string"
+        },
+        "label": {
+          "description": "Label of the color theme as shown in the UI.",
+          "title": "Label",
+          "type": "string"
+        },
+        "type": {
+          "description": "Base theme type, used for icons and filling in unprovided colors. Must be either `'dark'` or  `'light'`.",
+          "enum": [
+            "dark",
+            "light"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "syntax_style": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Syntax Style"
+        },
+        "colors": {
+          "$ref": "#/$defs/ThemeColors",
+          "description": "Theme colors. Valid keys include: `canvas`, `console`, `background`, `foreground`, `primary`, `secondary`, `highlight`, `text`, `icon`, `warning`, `current`. All keys are optional. Color values can be defined via:\n{_color_args}"
+        },
+        "font_size": {
+          "default": "9pt",
+          "description": "Font size (in points, pt) used in the application.",
+          "title": "Font Size",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "label",
+        "type",
+        "colors"
+      ],
+      "title": "ThemeContribution",
+      "type": "object"
+    },
+    "WidgetContribution": {
+      "additionalProperties": false,
+      "description": "Contribute a widget that can be added to the napari viewer.\n\nWidget contributions point to a **command** that, when called, returns a widget\n*instance*; this includes functions that return a widget instance, (e.g. those\ndecorated with `magicgui.magic_factory`) and subclasses of either\n[`QtWidgets.QWidget`](https://doc.qt.io/qt-5/qwidget.html) or\n[`magicgui.widgets.Widget`](https://napari.org/magicgui/api/_autosummary/magicgui.widgets._bases.Widget.html).\n\nOptionally, **autogenerate** may be used to create a widget (using\n[magicgui](https://napari.org/magicgui/)) from a command.  (In this case, the\ncommand needn't return a widget instance; it can be any function suitable as an\nargument to `magicgui.magicgui()`.)",
+      "properties": {
+        "command": {
+          "description": "Identifier of a command that returns a widget instance.  Or, if `autogenerate` is `True`, any command suitable as an argument to `magicgui.magicgui()`.",
+          "title": "Command",
+          "type": "string"
+        },
+        "display_name": {
+          "description": "Name for the widget, as presented in the UI.",
+          "title": "Display Name",
+          "type": "string"
+        },
+        "autogenerate": {
+          "default": false,
+          "description": "If true, a widget will be autogenerated from the signature of the associated command using [magicgui](https://napari.org/magicgui/).",
+          "title": "Autogenerate",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "command",
+        "display_name"
+      ],
+      "title": "WidgetContribution",
+      "type": "object"
+    },
+    "WriterContribution": {
+      "additionalProperties": false,
+      "description": "Contribute a layer writer.\n\nWriters accept data from one or more layers and write them to file. Writers declare\nsupport for writing one or more **layer_types**, may be associated with specific\n**filename_patterns** (e.g. \"\\*.tif\", \"\\*.zip\") and are invoked whenever\n`viewer.layers.save('some/path.ext')` is used on the command line, or when a user\nrequests to save one or more layers in the graphical user interface with `File ->\nSave Selected Layer(s)...` or `Save All Layers...`",
+      "properties": {
+        "command": {
+          "description": "Identifier of the command providing a writer.",
+          "title": "Command",
+          "type": "string"
+        },
+        "layer_types": {
+          "description": "List of layer type constraints. These determine what layers (or combinations thereof) this writer handles.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Layer Types",
+          "type": "array"
+        },
+        "filename_extensions": {
+          "description": "List of filename extensions compatible with this writer. The first entry is used as the default if necessary. Empty by default. When empty, any filename extension is accepted.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Filename Extensions",
+          "type": "array"
+        },
+        "display_name": {
+          "default": "",
+          "description": "Brief text used to describe this writer when presented. Empty by default. When present, this string is presented in the save dialog along side the plugin name and may be used to distinguish the kind of writer for the user. E.g. \u201clossy\u201d or \u201clossless\u201d.",
+          "title": "Display Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "command",
+        "layer_types"
+      ],
+      "title": "WriterContribution",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "name": {
+      "description": "The name of the plugin. Though this field is mandatory, it *must* match the package `name` as defined in the python package metadata.",
+      "title": "Name",
+      "type": "string"
+    },
+    "display_name": {
+      "default": "",
+      "description": "User-facing text to display as the name of this plugin. Must be 3-90 characters long and must not begin or end with an underscore, white space, or non-word character. If not provided, the manifest `name` will be used as the display name.",
+      "maxLength": 90,
+      "minLength": 3,
+      "title": "Display Name",
+      "type": "string"
+    },
+    "visibility": {
+      "default": "public",
+      "description": "Whether this plugin should be searchable and visible in the built-in plugin installer and the napari hub. By default (`'public'`) all plugins are visible. To prevent your plugin from appearing in search results, change this to `'hidden'`.",
+      "enum": [
+        "public",
+        "hidden"
+      ],
+      "title": "Visibility",
+      "type": "string"
+    },
+    "icon": {
+      "default": "",
+      "description": "The path to a square PNG icon of at least 128x128 pixels (256x256 for Retina screens). May be one of: <ul><li>a secure (https) URL </li><li>a path relative to the manifest file, (must be shipped in the sdist)</li><li>a string in the format `{package}:{resource}`, where `package` and `resource` are arguments to `importlib.resources.path(package, resource)`, (e.g. `top_module.some_folder:my_logo.png`).</li></ul>",
+      "title": "Icon",
+      "type": "string"
+    },
+    "categories": {
+      "description": "A list of categories that this plugin belongs to. This is used to help users discover your plugin. Allowed values: `[Acquisition, Annotation, Dataset, Image Processing, IO, Measurement, Registration, Segmentation, Simulation, Themes, Transformations, Utilities, Visualization]`",
+      "items": {
+        "$ref": "#/$defs/Category"
+      },
+      "title": "Categories",
+      "type": "array"
+    },
+    "schema_version": {
+      "always_export": true,
+      "default": "0.2.1",
+      "description": "A SemVer compatible version string matching the napari plugin schema version that the plugin is compatible with.",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "on_activate": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Fully qualified python path to a function that will be called upon plugin activation (e.g. `'my_plugin.some_module:activate'`). The activate function can be used to connect command ids to python callables, or perform other side-effects. A plugin will be 'activated' when one of its contributions is requested by the user (such as a widget, or reader).",
+      "title": "On Activate"
+    },
+    "on_deactivate": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Fully qualified python path to a function that will be called when a user deactivates a plugin (e.g. `'my_plugin.some_module:deactivate'`). This is optional, and may be used to perform any plugin cleanup.",
+      "title": "On Deactivate"
+    },
+    "contributions": {
+      "$ref": "#/$defs/ContributionPoints",
+      "description": "An object describing the plugin's [contributions](./contributions)"
+    },
+    "package_metadata": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PackageMetadata"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Package metadata following https://packaging.python.org/specifications/core-metadata/. For normal (non-dynamic) plugins, this data will come from the package's setup.cfg",
+      "hide_docs": true
+    },
+    "npe1_shim": {
+      "default": false,
+      "description": "Whether this manifest was created as a shim for an npe1 plugin.",
+      "hide_docs": true,
+      "title": "Npe1 Shim",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "title": "PluginManifest",
+  "type": "object"
+}

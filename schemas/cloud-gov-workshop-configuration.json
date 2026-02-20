@@ -1,0 +1,681 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workshop.cloud.gov/workshop/workshop-schemas/-/raw/main/cg-workshop.schema.json",
+  "title": "Workshop Configuration",
+  "description": "Schema for the Cloud.gov Workshop configuration files. Top level keys `subgroups` and `projects` are valid for Customer configs. Top level keys `namespaces` and `users` are valid for the Workshop-controlled configurations.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "namespaces": {
+      "description": "Workshop top level groups. This key is invalid in customer config files.",
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^([\\w\\-\\.]+)$": {
+          "$ref": "#/$defs/namespace"
+        }
+      }
+    },
+    "projects": {
+      "description": "Workshop customer projects.",
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^([\\w\\-\\.]+)$": {
+          "$ref": "#/$defs/project"
+        }
+      }
+    },
+    "subgroups": {
+      "description": "Workshop customer sub-groups.",
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^([\\w\\-\\.]+)$": {
+          "$ref": "#/$defs/subgroup"
+        }
+      }
+    },
+    "users": {
+      "description": "Workshop users to provision. This key is invalid in customer config files.",
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^([a-z0-9_\\-\\.\\+]+@[a-z0-9\\-.]+\\.gov)$": {
+          "$ref": "#/$defs/user"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "namespace": {
+      "description": "Namespace (top level group) - The key can use any sequence of letters, numbers, underscores, hypens, and dots",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "Friendly name for the group",
+          "type": "string"
+        },
+        "description": {
+          "description": "Friendly description for the group",
+          "type": "string"
+        },
+        "path": {
+          "description": "Path (slug) for group - Defaults to the group key name",
+          "type": "string",
+          "pattern": "^([\\w\\-\\.]+)$"
+        },
+        "config_project": {
+          "description": "Optional overrides for the related customer configuration project",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "approvals_required": {
+              "description": "Number of approvals needed for a MR to the config project",
+              "type": "number",
+              "minimum": 0
+            },
+            "merge_method": {
+              "description": "Default merge method",
+              "type": "string",
+              "enum": [
+                "merge",
+                "rebase_merge",
+                "ff"
+              ]
+            },
+            "require_owner_approval": {
+              "description": "Require at least one approval from a namespace owner before merging",
+              "type": "boolean"
+            },
+            "squash_option": {
+              "description": "Squash commits on merge request merge",
+              "type": "string",
+              "enum": [
+                "always",
+                "default_off",
+                "default_on",
+                "never"
+              ]
+            }
+          }
+        },
+        "custom_attributes": {
+          "description": "[Optional] Key/value pairs to set as custom attributes (Requires admin permission)",
+          "type": "object",
+          "patternProperties": {
+            "^([\\w\\-]+)$": {
+              "description": "Value for the given custom_attribute",
+              "type": "string"
+            }
+          }
+        },
+        "dr_group": {
+          "description": "Group is required to bootstrap Workshop",
+          "type": "boolean"
+        },
+        "visibility": {
+          "description": "Group visibility - private (members only), public (including anonymous), or internal (open to other Workshop users)",
+          "type": "string",
+          "enum": [
+            "internal",
+            "private",
+            "public"
+          ]
+        },
+        "use_custom_template": {
+          "description": "Use a custom project template",
+          "type": "boolean"
+        },
+        "owners": {
+          "description": "List of owners for the group",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^([a-z0-9_\\-\\.\\+]+@[a-z0-9\\-.]+\\.gov)$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "wiki_access_level": {
+          "description": "Whether the namespace group wiki is enabled, disabled, or private",
+          "type": "string",
+          "enum": [
+            "disabled",
+            "enabled",
+            "private"
+          ]
+        },
+        "runner": {
+          "description": "Runner pool configuration",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "allow_ssh": {
+              "description": "Allow SSH access to manager and egress spaces. Defaults to false",
+              "type": "boolean"
+            },
+            "cg_emails": {
+              "description": "List of Cloug.gov operators allowed to interact with the group runner spaces",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^([a-z0-9_\\-\\.\\+]+@gsa\\.gov)$"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "concurrency": {
+              "description": "Maximum concurrent jobs to run per-worker manager",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 100
+            },
+            "docker_hub_user": {
+              "description": "Docker Hub username for runner workers to pull images",
+              "type": "string"
+            },
+            "docker_hub_token_env_var": {
+              "description": "Name of the environment variable holding the token for the Docker Hub user",
+              "type": "string"
+            },
+            "egress_https_mode": {
+              "description": "Egress HTTPS proxy mode for runner workers and services",
+              "type": "string",
+              "enum": [
+                "http",
+                "https",
+                "both"
+              ]
+            },
+            "grant_workers_developer_role": {
+              "description": "Allow runner workers to SSH to runner services",
+              "type": "boolean"
+            },
+            "instances": {
+              "description": "Number of worker managers to run",
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "exclusiveMaximum": 2
+            },
+            "pool_size": {
+              "description": "Size of the runner worker pool",
+              "type": "string",
+              "enum": [
+                "small",
+                "medium",
+                "large",
+                "extra_large"
+              ]
+            },
+            "register": {
+              "description": "Register the runner pool to the group",
+              "type": "boolean"
+            },
+            "service_egress_ports": {
+              "description": "List of TCP ports the egress proxy will allow outbound connection to for job services",
+              "type": "array",
+              "items": {
+                "type": "number",
+                "exclusiveMinimum": 1,
+                "exclusiveMaxiumum": 65536
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "service_egress_allowlist": {
+              "description": "List of additional fully qualified domain names to allow outbound to the Internet by runner job services over HTTPS",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^([\\w\\-\\.\\*]+)$"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "service_egress_denylist": {
+              "description": "List of fully qualified domain names to block outbound to the Internet by runner job services over HTTPS",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^([\\w\\-\\.\\*]+)$"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "technologies": {
+              "description": "List of technologies used under the group requiring egress allowance over HTTPS byrunner workers",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^([a-z0-9_\\-]+)$"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "worker_allowlist": {
+              "description": "List of additional fully qualified domain names to allow outbound to the Internet by runner workers over HTTPS",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^([\\w\\-\\.\\*]+)$"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "worker_denylist": {
+              "description": "List of fully qualified domain names to block outbound to the Internet by runner workers over HTTPS",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^([\\w\\-\\.\\*]+)$"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "worker_egress_ports": {
+              "description": "List of TCP ports the egress proxy will allow outbound connection to for runner workers",
+              "type": "array",
+              "items": {
+                "type": "number",
+                "exclusiveMinimum": 1,
+                "exclusiveMaxiumum": 65536
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "unsafe_egress": {
+              "description": "Allow unfettered outbound Internet access [DANGER!]",
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "project": {
+      "description": "Project - The key can use any sequence of letters, numbers, underscores, hypens, and dots",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "visibility"
+      ],
+      "properties": {
+        "name": {
+          "description": "Friendly name for the project",
+          "type": "string"
+        },
+        "description": {
+          "description": "Friendly description for the project",
+          "type": "string"
+        },
+        "visibility": {
+          "description": "Project visibility - private (members only), public (including anonymous), or internal (open to other Workshop users)",
+          "type": "string",
+          "enum": [
+            "internal",
+            "private",
+            "public"
+          ]
+        },
+        "subgroup_key": {
+          "description": "Subgroup project is under - Defaults to the namespace",
+          "type": "string",
+          "pattern": "^([\\w\\-\\.\\/]+)$"
+        },
+        "archived": {
+          "description": "Archive - When true sets repository to read-only state",
+          "type": "boolean"
+        },
+        "approvals_required": {
+          "description": "Number of approvals needed for a MR",
+          "type": "number",
+          "minimum": 0
+        },
+        "auto_cancel_pending_pipelines": {
+          "description": "",
+          "type": "boolean"
+        },
+        "auto_devops_enabled": {
+          "description": "",
+          "type": "boolean"
+        },
+        "ci_pipeline_variables_minimum_override_role": {
+          "description": "",
+          "type": "string",
+          "enum": [
+            "developer",
+            "maintainer",
+            "owner"
+          ]
+        },
+        "ci_separated_caches": {
+          "description": "",
+          "type": "boolean"
+        },
+        "container_expiration_policy": {
+          "description": "",
+          "type": "object",
+          "properties": {
+            "cadence": {
+              "description": "",
+              "type": "string"
+            },
+            "enabled": {
+              "description": "",
+              "type": "boolean"
+            },
+            "older_than": {
+              "description": "",
+              "type": "string"
+            }
+          }
+        },
+        "container_registry_access_level": {
+          "description": "",
+          "type": "string",
+          "enum": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        "default_branch": {
+          "description": "",
+          "type": "string",
+          "pattern": "^([\\w\\-\\.\\/]+)$"
+        },
+        "import_id": {
+          "description": "Existing project ID to import as a new IaC managed resource",
+          "type": "number"
+        },
+        "initialize_with_readme": {
+          "description": "",
+          "type": "boolean"
+        },
+        "lfs_enabled": {
+          "description": "",
+          "type": "boolean"
+        },
+        "model_registry_access_level": {
+          "description": "",
+          "type": "string",
+          "enum": [
+            "disabled",
+            "enabled"
+          ]
+        },
+        "namespace": {
+          "description": "[DEPRECATING] Namespace path project is under - Defaults to the namespace / subgroup_key",
+          "type": "string",
+          "pattern": "^([\\w\\-\\.\\/]+)$"
+        },
+        "allow_merge_on_skipped_pipeline": {
+          "description": "Whether to treat skipped pipelines as successful when merging. Defaults to false",
+          "type": "boolean"
+        },
+        "only_allow_merge_if_all_discussions_are_resolved": {
+          "description": "Whether merge requests can be merged only after all discussions are resolved. Defaults to true",
+          "type": "boolean"
+        },
+        "only_allow_merge_if_pipeline_succeeds": {
+          "description": "Whether merge requests can be merged only if the pipeline succeeds. Defaults to true",
+          "type": "boolean"
+        },
+        "path": {
+          "description": "Project path (slug name) - Overrides the default path derived from the key name",
+          "type": "string",
+          "pattern": "^([\\w\\-\\.]+)$"
+        },
+        "packages_enabled": {
+          "description": "",
+          "type": "boolean"
+        },
+        "public_jobs": {
+          "description": "",
+          "type": "boolean"
+        },
+        "remove_source_branch_after_merge": {
+          "description": "",
+          "type": "boolean"
+        },
+        "resolve_outdated_diff_discussions": {
+          "description": "",
+          "type": "boolean"
+        },
+        "group_roles": {
+          "description": "Additional groups outside of the inheritence structure to share the project with, giving the group's members access to the project - Supports default roles docs.gitlab.com/user/permissions/#default-roles with a key of lower cased plural role name (e.g. The key developers will share the project with the group and give members the developer role)",
+          "type": "object",
+          "patternProperties": {
+            "^\\w+s$": {
+              "description": "List of group paths to assign as role project members, e.g. 'subgroup/roles/developers",
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^([\\w\\-\\.\\/]+)$"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        "shared_runners_enabled": {
+          "description": "",
+          "type": "boolean"
+        },
+        "snippets_enabled": {
+          "description": "Whether project code snippets are enabled. Deprecated in favor of `snippets_access_level`",
+          "deprecated": true,
+          "type": "boolean"
+        },
+        "snippets_access_level": {
+          "description": "Whether project code snippets are enabled, disabled, or private.",
+          "type": "string",
+          "enum": [
+            "disabled",
+            "enabled",
+            "private"
+          ]
+        },
+        "wiki_access_level": {
+          "description": "Whether the project wiki is enabled, disabled, or private",
+          "type": "string",
+          "enum": [
+            "disabled",
+            "enabled",
+            "private"
+          ]
+        },
+        "avatar": {
+          "description": "",
+          "type": "string"
+        },
+        "avatar_hash": {
+          "description": "",
+          "type": "string"
+        },
+        "forked_from_project_id": {
+          "description": "",
+          "type": "number"
+        },
+        "import_url": {
+          "description": "",
+          "type": "string"
+        },
+        "import_url_password": {
+          "description": "",
+          "type": "string"
+        },
+        "import_url_username": {
+          "description": "",
+          "type": "string"
+        },
+        "mirror": {
+          "description": "",
+          "type": "boolean"
+        },
+        "push_rules": {
+          "description": "Rules for pushing to the repository",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "commit_committer_check": {
+              "description": "Users can only push commits to this repository that were committed with one of their own verified emails.",
+              "type": "boolean"
+            },
+            "member_check": {
+              "description": "Restrict commits by author (email) to existing GitLab users.",
+              "type": "boolean"
+            },
+            "deny_delete_tag": {
+              "description": "Do not allow deleting tags with a push",
+              "type": "boolean"
+            },
+            "max_file_size": {
+              "description": "",
+              "type": "number"
+            },
+            "prevent_secrets": {
+              "description": "Reject any files that are likely to contain secrets",
+              "type": "boolean"
+            },
+            "reject_unsigned_commits": {
+              "description": "",
+              "type": "boolean"
+            },
+            "reject_non_dco_commits": {
+              "description": "Reject commits that do not have a valid DCO sign-off",
+              "type": "boolean"
+            },
+            "author_email_regex": {
+              "description": "",
+              "type": "string"
+            },
+            "branch_name_regex": {
+              "description": "",
+              "type": "string"
+            },
+            "commit_message_negative_regex": {
+              "description": "",
+              "type": "string"
+            },
+            "commit_message_regex": {
+              "description": "",
+              "type": "string"
+            },
+            "file_name_regex": {
+              "description": "",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "subgroup": {
+      "description": "Subgroup (any group other than a top level namespace) - The key can use any sequence of letters, numbers, underscores, hypens, and dots",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "Friendly name for the group",
+          "type": "string"
+        },
+        "path": {
+          "description": "Path (slug) for group - Defaults to the group key name",
+          "type": "string",
+          "pattern": "^([\\w\\-\\.]+)$"
+        },
+        "parent_path": {
+          "description": "Parent group full path for the subgroup. Defaults to the top level namespace",
+          "type": "string",
+          "pattern": "^([\\w\\-\\.\\/]+)$"
+        },
+        "description": {
+          "description": "Friendly description of the group",
+          "type": "string"
+        },
+        "import_id": {
+          "description": "Existing subgroup ID to import as a new IaC managed resource",
+          "type": "number"
+        },
+        "members": {
+          "description": "Roles and thier memberships under the subgroup - Supports both default roles docs.gitlab.com/user/permissions/#default-roles and custom roles https://docs.gitlab.com/user/custom_roles/ with a key of lower cased plural role name (e.g. The key developers will create a group Developers that give members the developer role)",
+          "type": "object",
+          "patternProperties": {
+            "^[\\w\\-\\.\\/]+$": {
+              "description": "List of users to assign as role group members",
+              "type": "array"
+            }
+          }
+        },
+        "visibility": {
+          "description": "Project visibility - private (members only), public (including anonymous), or internal (open to other Workshop users)",
+          "type": "string",
+          "enum": [
+            "internal",
+            "private",
+            "public"
+          ]
+        },
+        "wiki_access_level": {
+          "description": "Whether the group wiki is enabled, disabled, or private",
+          "type": "string",
+          "enum": [
+            "disabled",
+            "enabled",
+            "private"
+          ]
+        }
+      }
+    },
+    "user": {
+      "description": "User object - The key must be the user's US government email address under a .gov domain",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "custom_attributes": {
+          "description": "[Optional] Key/value pairs to set as custom attributes (Requires admin permission)",
+          "type": "object",
+          "patternProperties": {
+            "^([\\w\\-]+)$": {
+              "description": "Value for the given custom_attribute",
+              "type": "string"
+            }
+          }
+        },
+        "import_id": {
+          "description": "[Optional] Existing GitLab user ID on the system to import",
+          "type": "integer"
+        },
+        "name": {
+          "description": "Full name of user",
+          "type": "string",
+          "pattern": "^([\\w'\\- ]+)$"
+        },
+        "note": {
+          "description": "[Optional] Additional notes about the user",
+          "type": "string"
+        },
+        "projects_limit": {
+          "description": "[Optional] Personal project limit",
+          "type": "integer"
+        },
+        "state": {
+          "description": "[Optional] Forced state of the user account",
+          "type": "string",
+          "enum": [
+            "active",
+            "blocked",
+            "deactivated"
+          ]
+        },
+        "username": {
+          "description": "[Optional] Custom username - Overrides the default username from the user email address",
+          "type": "string",
+          "pattern": "^([a-zA-Z0-9][\\w\\-\\.]{1,254})$"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,300 @@
+{
+	"$schema": "http://json-schema.org/draft-06/schema#",
+	"type": "object",
+	"title": "Version Bumper config file schema",
+	"properties": {
+		"presets": {
+			"type": "array",
+			"title": "List of presets to apply",
+			"items": {
+				"oneOf": [
+					{
+						"$ref": "#/definitions/preset"
+					},
+					{
+						"$ref": "#/definitions/presetShort"
+					}
+				]
+			}
+		},
+		"filesToModify": {
+			"type": "array",
+			"title": "List of files that contain versions which are to be bumped",
+			"items": {
+				"$ref": "#/definitions/fileToModify"
+			}
+		},
+		"releaseOptions": {
+			"$ref": "#/definitions/releaseOptions"
+		},
+		"rootPath": {
+			"type": "string",
+			"title": "Relative or absolute path to project root",
+			"description": "This path will be used to calculate paths to configured files if they are configured as relative paths. If the root path is configured as relative path, it is calculated based on the config file path."
+		},
+		"versionRangeIndicators": {
+			"type": "array",
+			"title": "List of indicators to automatically determine version range",
+			"items": {
+				"$ref": "#/definitions/versionRangeIndicator"
+			}
+		}
+	},
+	"additionalProperties": false,
+	"definitions": {
+		"fileToModify": {
+			"type": "object",
+			"title": "A file that contains versions which are to be bumped",
+			"properties": {
+				"path": {
+					"type": "string",
+					"title": "Relative or absolute path to the file",
+					"description": "Relative paths are calculated from the configured (or calculated) project root."
+				},
+				"patterns": {
+					"type": "array",
+					"title": "List of version patterns to be searched and replaced in the configured file",
+					"description": "Each pattern must contain a `{%version%}` placeholder that is replaced by the new version. Patterns are internally converted to regular expressions, so feel free to use regex syntax such as `\\s+`.",
+					"items": {
+						"$ref": "#/definitions/versionPattern"
+					}
+				},
+				"reportUnmatched": {
+					"type": "boolean",
+					"title": "Show warning if a configured pattern does not match file contents",
+					"default": false
+				},
+				"reportMissing": {
+					"type": "boolean",
+					"title": "Fail if file to modify does not exist",
+					"default": true
+				}
+			},
+			"additionalProperties": false,
+			"required": [
+				"path",
+				"patterns"
+			]
+		},
+		"preset": {
+			"type": "object",
+			"title": "Default preset configuration",
+			"oneOf": [
+				{
+					"properties": {
+						"name": {
+							"type": "string",
+							"enum": [
+								"composer-package"
+							]
+						},
+						"options": {
+							"type": "object",
+							"properties": {
+								"path": {
+									"type": "string",
+									"title": "Path to composer.json",
+									"default": null
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"additionalProperties": false,
+					"required": [
+						"name"
+					]
+				},
+				{
+					"properties": {
+						"name": {
+							"type": "string",
+							"enum": [
+								"npm-package"
+							]
+						},
+						"options": {
+							"type": "object",
+							"properties": {
+								"packageName": {
+									"type": "string",
+									"title": "NPM package name as defined in package.json"
+								},
+								"path": {
+									"type": "string",
+									"title": "Path to package.json",
+									"default": null
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"additionalProperties": false,
+					"required": [
+						"name"
+					]
+				},
+				{
+					"properties": {
+						"name": {
+							"type": "string",
+							"enum": [
+								"conventional-commits",
+								"typo3-commit-guidelines"
+							]
+						}
+					},
+					"additionalProperties": false,
+					"required": [
+						"name"
+					]
+				},
+				{
+					"properties": {
+						"name": {
+							"type": "string",
+							"enum": [
+								"typo3-extension"
+							]
+						},
+						"options": {
+							"type": "object",
+							"properties": {
+								"documentation": {
+									"oneOf": [
+										{
+											"type": "boolean"
+										},
+										{
+											"type": "string",
+											"enum": [
+												"auto",
+												"legacy"
+											]
+										}
+									],
+									"title": "Define whether extension has a ReST documentation",
+									"description": "Use \"auto\" to automatically detect documentation files (PHP-based or Sphinx-based rendering) or \"legacy\" to use Sphinx-based rendering files.",
+									"default": "auto"
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"additionalProperties": false,
+					"required": [
+						"name"
+					]
+				}
+			]
+		},
+		"presetShort": {
+			"type": "string",
+			"title": "Short preset configuration",
+			"description": "Configuration for presets which do not have required preset options",
+			"enum": [
+				"composer-package",
+				"conventional-commits",
+				"npm-package",
+				"typo3-commit-guidelines",
+				"typo3-extension"
+			]
+		},
+		"releaseOptions": {
+			"type": "object",
+			"title": "Set of release options to respect with the --release command option",
+			"properties": {
+				"commitMessage": {
+					"type": "string",
+					"title": "Commit message pattern to use for new releases",
+					"description": "May contain a `{%version%}` placeholder that is replaced by the version to release."
+				},
+				"overwriteExistingTag": {
+					"type": "boolean",
+					"title": "Define whether existing tags should be overwritten",
+					"description": "If set to `true`, the existing tag will be deleted before the new tag is created."
+				},
+				"signTag": {
+					"type": "boolean",
+					"title": "Define whether to sign new tags",
+					"description": "Uses Git's `-s` command option to sign the new tag using the Git-configured signing key."
+				},
+				"tagName": {
+					"title": "Tag name pattern to use for new releases",
+					"description": "Must contain a `{%version%}` placeholder that is replaced by the version to release.",
+					"$ref": "#/definitions/versionPattern"
+				}
+			},
+			"additionalProperties": false
+		},
+		"versionPattern": {
+			"type": "string",
+			"pattern": "\\{%version%\\}"
+		},
+		"versionRange": {
+			"type": "string",
+			"enum": [
+				"major",
+				"minor",
+				"next",
+				"patch"
+			]
+		},
+		"versionRangeIndicator": {
+			"type": "object",
+			"title": "Indicator to use a specific version range for the new version to bump",
+			"properties": {
+				"patterns": {
+					"type": "array",
+					"title": "List of version range patterns to match for this indicator",
+					"items": {
+						"$ref": "#/definitions/versionRangePattern"
+					}
+				},
+				"range": {
+					"$ref": "#/definitions/versionRange"
+				},
+				"strategy": {
+					"type": "string",
+					"title": "Match strategy for configured patterns",
+					"enum": [
+						"matchAll",
+						"matchAny",
+						"matchNone"
+					],
+					"default": "matchAny"
+				}
+			},
+			"additionalProperties": false,
+			"required": [
+				"patterns",
+				"range"
+			]
+		},
+		"versionRangePattern": {
+			"type": "object",
+			"title": "Pattern to indicate a specific version range",
+			"properties": {
+				"pattern": {
+					"type": "string",
+					"title": "Regular expression to match a specific version range indicator"
+				},
+				"type": {
+					"type": "string",
+					"title": "Type of the pattern to match",
+					"enum": [
+						"commitMessage",
+						"fileAdded",
+						"fileDeleted",
+						"fileModified"
+					]
+				}
+			},
+			"additionalProperties": false,
+			"required": [
+				"pattern",
+				"type"
+			]
+		}
+	}
+}

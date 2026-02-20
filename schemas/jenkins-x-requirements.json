@@ -1,0 +1,502 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jenkins-x/jx-api/v4/pkg/apis/core/v4beta1/requirements",
+  "$ref": "#/$defs/Requirements",
+  "$defs": {
+    "AutoUpdateConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "schedule": {
+          "type": "string"
+        },
+        "autoMerge": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "AzureClusterNodesConfig": {
+      "properties": {
+        "clientID": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "AzureConfig": {
+      "properties": {
+        "registrySubscription": {
+          "type": "string"
+        },
+        "dns": {
+          "$ref": "#/$defs/AzureDNSConfig"
+        },
+        "secretStorage": {
+          "$ref": "#/$defs/AzureSecretConfig"
+        },
+        "storage": {
+          "$ref": "#/$defs/AzureStorageConfig"
+        },
+        "clusterNodes": {
+          "$ref": "#/$defs/AzureClusterNodesConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "AzureDNSConfig": {
+      "properties": {
+        "tenantId": {
+          "type": "string"
+        },
+        "subscriptionId": {
+          "type": "string"
+        },
+        "resourceGroup": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "AzureSecretConfig": {
+      "properties": {
+        "keyVaultName": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "AzureStorageConfig": {
+      "properties": {
+        "storageAccountName": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "ClusterConfig": {
+      "properties": {
+        "chartRepository": {
+          "type": "string"
+        },
+        "chartKind": {
+          "type": "string"
+        },
+        "chartSecret": {
+          "type": "string"
+        },
+        "registry": {
+          "type": "string"
+        },
+        "dockerRegistryOrg": {
+          "type": "string"
+        },
+        "kanikoFlags": {
+          "type": "string"
+        },
+        "environmentGitOwner": {
+          "type": "string"
+        },
+        "azure": {
+          "$ref": "#/$defs/AzureConfig"
+        },
+        "gke": {
+          "$ref": "#/$defs/GKEConfig"
+        },
+        "environmentGitPublic": {
+          "type": "boolean"
+        },
+        "gitPublic": {
+          "type": "boolean"
+        },
+        "provider": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        },
+        "clusterName": {
+          "type": "string"
+        },
+        "region": {
+          "type": "string"
+        },
+        "zone": {
+          "type": "string"
+        },
+        "gitName": {
+          "type": "string"
+        },
+        "gitKind": {
+          "type": "string"
+        },
+        "gitServer": {
+          "type": "string"
+        },
+        "externalDNSSAName": {
+          "type": "string"
+        },
+        "kanikoSAName": {
+          "type": "string"
+        },
+        "issueProvider": {
+          "$ref": "#/$defs/IssueTracker"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "EnvironmentConfig": {
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "gitServer": {
+          "type": "string"
+        },
+        "gitKind": {
+          "type": "string"
+        },
+        "gitUrl": {
+          "type": "string"
+        },
+        "ingress": {
+          "$ref": "#/$defs/IngressConfig"
+        },
+        "remoteCluster": {
+          "type": "boolean"
+        },
+        "promotionStrategy": {
+          "type": "string"
+        },
+        "reusePullRequest": {
+          "type": "boolean"
+        },
+        "namespace": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "GKEConfig": {
+      "properties": {
+        "projectNumber": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "IngressConfig": {
+      "properties": {
+        "apiVersion": {
+          "type": "string"
+        },
+        "externalDNS": {
+          "type": "boolean"
+        },
+        "cloud_dns_secret_name": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "ignoreLoadBalancer": {
+          "type": "boolean"
+        },
+        "namespaceSubDomain": {
+          "type": "string"
+        },
+        "tls": {
+          "$ref": "#/$defs/TLSConfig"
+        },
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "IssueTracker": {
+      "properties": {
+        "jira": {
+          "$ref": "#/$defs/JiraTracker"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "JiraTracker": {
+      "properties": {
+        "serverUrl": {
+          "type": "string"
+        },
+        "userName": {
+          "type": "string"
+        },
+        "project": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "MavenRepositoryConfig": {
+      "properties": {
+        "releaseUrl": {
+          "type": "string"
+        },
+        "snapshotUrl": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "RepositoryConfig": {
+      "properties": {
+        "maven": {
+          "$ref": "#/$defs/MavenRepositoryConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Requirements": {
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "apiVersion": {
+          "type": "string"
+        },
+        "spec": {
+          "$ref": "#/$defs/RequirementsConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "RequirementsConfig": {
+      "properties": {
+        "autoUpdate": {
+          "$ref": "#/$defs/AutoUpdateConfig"
+        },
+        "cluster": {
+          "$ref": "#/$defs/ClusterConfig"
+        },
+        "environments": {
+          "items": {
+            "$ref": "#/$defs/EnvironmentConfig"
+          },
+          "type": "array"
+        },
+        "extraDomains": {
+          "items": {
+            "$ref": "#/$defs/IngressConfig"
+          },
+          "type": "array"
+        },
+        "ingress": {
+          "$ref": "#/$defs/IngressConfig"
+        },
+        "kuberhealthy": {
+          "type": "boolean"
+        },
+        "pipelineUser": {
+          "$ref": "#/$defs/UserNameEmailConfig"
+        },
+        "repository": {
+          "type": "string"
+        },
+        "repositories": {
+          "$ref": "#/$defs/RepositoryConfig"
+        },
+        "secretStorage": {
+          "type": "string"
+        },
+        "storage": {
+          "items": {
+            "$ref": "#/$defs/StorageConfig"
+          },
+          "type": "array"
+        },
+        "terraform": {
+          "type": "boolean"
+        },
+        "terraformVault": {
+          "type": "boolean"
+        },
+        "vault": {
+          "$ref": "#/$defs/VaultConfig"
+        },
+        "webhook": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "StorageConfig": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "TLSConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "email": {
+          "type": "string"
+        },
+        "production": {
+          "type": "boolean"
+        },
+        "secretName": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "UserNameEmailConfig": {
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "VaultAWSConfig": {
+      "properties": {
+        "kmsKeyId": {
+          "type": "string"
+        },
+        "kmsRegion": {
+          "type": "string"
+        },
+        "s3Bucket": {
+          "type": "string"
+        },
+        "s3Prefix": {
+          "type": "string"
+        },
+        "s3Region": {
+          "type": "string"
+        },
+        "autoCreate": {
+          "type": "boolean"
+        },
+        "dynamoDBTable": {
+          "type": "string"
+        },
+        "dynamoDBRegion": {
+          "type": "string"
+        },
+        "iamUserName": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "VaultAzureConfig": {
+      "properties": {
+        "tenantId": {
+          "type": "string"
+        },
+        "vaultName": {
+          "type": "string"
+        },
+        "keyName": {
+          "type": "string"
+        },
+        "storageAccountName": {
+          "type": "string"
+        },
+        "containerName": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "VaultConfig": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "bucket": {
+          "type": "string"
+        },
+        "recreateBucket": {
+          "type": "boolean"
+        },
+        "keyring": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "disableURLDiscovery": {
+          "type": "boolean"
+        },
+        "aws": {
+          "$ref": "#/$defs/VaultAWSConfig"
+        },
+        "azure": {
+          "$ref": "#/$defs/VaultAzureConfig"
+        },
+        "url": {
+          "type": "string"
+        },
+        "serviceAccount": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        },
+        "secretEngineMountPoint": {
+          "type": "string"
+        },
+        "kubernetesAuthPath": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,345 @@
+{
+  "title": "JSON schema for OctoberCMS list",
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$comment": "https://docs.octobercms.com/4.x/element/list-columns.html",
+  "type": "object",
+  "definitions": {
+    "columns": {
+      "type": "object",
+      "patternProperties": {
+        "^[^\\s]*$": {
+          "description": "Model field name",
+          "$comment": "https://docs.octobercms.com/4.x/element/list-columns.html#column-properties",
+          "type": [
+            "object",
+            "string"
+          ],
+          "properties": {
+            "label": {
+              "description": "a name when displaying the list column to the user",
+              "type": "string"
+            },
+            "type": {
+              "description": "defines how this column should be rendered",
+              "default": "text",
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "text",
+                    "number",
+                    "image",
+                    "switch",
+                    "summary",
+                    "datetime",
+                    "date",
+                    "time",
+                    "timesince",
+                    "timetense",
+                    "selectable",
+                    "linkage",
+                    "partial",
+                    "colorpicker",
+                    "currency"
+                  ]
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "default": {
+              "description": "specifies the default value for the column if value is empty"
+            },
+            "searchable": {
+              "description": "include this column in the list search results",
+              "type": "boolean",
+              "default": false
+            },
+            "invisible": {
+              "description": "specifies if this column is hidden by default",
+              "type": "boolean",
+              "default": false
+            },
+            "sortable": {
+              "description": "specifies if this column can be sorted. Default: true",
+              "type": "boolean",
+              "default": true
+            },
+            "sortableDefault": {
+              "description": "specifies if this column is sorted by default. This should only be used on a single sortable column. Supported values: asc, desc",
+              "type": "string",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            },
+            "clickable": {
+              "description": "if set to false, disables the default click behavior when the column is clicked",
+              "type": "boolean",
+              "default": true
+            },
+            "select": {
+              "description": "defines a custom SQL select statement to use for the value. If a relation is specified, this refers to a column on the related database table",
+              "type": "string"
+            },
+            "valueFrom": {
+              "description": "defines a model attribute to use for the source value. If a relation is specified, this refers to the attribute of the relation and eager loads the relation",
+              "type": "string"
+            },
+            "displayFrom": {
+              "description": "defines a model attribute to use for the display value",
+              "type": "string"
+            },
+            "relation": {
+              "description": "defines a model relationship name as a source, used with select or valueFrom",
+              "type": "string"
+            },
+            "relationCount": {
+              "description": "display the number of related records as the column value. Must be used with the relation option. Default: false",
+              "type": "boolean",
+              "default": false
+            },
+            "relationWith": {
+              "description": "eager load the specified relation definition with the list query. Useful to improve performance of nested column selections",
+              "type": "string"
+            },
+            "cssClass": {
+              "description": "assigns a CSS class to the column container",
+              "type": "string"
+            },
+            "headCssClass": {
+              "description": "assigns a CSS class to the column header container",
+              "type": "string"
+            },
+            "width": {
+              "description": "sets the column width, can be specified in percents (10%) or pixels (50px). There could be a single column without width specified, it will be stretched to take the available space.",
+              "type": "string"
+            },
+            "align": {
+              "description": "specifies the column alignment. Possible values are left, right and center.",
+              "type": "string",
+              "enum": [
+                "left",
+                "right",
+                "center"
+              ]
+            },
+            "permissions": {
+              "description": "the permissions that the current backend user must have in order for the column to be used. Supports either a string for a single permission or an array of permissions of which only one is needed to grant access.",
+              "type": [
+                "string",
+                "array"
+              ]
+            },
+            "order": {
+              "description": "a numerical weight when determining the display order, default value increments at 100 points per column",
+              "type": "number"
+            },
+            "after": {
+              "description": "place this column after another existing column name using the display order (+1)",
+              "type": "string"
+            },
+            "before": {
+              "description": "place this column before another existing column name using the display order (-1)",
+              "type": "string"
+            },
+            "tooltip": {
+              "description": "adds an icon with a tooltip after the column label",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "description": "tooltip title text",
+                      "type": "string"
+                    },
+                    "icon": {
+                      "description": "defines an icon for the tooltip",
+                      "type": "string",
+                      "pattern": "^icon-"
+                    },
+                    "placement": {
+                      "description": "placement of the tooltip",
+                      "type": "string",
+                      "enum": [
+                        "top",
+                        "right",
+                        "bottom",
+                        "left"
+                      ],
+                      "default": "top"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "anyOf": [
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "text",
+                      "number"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "format": {
+                    "description": "specify a custom text format following the formatting rules of the PHP sprintf() function",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "datetime",
+                      "date",
+                      "time",
+                      "timesince",
+                      "timetense"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "useTimezone": {
+                    "description": "convert the date and time from the backend specified timezone preference",
+                    "type": "boolean"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "datetime",
+                      "date",
+                      "time"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "format": {
+                    "description": "specify a custom date format",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "partial"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "path": {
+                    "description": "partial view. Inside the partial these variables are available: $value is the default cell value, $record is the model used for the cell and $column is the configured class object Backend\\Classes\\ListColumn",
+                    "type": "string",
+                    "examples": [
+                      "~/plugins/acme/blog/models/comments/_content_column.htm"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "currency"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "format": {
+                    "description": "provides a display format. Supported values: long, short, null",
+                    "type": "string",
+                    "enum": [
+                      "long",
+                      "short"
+                    ]
+                  },
+                  "fromCode": {
+                    "description": "specify the source currency code",
+                    "type": "string"
+                  },
+                  "toCode": {
+                    "description": "specify the display currency code",
+                    "type": "string"
+                  },
+                  "site": {
+                    "description": "display the currency using the multisite definition context. Default: false",
+                    "type": "boolean",
+                    "default": false
+                  }
+                }
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "type": {
+                    "enum": [
+                      "image"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "width": {
+                    "description": "image display width in pixels",
+                    "type": "string"
+                  },
+                  "height": {
+                    "description": "image display height in pixels", 
+                    "type": "string"
+                  },
+                  "imageWidth": {
+                    "description": "resize image to this width",
+                    "type": "number"
+                  },
+                  "imageHeight": {
+                    "description": "resize image to this height",
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "properties": {
+    "columns": {
+      "$ref": "#/definitions/columns"
+    }
+  }
+}

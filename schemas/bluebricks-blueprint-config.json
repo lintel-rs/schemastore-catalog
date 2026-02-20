@@ -1,0 +1,439 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.bluebricks.co/docs/schemas/v1/bricks.schema.json",
+  "$defs": {
+    "Lifecycle": {
+      "properties": {
+        "plan": {
+          "$ref": "#/$defs/LifecyclePhase",
+          "description": "Configuration for the plan phase"
+        },
+        "apply": {
+          "$ref": "#/$defs/LifecyclePhase",
+          "description": "Configuration for the apply phase"
+        },
+        "destroy": {
+          "$ref": "#/$defs/LifecyclePhase",
+          "description": "Configuration for the destroy phase"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "title": "Custom Lifecycle Configuration"
+    },
+    "LifecyclePhase": {
+      "properties": {
+        "image": {
+          "type": "string",
+          "description": "Override container image for this phase"
+        },
+        "command": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Override command for this phase"
+        },
+        "args": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Override arguments for this phase"
+        },
+        "env_vars": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Additional environment variables for this phase"
+        },
+        "skip": {
+          "type": "boolean",
+          "description": "Skip this lifecycle phase"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "title": "Lifecycle Phase Configuration"
+    },
+    "Native": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "terraform",
+            "opentofu",
+            "helm",
+            "cloudformation",
+            "bicep",
+            "generic"
+          ],
+          "description": "IaC tool type to use for this blueprint or package"
+        },
+        "path": {
+          "type": "string",
+          "description": "Path to IaC source files relative to blueprint root"
+        },
+        "chart": {
+          "type": "string",
+          "description": "Remote Helm chart reference (OCI or HTTP URL)"
+        },
+        "version": {
+          "type": "string",
+          "description": "Chart version when using remote Helm charts"
+        },
+        "state_path": {
+          "type": "string",
+          "description": "Custom state file path for Terraform/OpenTofu"
+        },
+        "mode": {
+          "type": "string",
+          "description": "Execution mode for the IaC tool"
+        },
+        "image": {
+          "type": "string",
+          "description": "Container image for generic executor type"
+        },
+        "command": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Command to run for generic executor type"
+        },
+        "args": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Arguments passed to the command"
+        },
+        "env_vars": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "Environment variables for execution"
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/Lifecycle",
+          "description": "Custom lifecycle phase configurations"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "title": "IaC Tool Configuration"
+    },
+    "SemanticVersion": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+      "title": "Semantic Version",
+      "description": "Semantic version following semver 2.0.0 (major.minor.patch[-prerelease][+build])",
+      "examples": [
+        "1.0.0",
+        "2.1.3",
+        "1.0.0-alpha",
+        "1.0.0-rc.1",
+        "1.0.0+build.123",
+        "2.1.3-rc.2+20260113.git.abc1234"
+      ]
+    },
+    "SlimInput": {
+      "properties": {
+        "default": {
+          "description": "Default value if not provided at deployment time"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "string",
+            "number",
+            "bool",
+            "list",
+            "map",
+            "any"
+          ],
+          "description": "Data type for validation"
+        },
+        "description": {
+          "type": "string",
+          "description": "Explanation of what this input configures"
+        },
+        "allowed_values": {
+          "items": true,
+          "type": "array",
+          "description": "Restrict input to specific values"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "title": "Blueprint Input Parameter",
+      "description": "Input parameter definition. Must be an object (not null or empty). Use {} for unconstrained input, or specify properties: type, description, default, allowed_values",
+      "examples": [
+        {
+          "default": "my-bucket",
+          "description": "Name of the S3 bucket",
+          "type": "string"
+        },
+        {
+          "description": "Number of instances to create",
+          "type": "number"
+        },
+        {
+          "default": true,
+          "description": "Enable monitoring",
+          "type": "bool"
+        },
+        {
+          "allowed_values": [
+            "10.0.0.0/16",
+            "172.16.0.0/12"
+          ],
+          "description": "List of allowed CIDR blocks",
+          "type": "list"
+        },
+        {}
+      ]
+    },
+    "SlimOutput": {
+      "properties": {
+        "value": {
+          "description": "Output value using data.{package}.{output} reference syntax"
+        },
+        "description": {
+          "type": "string",
+          "description": "Explanation of what this output represents"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "value"
+      ],
+      "title": "Blueprint Output"
+    },
+    "SlimPackage": {
+      "oneOf": [
+        {
+          "not": {
+            "required": [
+              "source"
+            ]
+          },
+          "required": [
+            "version"
+          ],
+          "title": "Registry Package",
+          "description": "Package deployed from Bluebricks registry using version"
+        },
+        {
+          "required": [
+            "source",
+            "native"
+          ],
+          "title": "Source-based Package",
+          "description": "Package deployed from remote source (Git, HTTPS, etc.) with native IaC tool configuration"
+        }
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$",
+          "description": "Local alias for referencing this package in data.{id}.{output} expressions"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^(@((?!.*\\*\\*)[a-z0-9-*][a-z0-9-._]*\\*?)\\/)?((?!.*\\*\\*)[a-z0-9-*][a-z0-9-._]*\\*?)$",
+          "description": "Package name from registry or logical identifier"
+        },
+        "version": {
+          "$ref": "#/$defs/SemanticVersion",
+          "description": "Package version to deploy"
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of this package"
+        },
+        "source": {
+          "$ref": "#/$defs/Source"
+        },
+        "native": {
+          "$ref": "#/$defs/Native",
+          "description": "IaC tool configuration for this package"
+        },
+        "props": {
+          "propertyNames": {
+            "pattern": "^[a-zA-Z0-9_]+$"
+          },
+          "type": "object",
+          "description": "Property values passed to the package. Use inputs.{name} for blueprint inputs or data.{pkg}.{output} for cross-references"
+        },
+        "inputs": {
+          "type": "object",
+          "description": "Alias for props. Property values passed to the package"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "title": "Child package"
+    },
+    "Source": {
+      "type": "string",
+      "title": "Source Reference",
+      "description": "Remote source reference: Git URL (git::https://...), HTTPS URL, or other supported protocol. Supports optional path (//path) and ref (?ref=tag). Requires 'native' configuration for IaC tool settings.",
+      "examples": [
+        "git::https://github.com/org/repo.git",
+        "git::https://github.com/org/repo.git?ref=v1.0.0"
+      ]
+    }
+  },
+  "oneOf": [
+    {
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "source"
+            ]
+          },
+          {
+            "required": [
+              "native"
+            ]
+          }
+        ]
+      },
+      "required": [
+        "packages"
+      ],
+      "title": "Blueprint",
+      "description": "Blueprint that composes other blueprints and artifacts"
+    },
+    {
+      "not": {
+        "required": [
+          "packages"
+        ]
+      },
+      "required": [
+        "source",
+        "native"
+      ],
+      "title": "Remote Artifact",
+      "description": "Source-based artifact"
+    },
+    {
+      "not": {
+        "anyOf": [
+          {
+            "required": [
+              "packages"
+            ]
+          },
+          {
+            "required": [
+              "source"
+            ]
+          }
+        ]
+      },
+      "required": [
+        "native"
+      ],
+      "title": "Bluebricks registered Artifact",
+      "description": "Artifact from Bluebricks registry"
+    }
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "maxLength": 256,
+      "minLength": 1,
+      "pattern": "^(@((?!.*\\*\\*)[a-z0-9-*][a-z0-9-._]*\\*?)\\/)?((?!.*\\*\\*)[a-z0-9-*][a-z0-9-._]*\\*?)$",
+      "description": "Unique name for this blueprint"
+    },
+    "version": {
+      "$ref": "#/$defs/SemanticVersion",
+      "description": "Semantic version following major.minor.patch format"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of what this blueprint deploys"
+    },
+    "source": {
+      "$ref": "#/$defs/Source"
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "description": "Tags for organizing and filtering blueprints"
+    },
+    "native": {
+      "$ref": "#/$defs/Native",
+      "description": "IaC tool configuration for native blueprints. MUTUALLY EXCLUSIVE with 'packages'."
+    },
+    "inputs": {
+      "additionalProperties": {
+        "$ref": "#/$defs/SlimInput"
+      },
+      "propertyNames": {
+        "pattern": "^[a-zA-Z0-9_]+$"
+      },
+      "type": "object",
+      "description": "Input parameters that can be passed when deploying. Each input must be an object, not null. Use {} for unconstrained inputs.",
+      "examples": [
+        {
+          "bucket_name": {
+            "default": "my-default-bucket",
+            "description": "Name of the S3 bucket",
+            "type": "string"
+          },
+          "enable_logging": {
+            "default": true,
+            "type": "bool"
+          },
+          "instance_count": {
+            "description": "Number of EC2 instances",
+            "type": "number"
+          },
+          "unconstrained_param": {}
+        }
+      ]
+    },
+    "packages": {
+      "items": {
+        "$ref": "#/$defs/SlimPackage"
+      },
+      "type": "array",
+      "description": "List of packages to deploy. MUTUALLY EXCLUSIVE with 'native'"
+    },
+    "outputs": {
+      "additionalProperties": {
+        "$ref": "#/$defs/SlimOutput"
+      },
+      "propertyNames": {
+        "pattern": "^[a-zA-Z0-9_]+$"
+      },
+      "type": "object",
+      "description": "Values to expose after deployment completes"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "name",
+    "version"
+  ],
+  "title": "Bricks Blueprint",
+  "description": "JSON Schema for Bluebricks bricks.yaml blueprint configuration files"
+}

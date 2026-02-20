@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Config",
+  "type": "object",
+  "properties": {
+    "ignore_author_re": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "regex"
+    },
+    "subject_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "minimum": 0
+    },
+    "subject_capitalized": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "subject_not_punctuated": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "imperative_subject": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "no_fixup": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "no_wip": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "hard_line_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "minimum": 0
+    },
+    "line_length": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "uint",
+      "minimum": 0
+    },
+    "style": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Style"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "allowed_types": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "allowed_scopes": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "merge_commit": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "allowed_author_re": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "regex"
+    }
+  },
+  "$defs": {
+    "Style": {
+      "type": "string",
+      "enum": [
+        "conventional",
+        "none"
+      ]
+    }
+  }
+}

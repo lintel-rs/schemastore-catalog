@@ -1,0 +1,222 @@
+{
+  "$defs": {
+    "gitpod.v1.AutomationsFile.Service": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^(runs_on)$": {
+          "$ref": "#/$defs/gitpod.v1.RunsOn"
+        },
+        "^(triggered_by)$": {
+          "items": {
+            "enum": [
+              "manual",
+              "postEnvironmentStart",
+              "postDevcontainerStart"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "properties": {
+        "commands": {
+          "$ref": "#/$defs/gitpod.v1.ServiceSpec.Commands"
+        },
+        "description": {
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "default": "",
+          "minLength": 1,
+          "type": "string"
+        },
+        "role": {
+          "default": "",
+          "enum": [
+            "",
+            "default",
+            "editor",
+            "ai-agent"
+          ],
+          "type": "string"
+        },
+        "runsOn": {
+          "$ref": "#/$defs/gitpod.v1.RunsOn"
+        },
+        "triggeredBy": {
+          "items": {
+            "enum": [
+              "manual",
+              "postEnvironmentStart",
+              "postDevcontainerStart"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Service",
+      "type": "object"
+    },
+    "gitpod.v1.AutomationsFile.Task": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^(depends_on)$": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "^(runs_on)$": {
+          "$ref": "#/$defs/gitpod.v1.RunsOn"
+        },
+        "^(triggered_by)$": {
+          "items": {
+            "enum": [
+              "manual",
+              "postEnvironmentStart",
+              "postDevcontainerStart",
+              "prebuild"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "properties": {
+        "command": {
+          "default": "",
+          "minLength": 1,
+          "type": "string"
+        },
+        "dependsOn": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "description": {
+          "default": "",
+          "type": "string"
+        },
+        "name": {
+          "default": "",
+          "minLength": 1,
+          "type": "string"
+        },
+        "runsOn": {
+          "$ref": "#/$defs/gitpod.v1.RunsOn"
+        },
+        "triggeredBy": {
+          "items": {
+            "enum": [
+              "manual",
+              "postEnvironmentStart",
+              "postDevcontainerStart",
+              "prebuild"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Task",
+      "type": "object"
+    },
+    "gitpod.v1.RunsOn": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "docker": {
+          "$ref": "#/$defs/gitpod.v1.RunsOn.Docker"
+        },
+        "machine": {
+          "$ref": "#/$defs/gitpod.v1.RunsOn.Machine"
+        }
+      },
+      "title": "Runs On",
+      "type": "object"
+    },
+    "gitpod.v1.RunsOn.Docker": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "environment": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "image": {
+          "default": "",
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "title": "Docker",
+      "type": "object"
+    },
+    "gitpod.v1.RunsOn.Machine": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "description": "Machine runs the service/task directly on the VM/machine level.",
+      "properties": {},
+      "title": "Machine",
+      "type": "object"
+    },
+    "gitpod.v1.ServiceSpec.Commands": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "ready": {
+          "default": "",
+          "description": "ready is an optional command that is run repeatedly until it exits with a zero exit code.\n If set, the service will first go into a Starting phase, and then into a Running phase once the ready\n command exits with a zero exit code.",
+          "type": "string"
+        },
+        "start": {
+          "default": "",
+          "description": "start is the command to start and run the service.\n If start exits, the service will transition to the following phase:\n - Stopped: if the exit code is 0\n - Failed: if the exit code is not 0\n If the stop command is not set, the start command will receive a SIGTERM signal when the service is\n requested to stop. If it does not exit within 2 minutes, it will receive a SIGKILL signal.",
+          "minLength": 1,
+          "type": "string"
+        },
+        "stop": {
+          "default": "",
+          "description": "stop is an optional command that runs when the service is requested to stop.\n If set, instead of sending a SIGTERM signal to the start command, the stop command will be run.\n Once the stop command exits, the start command will receive a SIGKILL signal.\n If the stop command exits with a non-zero exit code, the service will transition to the Failed phase.\n If the stop command does not exit within 2 minutes, a SIGKILL signal will be sent to both the start and\n stop commands.",
+          "type": "string"
+        }
+      },
+      "title": "Commands",
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "WARN: Do not remove any field here, as it will break reading automation yaml files. We error if there are any\n unknown fields in the yaml (to ensure the yaml is correct), but would break if we removed any fields.\n This includes marking a field as \"reserved\" in the proto file, this will also break reading the yaml.",
+  "properties": {
+    "services": {
+      "additionalProperties": {
+        "$ref": "#/$defs/gitpod.v1.AutomationsFile.Service"
+      },
+      "propertyNames": {
+        "pattern": "^[a-zA-Z0-9_-]{1,128}$",
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "tasks": {
+      "additionalProperties": {
+        "$ref": "#/$defs/gitpod.v1.AutomationsFile.Task"
+      },
+      "propertyNames": {
+        "pattern": "^[a-zA-Z0-9_-]{1,128}$",
+        "type": "string"
+      },
+      "type": "object"
+    }
+  },
+  "title": "Automations File",
+  "type": "object"
+}

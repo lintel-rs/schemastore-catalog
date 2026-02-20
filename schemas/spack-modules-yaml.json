@@ -1,0 +1,843 @@
+{
+"$schema":"http://json-schema.org/draft-07/schema#",
+"title":"Spack module file configuration file schema",
+"type":"object",
+"additionalProperties":false,
+"properties":{
+"modules":{
+"type":"object",
+"description":"Configure automatic generation of module files for Environment Modules and Lmod to manage user environments at HPC centers",
+"properties":{
+"prefix_inspections":{
+"type":"object",
+"description":"Global prefix inspection settings that apply to all module sets, controlling which subdirectories are added to environment variables",
+"additionalProperties":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of environment variables to update with this prefix-relative path if it exists"
+}
+}
+},
+"additionalProperties":{
+"type":"object",
+"default":{},
+"description":"Named module set configuration (e.g., 'default') defining how module files are generated for a specific set of packages",
+"additionalProperties":false,
+"properties":{
+"use_view":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"boolean"
+}
+],
+"description":"Generate modules relative to an environment view instead of install tree (True for default view, string for named view, False to disable)"
+},
+"arch_folder":{
+"type":"boolean",
+"description":"Whether to include architecture-specific subdirectories in module file paths"
+},
+"roots":{
+"type":"object",
+"description":"Custom root directories for different module file types",
+"properties":{
+"tcl":{
+"type":"string",
+"description":"Root directory for TCL module files"
+},
+"lmod":{
+"type":"string",
+"description":"Root directory for Lmod module files"
+}
+}
+},
+"enable":{
+"type":"array",
+"default":[],
+"description":"List of module types to automatically generate during package installation",
+"items":{
+"type":"string",
+"enum":[
+"tcl",
+"lmod"
+]
+}
+},
+"lmod":{
+"type":"object",
+"default":{},
+"description":"Configuration for Lmod hierarchical module system",
+"additionalKeysAreSpecs":true,
+"properties":{
+"verbose":{
+"type":"boolean",
+"default":false,
+"description":"Enable verbose output during module file generation"
+},
+"hash_length":{
+"type":"integer",
+"minimum":0,
+"default":7,
+"description":"Length of package hash to include in module file names (0-32, shorter hashes may cause naming conflicts)"
+},
+"include":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of specs to explicitly include for module file generation, even if they would normally be excluded"
+},
+"exclude":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of specs to exclude from module file generation"
+},
+"exclude_implicits":{
+"type":"boolean",
+"default":false,
+"description":"Exclude implicit dependencies from module file generation while still allowing autoloading"
+},
+"defaults":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of specs for which to create default module symlinks when multiple versions exist"
+},
+"hide_implicits":{
+"type":"boolean",
+"default":false,
+"description":"Hide implicit dependency modules from 'module avail' but still allow autoloading (requires module system support)"
+},
+"naming_scheme":{
+"type":"string",
+"description":"Custom naming scheme for module files using format strings"
+},
+"projections":{
+"type":"object",
+"description":"Custom directory structure and naming convention for module files using projection format",
+"properties":{
+"all":{
+"type":"string",
+"description":"Default projection format string used as fallback for all specs that do not match other entries. Uses spec format syntax like \"{name}/{version}/{hash:16}\"."
+}
+},
+"additionalKeysAreSpecs":true,
+"additionalProperties":{
+"type":"string",
+"description":"Projection format string for specs matching this key. Uses spec format syntax supporting tokens like {name}, {version}, {compiler.name}, {^dependency.name}, etc."
+}
+},
+"all":{
+"type":"object",
+"default":{},
+"description":"Default configuration applied to all module files in this module set",
+"additionalProperties":false,
+"properties":{
+"filter":{
+"type":"object",
+"default":{},
+"description":"Filter out specific environment variable modifications from module files",
+"additionalProperties":false,
+"properties":{
+"exclude_env_vars":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of environment variable names to exclude from module file modifications"
+}
+}
+},
+"template":{
+"type":"string",
+"description":"Path to custom template file for generating module files"
+},
+"autoload":{
+"type":"string",
+"enum":[
+"none",
+"run",
+"direct",
+"all"
+],
+"description":"Automatically load dependency modules when this module is loaded"
+},
+"prerequisites":{
+"type":"string",
+"enum":[
+"none",
+"run",
+"direct",
+"all"
+],
+"description":"Mark dependency modules as prerequisites instead of autoloading them"
+},
+"conflict":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of modules that conflict with this one and should not be loaded simultaneously"
+},
+"load":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of additional modules to load when this module is loaded"
+},
+"suffixes":{
+"type":"object",
+"description":"Add custom suffixes to module names based on spec matching for better readability",
+"additionalKeysAreSpecs":true,
+"additionalProperties":{
+"type":"string"
+}
+},
+"environment":{
+"type":"object",
+"description":"Custom environment variable modifications to apply in this module file",
+"default":{},
+"additionalProperties":false,
+"properties":{
+"set":{
+"description":"Environment variables to set to specific values",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"unset":{
+"description":"Environment variables to remove/unset",
+"default":[],
+"type":"array",
+"items":{
+"type":"string"
+}
+},
+"prepend_path":{
+"description":"Environment variables to prepend values to (typically PATH-like variables)",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"append_path":{
+"description":"Environment variables to append values to (typically PATH-like variables)",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"remove_path":{
+"description":"Values to remove from PATH-like environment variables",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+}
+}
+}
+}
+},
+"core_compilers":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of core compilers that are always available at the top level of the Lmod hierarchy"
+},
+"hierarchy":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of packages to use for building the Lmod module hierarchy (typically compilers and MPI implementations)"
+},
+"core_specs":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of specs that should be placed in the core level of the Lmod hierarchy regardless of dependencies"
+},
+"filter_hierarchy_specs":{
+"type":"object",
+"description":"Filter which specs are included at different levels of the Lmod hierarchy based on spec matching",
+"additionalKeysAreSpecs":true,
+"additionalProperties":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+}
+}
+}
+},
+"additionalProperties":{
+"type":"object",
+"default":{},
+"description":"Configuration for individual module file behavior and content customization",
+"additionalProperties":false,
+"properties":{
+"filter":{
+"type":"object",
+"default":{},
+"description":"Filter out specific environment variable modifications from module files",
+"additionalProperties":false,
+"properties":{
+"exclude_env_vars":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of environment variable names to exclude from module file modifications"
+}
+}
+},
+"template":{
+"type":"string",
+"description":"Path to custom template file for generating module files"
+},
+"autoload":{
+"type":"string",
+"enum":[
+"none",
+"run",
+"direct",
+"all"
+],
+"description":"Automatically load dependency modules when this module is loaded"
+},
+"prerequisites":{
+"type":"string",
+"enum":[
+"none",
+"run",
+"direct",
+"all"
+],
+"description":"Mark dependency modules as prerequisites instead of autoloading them"
+},
+"conflict":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of modules that conflict with this one and should not be loaded simultaneously"
+},
+"load":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of additional modules to load when this module is loaded"
+},
+"suffixes":{
+"type":"object",
+"description":"Add custom suffixes to module names based on spec matching for better readability",
+"additionalKeysAreSpecs":true,
+"additionalProperties":{
+"type":"string"
+}
+},
+"environment":{
+"type":"object",
+"description":"Custom environment variable modifications to apply in this module file",
+"default":{},
+"additionalProperties":false,
+"properties":{
+"set":{
+"description":"Environment variables to set to specific values",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"unset":{
+"description":"Environment variables to remove/unset",
+"default":[],
+"type":"array",
+"items":{
+"type":"string"
+}
+},
+"prepend_path":{
+"description":"Environment variables to prepend values to (typically PATH-like variables)",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"append_path":{
+"description":"Environment variables to append values to (typically PATH-like variables)",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"remove_path":{
+"description":"Values to remove from PATH-like environment variables",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+}
+}
+}
+}
+}
+},
+"tcl":{
+"type":"object",
+"default":{},
+"description":"Configuration for TCL module files compatible with Environment Modules",
+"additionalKeysAreSpecs":true,
+"properties":{
+"verbose":{
+"type":"boolean",
+"default":false,
+"description":"Enable verbose output during module file generation"
+},
+"hash_length":{
+"type":"integer",
+"minimum":0,
+"default":7,
+"description":"Length of package hash to include in module file names (0-32, shorter hashes may cause naming conflicts)"
+},
+"include":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of specs to explicitly include for module file generation, even if they would normally be excluded"
+},
+"exclude":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of specs to exclude from module file generation"
+},
+"exclude_implicits":{
+"type":"boolean",
+"default":false,
+"description":"Exclude implicit dependencies from module file generation while still allowing autoloading"
+},
+"defaults":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of specs for which to create default module symlinks when multiple versions exist"
+},
+"hide_implicits":{
+"type":"boolean",
+"default":false,
+"description":"Hide implicit dependency modules from 'module avail' but still allow autoloading (requires module system support)"
+},
+"naming_scheme":{
+"type":"string",
+"description":"Custom naming scheme for module files using format strings"
+},
+"projections":{
+"type":"object",
+"description":"Custom directory structure and naming convention for module files using projection format",
+"properties":{
+"all":{
+"type":"string",
+"description":"Default projection format string used as fallback for all specs that do not match other entries. Uses spec format syntax like \"{name}/{version}/{hash:16}\"."
+}
+},
+"additionalKeysAreSpecs":true,
+"additionalProperties":{
+"type":"string",
+"description":"Projection format string for specs matching this key. Uses spec format syntax supporting tokens like {name}, {version}, {compiler.name}, {^dependency.name}, etc."
+}
+},
+"all":{
+"type":"object",
+"default":{},
+"description":"Default configuration applied to all module files in this module set",
+"additionalProperties":false,
+"properties":{
+"filter":{
+"type":"object",
+"default":{},
+"description":"Filter out specific environment variable modifications from module files",
+"additionalProperties":false,
+"properties":{
+"exclude_env_vars":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of environment variable names to exclude from module file modifications"
+}
+}
+},
+"template":{
+"type":"string",
+"description":"Path to custom template file for generating module files"
+},
+"autoload":{
+"type":"string",
+"enum":[
+"none",
+"run",
+"direct",
+"all"
+],
+"description":"Automatically load dependency modules when this module is loaded"
+},
+"prerequisites":{
+"type":"string",
+"enum":[
+"none",
+"run",
+"direct",
+"all"
+],
+"description":"Mark dependency modules as prerequisites instead of autoloading them"
+},
+"conflict":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of modules that conflict with this one and should not be loaded simultaneously"
+},
+"load":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of additional modules to load when this module is loaded"
+},
+"suffixes":{
+"type":"object",
+"description":"Add custom suffixes to module names based on spec matching for better readability",
+"additionalKeysAreSpecs":true,
+"additionalProperties":{
+"type":"string"
+}
+},
+"environment":{
+"type":"object",
+"description":"Custom environment variable modifications to apply in this module file",
+"default":{},
+"additionalProperties":false,
+"properties":{
+"set":{
+"description":"Environment variables to set to specific values",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"unset":{
+"description":"Environment variables to remove/unset",
+"default":[],
+"type":"array",
+"items":{
+"type":"string"
+}
+},
+"prepend_path":{
+"description":"Environment variables to prepend values to (typically PATH-like variables)",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"append_path":{
+"description":"Environment variables to append values to (typically PATH-like variables)",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"remove_path":{
+"description":"Values to remove from PATH-like environment variables",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+}
+}
+}
+}
+}
+},
+"additionalProperties":{
+"type":"object",
+"default":{},
+"description":"Configuration for individual module file behavior and content customization",
+"additionalProperties":false,
+"properties":{
+"filter":{
+"type":"object",
+"default":{},
+"description":"Filter out specific environment variable modifications from module files",
+"additionalProperties":false,
+"properties":{
+"exclude_env_vars":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of environment variable names to exclude from module file modifications"
+}
+}
+},
+"template":{
+"type":"string",
+"description":"Path to custom template file for generating module files"
+},
+"autoload":{
+"type":"string",
+"enum":[
+"none",
+"run",
+"direct",
+"all"
+],
+"description":"Automatically load dependency modules when this module is loaded"
+},
+"prerequisites":{
+"type":"string",
+"enum":[
+"none",
+"run",
+"direct",
+"all"
+],
+"description":"Mark dependency modules as prerequisites instead of autoloading them"
+},
+"conflict":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of modules that conflict with this one and should not be loaded simultaneously"
+},
+"load":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of additional modules to load when this module is loaded"
+},
+"suffixes":{
+"type":"object",
+"description":"Add custom suffixes to module names based on spec matching for better readability",
+"additionalKeysAreSpecs":true,
+"additionalProperties":{
+"type":"string"
+}
+},
+"environment":{
+"type":"object",
+"description":"Custom environment variable modifications to apply in this module file",
+"default":{},
+"additionalProperties":false,
+"properties":{
+"set":{
+"description":"Environment variables to set to specific values",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"unset":{
+"description":"Environment variables to remove/unset",
+"default":[],
+"type":"array",
+"items":{
+"type":"string"
+}
+},
+"prepend_path":{
+"description":"Environment variables to prepend values to (typically PATH-like variables)",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"append_path":{
+"description":"Environment variables to append values to (typically PATH-like variables)",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+},
+"remove_path":{
+"description":"Values to remove from PATH-like environment variables",
+"type":"object",
+"additionalProperties":{
+"anyOf":[
+{
+"type":"string"
+},
+{
+"type":"number"
+}
+]
+}
+}
+}
+}
+}
+}
+},
+"prefix_inspections":{
+"type":"object",
+"description":"Control which package subdirectories are added to environment variables (e.g., bin to PATH, lib to LIBRARY_PATH)",
+"additionalProperties":{
+"type":"array",
+"default":[],
+"items":{
+"type":"string"
+},
+"description":"List of environment variables to update with this prefix-relative path if it exists"
+}
+}
+}
+}
+}
+}
+}

@@ -1,0 +1,629 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "addPanel": {
+      "jsDoc": {
+        "description": "Add Panel config.\nCan contain list of libraries installed in the project which provide boards for Codux.",
+        "tags": [
+          {
+            "tagName": "example",
+            "text": "{ addPanel: { assets: [\"addpanel-bootstrap\"] } }"
+          },
+          { "tagName": "group", "text": "General" }
+        ]
+      },
+      "description": "Add Panel config.\nCan contain list of libraries installed in the project which provide boards for Codux.",
+      "type": "object",
+      "properties": {
+        "assets": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "svgLoader": {
+      "jsDoc": {
+        "description": "Configures how SVG assets load.\nRefer to https://help.codux.com/kb/en/article/kb17934 for more information.",
+        "tags": [
+          { "tagName": "default", "text": "\"asset\"" },
+          { "tagName": "group", "text": "AssetManagement" }
+        ]
+      },
+      "description": "Configures how SVG assets load.\nRefer to https://help.codux.com/kb/en/article/kb17934 for more information.",
+      "oneOf": [
+        { "type": "string", "enum": ["asset"] },
+        { "type": "string", "enum": ["svgr"] },
+        { "type": "string", "enum": ["both"] }
+      ],
+      "default": "asset"
+    },
+    "boardsPath": {
+      "jsDoc": {
+        "description": "Default directory for new boards, relative to the project root.\nRefer to https://help.codux.com/kb/en/article/kb19337 for more information.",
+        "tags": [{ "tagName": "default", "text": "\"src/_codux/boards\"" }]
+      },
+      "description": "Default directory for new boards, relative to the project root.\nRefer to https://help.codux.com/kb/en/article/kb19337 for more information.",
+      "type": "string",
+      "default": "src/_codux/boards"
+    },
+    "newBoard": {
+      "jsDoc": {
+        "description": "Configures default path for board template folders and files.",
+        "tags": [
+          { "tagName": "default", "text": "undefined" },
+          { "tagName": "group", "text": "General" }
+        ]
+      },
+      "description": "Configures default path for board template folders and files.",
+      "type": "object",
+      "properties": {
+        "templatesPath": { "$ref": "#/$defs/TemplatesConfig" },
+        "templatesConfig": {
+          "jsDoc": {
+            "description": "Defines a configuration object for templates.\nThis configuration allows specifying default directories for entities created using these templates.\nEach template can have a custom configuration.",
+            "tags": [{ "tagName": "visualizer", "text": "json-edit-code" }]
+          },
+          "description": "Defines a configuration object for templates.\nThis configuration allows specifying default directories for entities created using these templates.\nEach template can have a custom configuration.",
+          "format": "json-edit-code",
+          "type": "object",
+          "additionalItems": {}
+        }
+      }
+    },
+    "maxThumbnailSnapshotDelayConfig": {
+      "jsDoc": {
+        "description": "Maximum time (in milliseconds) to postpone capturing a thumbnail for the board.\nRefer to https://help.codux.com/kb/en/article/kb20920 for more information.",
+        "tags": [{ "tagName": "default", "text": "5000" }]
+      },
+      "description": "Maximum time (in milliseconds) to postpone capturing a thumbnail for the board.\nRefer to https://help.codux.com/kb/en/article/kb20920 for more information.",
+      "type": "number",
+      "default": 5000
+    },
+    "scripts": {
+      "jsDoc": {
+        "description": "Configures scripts for project users to run from Codux (triggerable and on demand).\nRefer to https://help.codux.com/kb/en/article/kb30920 for more information.",
+        "tags": [
+          { "tagName": "group", "text": "Scripts" },
+          { "tagName": "visualizer", "text": "json-edit-code" }
+        ]
+      },
+      "description": "Configures scripts for project users to run from Codux (triggerable and on demand).\nRefer to https://help.codux.com/kb/en/article/kb30920 for more information.",
+      "format": "json-edit-code",
+      "type": "object",
+      "additionalItems": { "$ref": "#/$defs/ConfiguredScript" }
+    },
+    "boardGlobalSetup": {
+      "jsDoc": {
+        "description": "Path to a file that will be evaluated before each board is rendered,\nUseful for importing global stylesheets and initializing global variables.\nCan be absolute or relative to the project root (in which case it needs to start with './')\nRefer to https://help.codux.com/kb/en/article/kb36623 for more information.",
+        "tags": [{ "tagName": "group", "text": "Rendering" }]
+      },
+      "description": "Path to a file that will be evaluated before each board is rendered,\nUseful for importing global stylesheets and initializing global variables.\nCan be absolute or relative to the project root (in which case it needs to start with './')\nRefer to https://help.codux.com/kb/en/article/kb36623 for more information.",
+      "oneOf": [
+        { "type": "null" },
+        { "type": "string" },
+        { "$ref": "#/$defs/GlobalPathsInterface" }
+      ]
+    },
+    "previewConfiguration": {
+      "jsDoc": {
+        "description": "Specifies environment variables to use globally across the project.\nRefer to https://help.codux.com/kb/en/article/kb37722 for more information."
+      },
+      "description": "Specifies environment variables to use globally across the project.\nRefer to https://help.codux.com/kb/en/article/kb37722 for more information.",
+      "type": "object",
+      "properties": {
+        "environmentVariables": {
+          "jsDoc": {
+            "description": "variables that are being accessed from process.env",
+            "tags": [{ "tagName": "visualizer", "text": "json-edit-code" }]
+          },
+          "description": "variables that are being accessed from process.env",
+          "format": "json-edit-code",
+          "type": "object",
+          "additionalItems": { "type": "string" }
+        },
+        "envFile": {
+          "jsDoc": {
+            "description": "variables that are being accessed from process.env from an env file"
+          },
+          "description": "variables that are being accessed from process.env from an env file",
+          "type": "string"
+        }
+      }
+    },
+    "staticServerRoot": {
+      "jsDoc": {
+        "description": "The relative path to the folder from which static files are served.\nRefer to https://help.codux.com/kb/en/article/kb23123 for more information.",
+        "tags": [
+          { "tagName": "default", "text": "''" },
+          { "tagName": "group", "text": "Server" },
+          { "tagName": "visualizer", "text": "json-edit-code" }
+        ]
+      },
+      "description": "The relative path to the folder from which static files are served.\nRefer to https://help.codux.com/kb/en/article/kb23123 for more information.",
+      "format": "json-edit-code",
+      "type": "string",
+      "default": "public"
+    },
+    "cssCompilation": {
+      "jsDoc": {
+        "description": "Enables CSS modules in your project.\nRefer to https://help.codux.com/kb/en/article/kb25813 for more information.",
+        "tags": [{ "tagName": "group", "text": "Styling" }]
+      },
+      "description": "Enables CSS modules in your project.\nRefer to https://help.codux.com/kb/en/article/kb25813 for more information.",
+      "type": "object",
+      "properties": {
+        "activateCssModules": {
+          "jsDoc": {
+            "description": "Enables or disables the use of CSS modules.",
+            "tags": [{ "tagName": "default", "text": "true" }]
+          },
+          "description": "Enables or disables the use of CSS modules.",
+          "type": "boolean"
+        },
+        "cssModulesExt": {
+          "jsDoc": {
+            "description": "The extension types for files to load as modules.",
+            "tags": [{ "tagName": "default", "text": "[\".modules.css\"]" }]
+          },
+          "description": "The extension types for files to load as modules.",
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["activateCssModules", "cssModulesExt"]
+    },
+    "safeRender": {
+      "jsDoc": {
+        "description": "Configures maximum rendered elements.\nRefer to https://help.codux.com/kb/en/article/kb18414 for more information.",
+        "tags": [{ "tagName": "group", "text": "Rendering" }]
+      },
+      "description": "Configures maximum rendered elements.\nRefer to https://help.codux.com/kb/en/article/kb18414 for more information.",
+      "type": "object",
+      "properties": { "maxInstancesPerComponent": { "type": "number" } }
+    },
+    "conditionalRenderers": {
+      "jsDoc": {
+        "description": "If the project uses <Routes />, or any other component to conditionally render its\nchildren based on the URL or some other logic, this string[] should include the names\nof these components (\"Routes\") for compatibility with Codux.",
+        "tags": [{ "tagName": "group", "text": "Rendering" }]
+      },
+      "description": "If the project uses <Routes />, or any other component to conditionally render its\nchildren based on the URL or some other logic, this string[] should include the names\nof these components (\"Routes\") for compatibility with Codux.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "defaultImportedStylesFilePath": {
+      "jsDoc": {
+        "description": "Configures the default file path to add new fonts to.",
+        "tags": [{ "tagName": "group", "text": "Styling" }]
+      },
+      "description": "Configures the default file path to add new fonts to.",
+      "type": "string",
+      "default": ""
+    },
+    "httpServerPort": {
+      "jsDoc": {
+        "description": "Port of HTTP server that is used to serve previews and user project itself.",
+        "tags": [
+          { "tagName": "default", "text": "0 (auto assigned by OS)" },
+          { "tagName": "group", "text": "Server" }
+        ]
+      },
+      "description": "Port of HTTP server that is used to serve previews and user project itself.",
+      "type": "number",
+      "default": 0
+    },
+    "defaultJSONSchemas": {
+      "jsDoc": {
+        "description": "Configuration for adding additional json schemas to your project.\nThis can be used to centralise json schemas addition instead of using $schema and get autocompletion for json files when using Codux.",
+        "tags": [
+          {
+            "tagName": "example",
+            "text": "  defaultJSONSchemas: [\n    {\n      fileNameRegex: 'schema-from-config.json',\n      schemaPath: '/src/specified-schema.schema.json#def1',\n    },\n    {\n      fileNameRegex: 'schema-from-ts.json',\n      schemaPath: '/src/specified-schema.ts#MyJSON',\n    },\n  ],"
+          }
+        ]
+      },
+      "description": "Configuration for adding additional json schemas to your project.\nThis can be used to centralise json schemas addition instead of using $schema and get autocompletion for json files when using Codux.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/IDefaultJSONSchema" }
+    },
+    "defaultImagesDir": {
+      "jsDoc": {
+        "description": "Configures the default directory where the Codux Media Manager stores new assets.\nRefer to https://help.codux.com/kb/en/article/kb96140 for more information.",
+        "tags": [{ "tagName": "group", "text": "General" }]
+      },
+      "description": "Configures the default directory where the Codux Media Manager stores new assets.\nRefer to https://help.codux.com/kb/en/article/kb96140 for more information.",
+      "type": "string",
+      "default": "./src/assets"
+    },
+    "newComponent": {
+      "jsDoc": {
+        "description": "Configures default paths for new component and template files.\nRefer to https://help.codux.com/kb/en/article/kb16522 for more information."
+      },
+      "description": "Configures default paths for new component and template files.\nRefer to https://help.codux.com/kb/en/article/kb16522 for more information.",
+      "type": "object",
+      "properties": {
+        "templatesPath": { "$ref": "#/$defs/TemplatesConfig" },
+        "templatesConfig": {
+          "jsDoc": {
+            "description": "Defines a configuration object for templates.\nThis configuration allows specifying default directories for entities created using these templates.\nEach template can have a custom configuration.",
+            "tags": [{ "tagName": "visualizer", "text": "json-edit-code" }]
+          },
+          "description": "Defines a configuration object for templates.\nThis configuration allows specifying default directories for entities created using these templates.\nEach template can have a custom configuration.",
+          "format": "json-edit-code",
+          "type": "object",
+          "additionalItems": {
+            "type": "object",
+            "properties": {
+              "path": { "type": "string" },
+              "boardTemplate": {
+                "$ref": "#/$defs/NewComponentTemplateConfigAddition"
+              }
+            }
+          }
+        },
+        "componentsPath": {
+          "jsDoc": {
+            "description": "Path where new components and related files will save to."
+          },
+          "description": "Path where new components and related files will save to.",
+          "type": "string"
+        }
+      }
+    },
+    "ignoredSubPaths": {
+      "jsDoc": {
+        "description": "Specifies project folders to exclude from component search.\nRefer to https://help.codux.com/kb/en/article/kb14730 for more information.",
+        "tags": [{ "tagName": "group", "text": "General" }]
+      },
+      "description": "Specifies project folders to exclude from component search.\nRefer to https://help.codux.com/kb/en/article/kb14730 for more information.",
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "fileNamingConvention": {
+      "jsDoc": {
+        "description": "Configures file-naming convention for new component creation.\nRefer to https://help.codux.com/kb/en/article/kb29627 for more information.\nOptions: \"pascal-case\" | \"camel-case\" | \"kebab-case\"",
+        "tags": [
+          { "tagName": "default", "text": "\"kebab-case\"" },
+          { "tagName": "group", "text": "FileManagement" }
+        ]
+      },
+      "description": "Configures file-naming convention for new component creation.\nRefer to https://help.codux.com/kb/en/article/kb29627 for more information.\nOptions: \"pascal-case\" | \"camel-case\" | \"kebab-case\"",
+      "oneOf": [
+        { "type": "string", "enum": ["kebab-case"] },
+        { "type": "string", "enum": ["pascal-case"] },
+        { "type": "string", "enum": ["camel-case"] }
+      ]
+    },
+    "resolve": {
+      "jsDoc": {
+        "description": "Includes package assets from additional sources, and creates aliases and fallbacks.\nRefer to https://help.codux.com/kb/en/article/kb18719 for more information.",
+        "tags": [
+          {
+            "tagName": "default",
+            "text": "{ packageRoots: [\"node_modules\"], alias: {}, workspaceAlias: {}, fallback: {} }"
+          },
+          { "tagName": "group", "text": "AssetManagement" }
+        ]
+      },
+      "description": "Includes package assets from additional sources, and creates aliases and fallbacks.\nRefer to https://help.codux.com/kb/en/article/kb18719 for more information.",
+      "type": "object",
+      "properties": {
+        "alias": {
+          "jsDoc": {
+            "description": "Aliases for package requests.\nRecord key is the request to be mapped, value is the new target.\nAlias is attempted before original request.",
+            "tags": [{ "tagName": "visualizer", "text": "json-edit-code" }]
+          },
+          "description": "Aliases for package requests.\nRecord key is the request to be mapped, value is the new target.\nAlias is attempted before original request.",
+          "format": "json-edit-code",
+          "type": "object",
+          "additionalItems": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "boolean", "enum": [false] }
+            ]
+          }
+        },
+        "fallback": {
+          "jsDoc": {
+            "description": "Fallback for package requests.\nRecord key is the request to be mapped, value is the new target.\nOriginal request is attempted before fallback.",
+            "tags": [{ "tagName": "visualizer", "text": "json-edit-code" }]
+          },
+          "description": "Fallback for package requests.\nRecord key is the request to be mapped, value is the new target.\nOriginal request is attempted before fallback.",
+          "format": "json-edit-code",
+          "type": "object",
+          "additionalItems": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "boolean", "enum": [false] }
+            ]
+          }
+        },
+        "packageRoots": {
+          "jsDoc": {
+            "description": "Folders to use when searching for packages.",
+            "tags": [{ "tagName": "default", "text": "['node_modules']" }]
+          },
+          "description": "Folders to use when searching for packages.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "workspaceAlias": {
+          "jsDoc": {
+            "description": "Aliases for all package requests in a monorepo.\nRecord key is the request to be mapped, value is the new target.",
+            "tags": [{ "tagName": "visualizer", "text": "json-edit-code" }]
+          },
+          "description": "Aliases for all package requests in a monorepo.\nRecord key is the request to be mapped, value is the new target.",
+          "format": "json-edit-code",
+          "type": "object",
+          "additionalItems": { "type": "string" }
+        },
+        "customConditions": {
+          "jsDoc": {
+            "description": "Conditions to set in addition to the resolver-specific\ndefaults when resolving imports."
+          },
+          "description": "Conditions to set in addition to the resolver-specific\ndefaults when resolving imports.",
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "sassCompilation": {
+      "jsDoc": {
+        "description": "Adds Sass support to compilations.\nRefer to https://help.codux.com/kb/en/article/kb19315 for more information.",
+        "tags": [{ "tagName": "group", "text": "Styling" }]
+      },
+      "description": "Adds Sass support to compilations.\nRefer to https://help.codux.com/kb/en/article/kb19315 for more information.",
+      "type": "object",
+      "properties": {
+        "modules": {
+          "jsDoc": {
+            "description": "Defines path and module extensions for Sass modules to include and/or ignore.\nInput as an array of glob patterns."
+          },
+          "description": "Defines path and module extensions for Sass modules to include and/or ignore.\nInput as an array of glob patterns.",
+          "type": "object",
+          "properties": {
+            "include": {
+              "jsDoc": { "description": "Array of glob patterns to include." },
+              "description": "Array of glob patterns to include.",
+              "oneOf": [
+                { "type": "string" },
+                { "type": "array", "items": { "type": "string" } }
+              ]
+            },
+            "ignore": {
+              "jsDoc": { "description": "Array of glob patterns to ignore." },
+              "description": "Array of glob patterns to ignore.",
+              "oneOf": [
+                { "type": "string" },
+                { "type": "array", "items": { "type": "string" } }
+              ]
+            }
+          },
+          "required": ["include"]
+        },
+        "resolveUrls": {
+          "jsDoc": {
+            "description": "Determines whether URLs in Sass files should resolve to absolute file paths before compiling them.",
+            "tags": [{ "tagName": "default", "text": "true" }]
+          },
+          "description": "Determines whether URLs in Sass files should resolve to absolute file paths before compiling them.",
+          "type": "boolean"
+        },
+        "includePaths": {
+          "jsDoc": {
+            "description": "Array of paths to resolve Sass files from."
+          },
+          "description": "Array of paths to resolve Sass files from.",
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["modules", "resolveUrls"]
+    },
+    "serverProxyMap": {
+      "jsDoc": {
+        "description": "Configures proxy servers for Codux to redirect requests to.\nThe key is the path to proxy requests from, and the value is the url to proxy requests to.\nRefer to https://help.codux.com/kb/en/article/kb18137 for more information.",
+        "tags": [
+          { "tagName": "default", "text": "{}" },
+          { "tagName": "group", "text": "Server" },
+          { "tagName": "visualizer", "text": "json-edit-code" }
+        ]
+      },
+      "description": "Configures proxy servers for Codux to redirect requests to.\nThe key is the path to proxy requests from, and the value is the url to proxy requests to.\nRefer to https://help.codux.com/kb/en/article/kb18137 for more information.",
+      "format": "json-edit-code",
+      "type": "object",
+      "additionalItems": { "type": "string" }
+    },
+    "disableProjectSharing": {
+      "jsDoc": {
+        "description": "Disables sharing the project in the Codux Online Playground.\nRefer to https://help.codux.com/kb/en/article/kb02353 for more information.",
+        "tags": [{ "tagName": "default", "text": "\"false\"" }]
+      },
+      "description": "Disables sharing the project in the Codux Online Playground.\nRefer to https://help.codux.com/kb/en/article/kb02353 for more information.",
+      "type": "boolean",
+      "default": false
+    },
+    "styling": {
+      "jsDoc": {
+        "description": "Styling related configuration.\nContains field for styling solution which determines the main styling solution in the user's project.\nRefer to https://help.codux.com/kb/en/article/kb31817 for more information.",
+        "tags": [
+          { "tagName": "example", "text": "{ solution: \"stylable\" }" },
+          { "tagName": "group", "text": "Styling" }
+        ]
+      },
+      "description": "Styling related configuration.\nContains field for styling solution which determines the main styling solution in the user's project.\nRefer to https://help.codux.com/kb/en/article/kb31817 for more information.",
+      "type": "object",
+      "properties": {
+        "solution": {
+          "jsDoc": {
+            "description": "Default file extension to use for component style sheets in the project.\nOptions: \"css\" | \"sass\" | \"css modules\" | \"sass modules\" | \"scss\" | \"scss modules\" | \"stylable\""
+          },
+          "description": "Default file extension to use for component style sheets in the project.\nOptions: \"css\" | \"sass\" | \"css modules\" | \"sass modules\" | \"scss\" | \"scss modules\" | \"stylable\"",
+          "type": "string"
+        }
+      }
+    },
+    "styleFilesConfig": {
+      "jsDoc": {
+        "description": "Formats code styling in the Codux code drawer.\nRefer to https://help.codux.com/kb/en/article/kb18018 for more information.",
+        "tags": [
+          { "tagName": "group", "text": "FileManagement" },
+          { "tagName": "group", "text": "Styling" }
+        ]
+      },
+      "description": "Formats code styling in the Codux code drawer.\nRefer to https://help.codux.com/kb/en/article/kb18018 for more information.",
+      "type": "object",
+      "properties": {
+        "commonStyleFilePattern": {
+          "jsDoc": {
+            "description": "An extended glob pattern that describes the common CSS files used in the project.\nThe Style Panel will not suggest these files for adding new rules to an element or editing its style."
+          },
+          "description": "An extended glob pattern that describes the common CSS files used in the project.\nThe Style Panel will not suggest these files for adding new rules to an element or editing its style.",
+          "type": "string"
+        }
+      }
+    },
+    "conditionalClassnamesConfig": {
+      "$ref": "#/$defs/UtilityFunctionClassNamesPluginOptions"
+    },
+    "schemaMemoryUsageView": {
+      "jsDoc": { "description": "Configures the schema memory usage panel" },
+      "description": "Configures the schema memory usage panel",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "oneOf": [
+            { "type": "boolean", "enum": [false] },
+            { "type": "boolean", "enum": [true] }
+          ]
+        }
+      }
+    },
+    "tailwindcssConfig": {
+      "jsDoc": {
+        "description": "Lets you pass a custom tailwindcss config file path.\nRefer to https://help.codux.com/kb/en/article/kb18518 for more information.",
+        "tags": [{ "tagName": "group", "text": "Styling" }]
+      },
+      "description": "Lets you pass a custom tailwindcss config file path.\nRefer to https://help.codux.com/kb/en/article/kb18518 for more information.",
+      "type": "string"
+    },
+    "componentsDiscovery": {
+      "jsDoc": {
+        "description": "Scopes component discovery in your project.\nRefer to https://help.codux.com/kb/en/article/kb37113 for more information.",
+        "tags": [{ "tagName": "group", "text": "General" }]
+      },
+      "description": "Scopes component discovery in your project.\nRefer to https://help.codux.com/kb/en/article/kb37113 for more information.",
+      "type": "object",
+      "properties": {
+        "include": {
+          "jsDoc": { "description": "Array of glob patterns to include." },
+          "description": "Array of glob patterns to include.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "exclude": {
+          "jsDoc": { "description": "Array of glob patterns to exclude." },
+          "description": "Array of glob patterns to exclude.",
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "externalProviders": {
+      "type": "object",
+      "properties": {
+        "wix": {
+          "type": "object",
+          "properties": {
+            "projectId": { "type": "string" },
+            "metaSiteId": { "type": "string" }
+          },
+          "required": ["projectId", "metaSiteId"]
+        }
+      }
+    }
+  },
+  "$defs": {
+    "TemplatesConfig": {
+      "jsDoc": { "description": "Path where project templates are stored." },
+      "description": "Path where project templates are stored.",
+      "type": "string"
+    },
+    "ScriptFrom": {
+      "jsDoc": {
+        "description": "Script title in the UI.\nWill be available to use from Codux."
+      },
+      "description": "Script title in the UI.\nWill be available to use from Codux.",
+      "type": "string"
+    },
+    "ScriptFromConfig": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "jsDoc": {
+            "description": "This is the command that the script runs when executed."
+          },
+          "description": "This is the command that the script runs when executed.",
+          "type": "string"
+        },
+        "title": { "$ref": "#/$defs/ScriptFrom" },
+        "description": { "$ref": "#/$defs/ScriptFrom" },
+        "trigger": { "$ref": "#/$defs/ScriptFrom" },
+        "preventRunningInBackground": { "$ref": "#/$defs/ScriptFrom" },
+        "preventRerenderBoardsOnFinish": { "$ref": "#/$defs/ScriptFrom" }
+      },
+      "required": ["command"]
+    },
+    "BatchFromConfig": {
+      "type": "object",
+      "properties": {
+        "run": {
+          "jsDoc": {
+            "description": "The value of this parameter is an array of script objects to include in the batch."
+          },
+          "description": "The value of this parameter is an array of script objects to include in the batch.",
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "title": { "$ref": "#/$defs/ScriptFrom" },
+        "description": { "$ref": "#/$defs/ScriptFrom" },
+        "trigger": { "$ref": "#/$defs/ScriptFrom" },
+        "preventRunningInBackground": { "$ref": "#/$defs/ScriptFrom" },
+        "preventRerenderBoardsOnFinish": { "$ref": "#/$defs/ScriptFrom" }
+      },
+      "required": ["run"]
+    },
+    "ConfiguredScript": {
+      "oneOf": [
+        { "$ref": "#/$defs/ScriptFromConfig" },
+        { "$ref": "#/$defs/BatchFromConfig" }
+      ]
+    },
+    "GlobalPathsInterface": {
+      "type": "object",
+      "properties": {
+        "before": { "type": "string" },
+        "after": { "type": "string" }
+      }
+    },
+    "IDefaultJSONSchema": {
+      "type": "object",
+      "properties": {
+        "fileNameRegex": { "type": "string" },
+        "schemaPath": { "type": "string" }
+      },
+      "required": ["fileNameRegex", "schemaPath"]
+    },
+    "NewComponentTemplateConfigAddition": { "type": "string" },
+    "UtilityFunctionClassNamesPluginOptions": {
+      "jsDoc": {
+        "description": "Options for using the classNames utility library, including path to classNames module, and target export.\nThe default configuration is set for handling the '[classnames](https://github.com/JedWatson/classnames)' library by JedWatson.\nRefer to https://help.codux.com/kb/en/article/kb36122 for more information.",
+        "tags": [{ "tagName": "group", "text": "General" }]
+      },
+      "description": "Options for using the classNames utility library, including path to classNames module, and target export.\nThe default configuration is set for handling the '[classnames](https://github.com/JedWatson/classnames)' library by JedWatson.\nRefer to https://help.codux.com/kb/en/article/kb36122 for more information.",
+      "type": "object",
+      "properties": {
+        "classnamesPath": { "type": "string" },
+        "classnamesTarget": { "type": "string" }
+      },
+      "required": ["classnamesPath", "classnamesTarget"]
+    }
+  }
+}

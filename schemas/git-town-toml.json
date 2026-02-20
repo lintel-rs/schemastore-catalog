@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://www.git-town.com/git-town.toml",
+  "$ref": "#/$defs/Data",
+  "$defs": {
+    "Branches": {
+      "properties": {
+        "contribution-regex": {
+          "type": "string"
+        },
+        "default-type": {
+          "type": "string"
+        },
+        "display-types": {
+          "type": "string"
+        },
+        "feature-regex": {
+          "type": "string"
+        },
+        "main": {
+          "type": "string"
+        },
+        "observed-regex": {
+          "type": "string"
+        },
+        "order": {
+          "type": "string"
+        },
+        "perennial-regex": {
+          "type": "string"
+        },
+        "perennials": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "unknown-type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Create": {
+      "properties": {
+        "branch-prefix": {
+          "type": "string"
+        },
+        "new-branch-type": {
+          "type": "string"
+        },
+        "push-new-branches": {
+          "type": "boolean"
+        },
+        "share-new-branches": {
+          "type": "string"
+        },
+        "stash": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Data": {
+      "properties": {
+        "branches": {
+          "$ref": "#/$defs/Branches"
+        },
+        "create": {
+          "$ref": "#/$defs/Create"
+        },
+        "create-prototype-branches": {
+          "type": "boolean"
+        },
+        "hosting": {
+          "$ref": "#/$defs/Hosting"
+        },
+        "propose": {
+          "$ref": "#/$defs/Propose"
+        },
+        "push-hook": {
+          "type": "boolean"
+        },
+        "push-new-branches": {
+          "type": "boolean"
+        },
+        "ship": {
+          "$ref": "#/$defs/Ship"
+        },
+        "ship-delete-tracking-branch": {
+          "type": "boolean"
+        },
+        "ship-strategy": {
+          "type": "string"
+        },
+        "sync": {
+          "$ref": "#/$defs/Sync"
+        },
+        "sync-strategy": {
+          "$ref": "#/$defs/SyncStrategy"
+        },
+        "sync-tags": {
+          "type": "boolean"
+        },
+        "sync-upstream": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Hosting": {
+      "properties": {
+        "browser": {
+          "type": "string"
+        },
+        "dev-remote": {
+          "type": "string"
+        },
+        "forge-type": {
+          "type": "string"
+        },
+        "github-connector": {
+          "type": "string"
+        },
+        "gitlab-connector": {
+          "type": "string"
+        },
+        "origin-hostname": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Propose": {
+      "properties": {
+        "breadcrumb": {
+          "type": "string"
+        },
+        "direction": {
+          "type": "string"
+        },
+        "lineage": {
+          "type": "string"
+        },
+        "style": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Ship": {
+      "properties": {
+        "delete-tracking-branch": {
+          "type": "boolean"
+        },
+        "ignore-uncommitted": {
+          "type": "boolean"
+        },
+        "strategy": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "Sync": {
+      "properties": {
+        "auto-resolve": {
+          "type": "boolean"
+        },
+        "auto-sync": {
+          "type": "boolean"
+        },
+        "detached": {
+          "type": "boolean"
+        },
+        "feature-strategy": {
+          "type": "string"
+        },
+        "perennial-strategy": {
+          "type": "string"
+        },
+        "prototype-strategy": {
+          "type": "string"
+        },
+        "push-branches": {
+          "type": "boolean"
+        },
+        "push-hook": {
+          "type": "boolean"
+        },
+        "tags": {
+          "type": "boolean"
+        },
+        "upstream": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "SyncStrategy": {
+      "properties": {
+        "feature-branches": {
+          "type": "string"
+        },
+        "perennial-branches": {
+          "type": "string"
+        },
+        "prototype-branches": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  }
+}

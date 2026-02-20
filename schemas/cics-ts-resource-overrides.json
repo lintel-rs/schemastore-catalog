@@ -1,0 +1,64 @@
+{
+    "$id": "http://www.ibm.com/xmlns/prod/cics/resourceoverrides",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "CICS resource overrides JSON Schema for CICS TS 6.3.0.",
+    "description": "Super-schema that describes all versions of 'CICS resource overrides JSON Schema for CICS TS 6.3.0.'",
+    "allOf": [
+        {
+            "title": "CICS resource overrides JSON Schema.",
+            "description": "Schema that describes the structure of a CICS resource overrides document.",
+            "if": {
+                "properties": {
+                    "schemaVersion": {
+                        "const": "resourceOverrides/1.0"
+                    }
+                }
+            },
+            "then": {
+                "$ref": "resourceoverrides/resourceoverrides-1.0.0.json"
+            }
+        },
+        {
+            "title": "CICS resource overrides JSON Schema for CICS TS 6.1.0.",
+            "description": "Schema that describes the structure of a CICS resource overrides document.",
+            "if": {
+                "properties": {
+                    "schemaVersion": {
+                        "const": "resourceOverrides/1.100"
+                    }
+                }
+            },
+            "then": {
+                "$ref": "resourceoverrides/resourceoverrides-1.100.3.json"
+            }
+        },
+        {
+            "title": "CICS resource overrides JSON Schema for CICS TS 6.2.0.",
+            "description": "Schema that describes the structure of a CICS resource overrides document.",
+            "if": {
+                "properties": {
+                    "schemaVersion": {
+                        "const": "resourceOverrides/1.200"
+                    }
+                }
+            },
+            "then": {
+                "$ref": "resourceoverrides/resourceoverrides-1.200.0.json"
+            }
+        },
+        {
+            "title": "CICS resource overrides JSON Schema for CICS TS 6.3.0.",
+            "description": "Schema that describes the structure of a CICS resource overrides document.",
+            "if": {
+                "properties": {
+                    "schemaVersion": {
+                        "const": "resourceOverrides/1.300"
+                    }
+                }
+            },
+            "then": {
+                "$ref": "resourceoverrides/resourceoverrides-1.300.0.json"
+            }
+        }
+    ]
+}

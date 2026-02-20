@@ -1,0 +1,794 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "IXpect Configuration Schema",
+  "type": "object",
+  "properties": {
+    "probes": {
+      "description": "The probe configurations.",
+      "$ref": "#/$defs/ProbesConfig"
+    },
+    "event": {
+      "description": "The configuration of event notifications.",
+      "$ref": "#/$defs/EventsConfig"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "probes",
+    "event"
+  ],
+  "$defs": {
+    "ProbesConfig": {
+      "type": "object",
+      "properties": {
+        "print": {
+          "$ref": "#/$defs/PrintProbe"
+        },
+        "arp_neighbor": {
+          "$ref": "#/$defs/ArpNeighborConfig"
+        },
+        "bum_rate": {
+          "$ref": "#/$defs/BumRateConfig"
+        },
+        "ether_type": {
+          "$ref": "#/$defs/EtherTypeConfig"
+        },
+        "stp": {
+          "$ref": "#/$defs/StpProbe"
+        },
+        "arp_bogon": {
+          "$ref": "#/$defs/ArpBogonConfig"
+        },
+        "ipv6_bogon": {
+          "$ref": "#/$defs/Ipv6BogonConfig"
+        },
+        "ipv6_router": {
+          "$ref": "#/$defs/Ipv6RouterProbe"
+        },
+        "ipv6_neighbor": {
+          "$ref": "#/$defs/Ipv6NeighborConfig"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PrintProbe": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this probe.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ArpNeighborConfig": {
+      "description": "The arp_neighbor probe checks the ARP resolution from IP to MAC addresses.",
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this probe.",
+          "type": "boolean",
+          "default": false
+        },
+        "static_resolutions": {
+          "description": "Static map of ARP resolutions.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArpNeighborResolutionConfig"
+          }
+        },
+        "dynamic_enable": {
+          "description": "Enable dynamic learning from observed ARP resolutions.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ArpNeighborResolutionConfig": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string",
+          "format": "ipv4"
+        },
+        "mac": {
+          "type": "string",
+          "pattern": "^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ip",
+        "mac"
+      ]
+    },
+    "BumRateConfig": {
+      "description": "The bum_rate probe monitors the packet rates of BUM traffic.",
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this probe.",
+          "type": "boolean",
+          "default": false
+        },
+        "window": {
+          "description": "The aggregation window in which the BUM thresholds are periodically checked.",
+          "type": "string"
+        },
+        "thresholds": {
+          "$ref": "#/$defs/BumRateThresholds"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "window",
+        "thresholds"
+      ]
+    },
+    "BumRateThresholds": {
+      "description": "The thresholds for different BUM traffic patterns.",
+      "type": "object",
+      "properties": {
+        "broadcast": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint64",
+          "minimum": 0
+        },
+        "unicast": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint64",
+          "minimum": 0
+        },
+        "multicast": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint64",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "EtherTypeConfig": {
+      "description": "The ether_type probe inspects the EtherType of packets.",
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this probe.",
+          "type": "boolean",
+          "default": false
+        },
+        "allowed_ether_types": {
+          "description": "The list of allowed ether types.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "integer",
+            "format": "uint16",
+            "minimum": 0,
+            "maximum": 65535
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "StpProbe": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this probe.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "ArpBogonConfig": {
+      "description": "The arp_bogon probe checks IP addresses in ARP resolutions against a prefix whitelist.",
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this probe.",
+          "type": "boolean",
+          "default": false
+        },
+        "prefixes": {
+          "description": "A whitelist of connected prefixes.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    },
+    "Ipv6BogonConfig": {
+      "description": "The ipv6_bogon probe checks IP addresses in IPv6 neighbor discoveries against a prefix whitelist.",
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this probe.",
+          "type": "boolean",
+          "default": false
+        },
+        "prefixes": {
+          "description": "A whitelist of connected prefixes.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "ignore_link_local": {
+          "description": "Ignore packets from the link-local prefix `fe80::/64` w/o explicit whitelisting.",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "Ipv6RouterProbe": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "Ipv6NeighborConfig": {
+      "description": "The ipv6_neighbor probe checks the IPv6 neighbor discovery from IP addresses to MAC addresses.",
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this probe.",
+          "type": "boolean",
+          "default": false
+        },
+        "static_resolutions": {
+          "description": "Static map of IPv6 neighbor discoveries.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Ipv6NeighborResolutionConfig"
+          }
+        },
+        "dynamic_enable": {
+          "description": "Enable dynamic learning from observed IPv6 neighbor discoveries.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "Ipv6NeighborResolutionConfig": {
+      "type": "object",
+      "properties": {
+        "ip": {
+          "type": "string",
+          "format": "ipv6"
+        },
+        "mac": {
+          "type": "string",
+          "pattern": "^([0-9A-Fa-f]{2}[:]){5}([0-9A-Fa-f]{2})$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "ip",
+        "mac"
+      ]
+    },
+    "EventsConfig": {
+      "type": "object",
+      "properties": {
+        "collection_window": {
+          "description": "The time window, in which IXpect will collect and aggregate events.\nExample: `1hour 12min 5s`\n\nThe duration string is a concatenation of time spans. Where each time\nspan is an integer number and a suffix. Supported suffixes:\n\n* `nsec`, `ns` -- nanoseconds\n* `usec`, `us`, `µs` -- microseconds\n* `msec`, `ms` -- milliseconds\n* `seconds`, `second`, `sec`, `s`\n* `minutes`, `minute`, `min`, `m`\n* `hours`, `hour`, `hr`, `hrs`, `h`\n* `days`, `day`, `d`\n* `weeks`, `week`, `wk`, `wks`, `w`\n* `months`, `month`, `M` -- defined as 30.44 days\n* `years`, `year`, `yr`, `yrs`, `y` -- defined as 365.25 days",
+          "type": "string",
+          "default": "5m"
+        },
+        "notifiers": {
+          "description": "The notifiers configurations.",
+          "$ref": "#/$defs/EventNotifiersConfig"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "notifiers"
+      ]
+    },
+    "EventNotifiersConfig": {
+      "type": "object",
+      "properties": {
+        "log": {
+          "description": "The log notifier will print the list of received events to stdout.",
+          "$ref": "#/$defs/LogEventNotifierConfig"
+        },
+        "email": {
+          "description": "The email notifier allows IXpect to send emails via SMTP.",
+          "$ref": "#/$defs/EMailEventNotifierConfig"
+        },
+        "matrix": {
+          "description": "The matrix notifier allows IXpect to send *unencrypted* messages into Matrix chat rooms.",
+          "$ref": "#/$defs/MatrixEventNotifierConfig"
+        },
+        "slack": {
+          "description": "The slack notifier allows IXpect to send messages into Slack channels.",
+          "$ref": "#/$defs/SlackEventNotifierConfig"
+        },
+        "http": {
+          "description": "The HTTP notifier can be used to send a customizable payload to a HTTP-based API.",
+          "$ref": "#/$defs/HttpEventNotifierConfig"
+        }
+      },
+      "additionalProperties": false
+    },
+    "LogEventNotifierConfig": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this notifier.",
+          "type": "boolean",
+          "default": false
+        },
+        "events": {
+          "description": "A whitelist of events processed by this notifier. An empty list accepts any events.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/EventName"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "EventName": {
+      "oneOf": [
+        {
+          "description": "the target IP address is not covered by `prefixes`",
+          "type": "string",
+          "const": "ARP_BOGON_TARGET"
+        },
+        {
+          "description": "the source IP address is not covered by `prefixes`",
+          "type": "string",
+          "const": "ARP_BOGON_SOURCE"
+        },
+        {
+          "description": "an observed resolution conflicts with a static configured one",
+          "type": "string",
+          "const": "ARP_NEIGHBOR_SPOOFED_STATIC"
+        },
+        {
+          "description": "an observed resolution conflicts with a dynamic learned one",
+          "type": "string",
+          "const": "ARP_NEIGHBOR_SPOOFED_DYNAMIC"
+        },
+        {
+          "description": "`dynamic_enable` is `true` and a resolution is learned",
+          "type": "string",
+          "const": "ARP_NEIGHBOR_NEW_DYNAMIC"
+        },
+        {
+          "description": "`dynamic_enable` is `false` and a resolution is unknown",
+          "type": "string",
+          "const": "ARP_NEIGHBOR_UNKNOWN"
+        },
+        {
+          "description": "a packet with a non-whitelisted EtherType has been observed",
+          "type": "string",
+          "const": "ETHER_TYPE_VIOLATION"
+        },
+        {
+          "description": "the number of broadcast packets have exceeded the threshold",
+          "type": "string",
+          "const": "BUM_RATE_BROADCAST_EXCEEDED"
+        },
+        {
+          "description": "the number of multicast packets have exceeded the threshold",
+          "type": "string",
+          "const": "BUM_RATE_UNICAST_EXCEEDED"
+        },
+        {
+          "description": "the number of (unknown) unicast packets have exceeded the threshold",
+          "type": "string",
+          "const": "BUM_RATE_MULTICAST_EXCEEDED"
+        },
+        {
+          "description": "a STP related packet has been observed",
+          "type": "string",
+          "const": "STP_PACKET_FOUND"
+        },
+        {
+          "description": "the target IPv6 address is not covered by `prefixes`",
+          "type": "string",
+          "const": "IPV6_BOGON_TARGET"
+        },
+        {
+          "description": "the source IPv6 address is not covered by `prefixes`",
+          "type": "string",
+          "const": "IPV6_BOGON_SOURCE"
+        },
+        {
+          "description": "router advertisement has been detected",
+          "type": "string",
+          "const": "IPV6_ROUTER_ADVERTISEMENT"
+        },
+        {
+          "description": "router solicitation has been detected",
+          "type": "string",
+          "const": "IPV6_ROUTER_SOLICITATION"
+        },
+        {
+          "description": "an observed resolution conflicts with a static configured one",
+          "type": "string",
+          "const": "IPV6_NEIGHBOR_SPOOFED_STATIC"
+        },
+        {
+          "description": "an observed resolution conflicts with a dynamic learned one",
+          "type": "string",
+          "const": "IPV6_NEIGHBOR_SPOOFED_DYNAMIC"
+        },
+        {
+          "description": "`dynamic_enable` is `true` and a resolution is learned",
+          "type": "string",
+          "const": "IPV6_NEIGHBOR_NEW_DYNAMIC"
+        },
+        {
+          "description": "`dynamic_enable` is `false` and a resolution is unknown",
+          "type": "string",
+          "const": "IPV6_NEIGHBOR_UNKNOWN"
+        },
+        {
+          "description": "the packet does not match the expected format",
+          "type": "string",
+          "const": "IXPECT_BAD_PACKET"
+        },
+        {
+          "description": "a test event, triggered when a signal `USR1` is received",
+          "type": "string",
+          "const": "IXPECT_TEST"
+        }
+      ]
+    },
+    "EMailEventNotifierConfig": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this notifier.",
+          "type": "boolean",
+          "default": false
+        },
+        "smtp": {
+          "description": "The SMTP configuration of the mail server that should be used for submitting emails.",
+          "$ref": "#/$defs/EMailEventNotifierSmtpConfig"
+        },
+        "from": {
+          "description": "The email sender address which should be used.",
+          "type": "string"
+        },
+        "template": {
+          "description": "The file name of the MiniJinja template in the templates folder that should be used to format the message.",
+          "type": "string",
+          "default": "email.html.j2"
+        },
+        "channels": {
+          "description": "The list of channels.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChannelEMailEventNotifierConfig"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "from"
+      ]
+    },
+    "EMailEventNotifierSmtpConfig": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "description": "The mail server host.",
+          "type": "string"
+        },
+        "port": {
+          "description": "The SMTP port of the mail server.",
+          "type": "integer",
+          "format": "uint16",
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 25
+        },
+        "encryption": {
+          "description": "The transport encryption to be used.",
+          "$ref": "#/$defs/EMailEventNotifierSmtpEncryption"
+        },
+        "auth": {
+          "description": "The authentication mode to be used.",
+          "$ref": "#/$defs/EMailEventNotifierSmtpAuthConfig"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "host"
+      ]
+    },
+    "EMailEventNotifierSmtpEncryption": {
+      "type": "string",
+      "enum": [
+        "NONE",
+        "START_TLS",
+        "TLS"
+      ]
+    },
+    "EMailEventNotifierSmtpAuthConfig": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "mechanism": {
+              "type": "string",
+              "const": "NONE"
+            }
+          },
+          "required": [
+            "mechanism"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "user": {
+              "type": "string"
+            },
+            "pass": {
+              "$ref": "#/$defs/Secret"
+            },
+            "mechanism": {
+              "type": "string",
+              "const": "PLAIN"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "mechanism",
+            "user",
+            "pass"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "user": {
+              "type": "string"
+            },
+            "pass": {
+              "$ref": "#/$defs/Secret"
+            },
+            "mechanism": {
+              "type": "string",
+              "const": "LOGIN"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "mechanism",
+            "user",
+            "pass"
+          ]
+        }
+      ]
+    },
+    "Secret": {
+      "anyOf": [
+        {
+          "description": "An inlined password",
+          "type": "string"
+        },
+        {
+          "description": "The path to a file containing the password.",
+          "type": "object",
+          "properties": {
+            "file": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "file"
+          ]
+        }
+      ]
+    },
+    "ChannelEMailEventNotifierConfig": {
+      "type": "object",
+      "properties": {
+        "events": {
+          "description": "A whitelist of events processed by this notifier. An empty list accepts any events.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/EventName"
+          }
+        },
+        "to": {
+          "description": "The list of recipient email addresses.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "to"
+      ]
+    },
+    "MatrixEventNotifierConfig": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this notifier.",
+          "type": "boolean",
+          "default": false
+        },
+        "channels": {
+          "description": "The list of channels.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChannelMatrixEventNotifierConfig"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ChannelMatrixEventNotifierConfig": {
+      "type": "object",
+      "properties": {
+        "server": {
+          "description": "The URL of the matrix server (i.e. `https://matrix.example.net`).",
+          "type": "string",
+          "format": "uri"
+        },
+        "internal_room_id": {
+          "description": "The internal room inclung your servers host (i.e. `room_id:matrix.example.net`).",
+          "type": "string"
+        },
+        "access_token": {
+          "description": "The access token for this account.",
+          "$ref": "#/$defs/Secret"
+        },
+        "template": {
+          "description": "The file name of the MiniJinja template in the templates folder that should be used to format the message.",
+          "type": "string",
+          "default": "matrix.html.j2"
+        },
+        "events": {
+          "description": "A whitelist of events processed by this notifier. An empty list accepts any events.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/EventName"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "server",
+        "internal_room_id",
+        "access_token"
+      ]
+    },
+    "SlackEventNotifierConfig": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this notifier.",
+          "type": "boolean",
+          "default": false
+        },
+        "channels": {
+          "description": "The list of channels.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChannelSlackEventNotifierConfig"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ChannelSlackEventNotifierConfig": {
+      "type": "object",
+      "properties": {
+        "webhook": {
+          "description": "The Slack webhook containing the access token and the Slack channel ID.",
+          "$ref": "#/$defs/Secret"
+        },
+        "template": {
+          "description": "The file name of the MiniJinja template in the templates folder that should be used to format the message.",
+          "type": "string",
+          "default": "slack.json.j2"
+        },
+        "events": {
+          "description": "A whitelist of events processed by this notifier. An empty list accepts any events.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/EventName"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "webhook"
+      ]
+    },
+    "HttpEventNotifierConfig": {
+      "type": "object",
+      "properties": {
+        "enable": {
+          "description": "Enables this notifier.",
+          "type": "boolean",
+          "default": false
+        },
+        "channels": {
+          "description": "The list of channels.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ChannelHttpEventNotifierConfig"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ChannelHttpEventNotifierConfig": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "description": "The URL of the remote HTTP endpoint (i.e. `https://api.example.net/api/notify`).",
+          "type": "string",
+          "format": "uri"
+        },
+        "method": {
+          "description": "The HTTP method.",
+          "type": "string",
+          "default": "POST"
+        },
+        "content_type": {
+          "description": "The content type of the HTTP body (i.e. `application/json`).",
+          "type": "string"
+        },
+        "template": {
+          "description": "The file name of the MiniJinja template in the templates folder that should be used to format the message.",
+          "type": "string"
+        },
+        "events": {
+          "description": "A whitelist of events processed by this notifier. An empty list accepts any events.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/EventName"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "content_type",
+        "template"
+      ]
+    }
+  }
+}

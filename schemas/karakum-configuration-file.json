@@ -1,0 +1,272 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "NamespaceStrategy": {
+            "enum": [
+                "ignore",
+                "object",
+                "package"
+            ],
+            "type": "string"
+        },
+        "ConflictResolutionStrategy": {
+            "enum": [
+                "join",
+                "replace",
+                "error"
+            ],
+            "type": "string"
+        },
+        "InputResolutionStrategy": {
+            "enum": [
+                "node",
+                "plain"
+            ],
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "properties": {
+        "annotations": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "title": "annotations"
+        },
+        "compilerOptions": {
+            "title": "compilerOptions",
+            "type": "object",
+            "$ref": "https://json.schemastore.org/tsconfig#/definitions/compilerOptionsDefinition/properties/compilerOptions",
+            "additionalProperties": false
+        },
+        "conflictResolutionStrategy": {
+            "title": "conflictResolutionStrategy",
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/ConflictResolutionStrategy"
+            }
+        },
+        "cwd": {
+            "type": "string",
+            "title": "cwd"
+        },
+        "disclaimer": {
+            "type": "string",
+            "title": "disclaimer"
+        },
+        "ignoreInput": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "title": "ignoreInput"
+        },
+        "ignoreOutput": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "title": "ignoreOutput"
+        },
+        "importInjector": {
+            "title": "importInjector",
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": {
+                    "type": "string"
+                }
+            }
+        },
+        "importMapper": {
+            "title": "importMapper",
+            "type": "object",
+            "additionalProperties": {
+                "anyOf": [
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                ]
+            }
+        },
+        "inheritanceModifiers": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "title": "inheritanceModifiers"
+        },
+        "injections": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "title": "injections"
+        },
+        "input": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "title": "input"
+        },
+        "inputResolutionStrategy": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/InputResolutionStrategy"
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "title": "inputResolutionStrategy"
+        },
+        "inputRoots": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "title": "inputRoots"
+        },
+        "isolatedOutputPackage": {
+            "type": "boolean",
+            "title": "isolatedOutputPackage"
+        },
+        "libraryName": {
+            "type": "string",
+            "title": "libraryName"
+        },
+        "libraryNameOutputPrefix": {
+            "type": "boolean",
+            "title": "libraryNameOutputPrefix"
+        },
+        "moduleNameMapper": {
+            "title": "moduleNameMapper",
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
+        "nameResolvers": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "title": "nameResolvers"
+        },
+        "namespaceStrategy": {
+            "title": "namespaceStrategy",
+            "type": "object",
+            "additionalProperties": {
+                "$ref": "#/definitions/NamespaceStrategy"
+            }
+        },
+        "output": {
+            "type": "string",
+            "title": "output"
+        },
+        "packageNameMapper": {
+            "title": "packageNameMapper",
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
+        "plugins": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "title": "plugins"
+        },
+        "varianceModifiers": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "title": "varianceModifiers"
+        },
+        "verbose": {
+            "type": "boolean",
+            "title": "verbose"
+        }
+    },
+    "type": "object"
+}

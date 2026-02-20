@@ -1,0 +1,311 @@
+{
+  "$id": "https://json.schemastore.org/base.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DDEV global config",
+  "description": "Schema for DDEV global_config.yaml",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "developer_mode": {
+      "description": "Not currently used.",
+      "type": "boolean"
+    },
+    "fail_on_hook_fail": {
+      "description": "Whether \"ddev start\" should be interrupted by a failing hook, on a single project or for all projects if used globally.",
+      "type": "boolean"
+    },
+    "instrumentation_opt_in": {
+      "description": "Whether to allow instrumentation reporting.",
+      "type": "boolean"
+    },
+    "instrumentation_queue_size": {
+      "description": "Maximum number of locally collected events for instrumentation reporting.",
+      "type": "integer"
+    },
+    "instrumentation_reporting_interval": {
+      "description": "Reporting interval in hours for instrumentation reporting.",
+      "type": "integer"
+    },
+    "instrumentation_user": {
+      "description": "Specific name identifier for instrumentation reporting.",
+      "type": "string"
+    },
+    "internet_detection_timeout_ms": {
+      "description": "Internet detection timeout in milliseconds.",
+      "type": "integer"
+    },
+    "last_started_version": {
+      "description": "Last started version using \"ddev --version\" command.",
+      "type": "string"
+    },
+    "letsencrypt_email": {
+      "description": "Email associated with Let's Encrypt feature. (Works in conjunction with use_letsencrypt.)",
+      "type": "string"
+    },
+    "mailpit_http_port": {
+      "description": "Router port used for Mailpit HTTP, can be overridden in project config.",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "8025"
+          ]
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "mailpit_https_port": {
+      "description": "Router port used for Mailpit HTTPS, can be overridden in project config.",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "8026"
+          ]
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "messages": {
+      "description": "Configure messages like the Tip of the Day.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ticker_interval": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "ticker_interval"
+      ]
+    },
+    "mkcert_caroot": {
+      "description": "The absolute path to the directory containing mkcert certificates using \"mkcert -CAROOT\" command.",
+      "type": "string"
+    },
+    "no_bind_mounts": {
+      "description": "Whether to not use Docker bind mounts.",
+      "type": "boolean"
+    },
+    "omit_containers": {
+      "description": "List of container types that should not be started when the project is started.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "ddev-router",
+          "ddev-ssh-agent"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "omit_project_name_by_default": {
+      "description": "Whether to omit the project name from config.yaml and use directory name instead.",
+      "type": "boolean"
+    },
+    "performance_mode": {
+      "description": "Define the performance optimization mode to be used. Currently, Mutagen asynchronous caching is supported. Mutagen is enabled by default on Mac and Windows.",
+      "type": "string",
+      "enum": [
+        "none",
+        "mutagen"
+      ]
+    },
+    "project_tld": {
+      "description": "Set the top-level domain to be used for projects, defaults to \"ddev.site\".",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "ddev.site"
+          ]
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "required_docker_compose_version": {
+      "description": "Specific docker-compose version for download.",
+      "type": "string"
+    },
+    "router_bind_all_interfaces": {
+      "description": "Whether to bind ddev-router's ports on all network interfaces.",
+      "type": "boolean"
+    },
+    "router_http_port": {
+      "description": "Router HTTP port for all projects, can be overridden in project config.",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "80"
+          ]
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "router_https_port": {
+      "description": "Router HTTPS port for all projects, can be overridden in project config.",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "443"
+          ]
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "share_default_provider": {
+      "description": "Default share provider for all projects, can be overridden in project config.",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "ngrok",
+            "cloudflared"
+          ]
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "simple_formatting": {
+      "description": "Whether to disable most \"ddev list\" and \"ddev describe\" table formatting.",
+      "type": "boolean"
+    },
+    "table_style": {
+      "description": "Style for \"ddev list\" and \"ddev describe\".",
+      "type": "string",
+      "enum": [
+        "default",
+        "bold",
+        "bright"
+      ]
+    },
+    "traefik_monitor_port": {
+      "description": "Specify an alternate port for the Traefik (ddev-router) monitor port. This defaults to 10999 and rarely needs to be changed, but can be changed in cases of port conflicts.",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "10999"
+          ]
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "use_docker_compose_from_path": {
+      "description": "Whether to use the system-installed docker-compose. You can otherwise use required_docker_compose_version to specify a version for download.",
+      "type": "boolean"
+    },
+    "use_hardened_images": {
+      "description": "Whether to use hardened images for internet deployment.",
+      "type": "boolean"
+    },
+    "use_letsencrypt": {
+      "description": "Whether to enable Let's Encrypt integration. (Works in conjunction with letsencrypt_email.)",
+      "type": "boolean"
+    },
+    "web_environment": {
+      "description": "Add environment variables to the web container.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "wsl2_no_windows_hosts_mgt": {
+      "description": "(WSL2 only) Whether to disable the management and checking of the Windows hosts file. By default, when using WSL2, DDEV manages the system-wide hosts file on the Windows side (normally C:\\Windows\\system32\\drivers\\etc\\hosts) by using ddev.exe installed on the Windows side. This normally works better for all applications, including browsers and IDEs. However, this behavior can be disabled by setting \"wsl_no_windows_hosts_mgt: true\".",
+      "type": "boolean"
+    },
+    "xdebug_ide_location": {
+      "description": "Adjust Xdebug listen location for WSL2 or in-container.",
+      "type": "string"
+    },
+    "xhgui_http_port": {
+      "description": "Router port used for XHGui HTTP, can be overridden in project config.",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "8143"
+          ]
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "xhgui_https_port": {
+      "description": "Router port used for XHGui HTTPS, can be overridden in project config.",
+      "type": "string",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "8142"
+          ]
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "xhprof_mode": {
+      "description": "Define the default XHProf usage mode.",
+      "type": "string",
+      "enum": [
+        "prepend",
+        "xhgui"
+      ]
+    },
+    "remote_config": {
+      "description": "Configuration for remote config and sponsorship data sources.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "update_interval": {
+          "description": "Update interval in hours for remote config and sponsorship data.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "remote_config_url": {
+          "description": "URL for downloading remote configuration data.",
+          "type": "string",
+          "format": "uri"
+        },
+        "sponsorship_data_url": {
+          "description": "URL for downloading sponsorship data.",
+          "type": "string",
+          "format": "uri"
+        },
+        "addon_data_url": {
+          "description": "URL for downloading add-on registry data.",
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "EUDR Exchange Format, defined by Initiative Online Print e.V.",
+    "type": "object",
+    "properties": {
+        "operator": {
+            "type": "object",
+            "properties": {
+                "company_name": {
+                    "type": "string"
+                },
+                "address": {
+                    "type": "object",
+                    "properties": {
+                        "street": {
+                            "type": "string"
+                        },
+                        "postal_code": {
+                            "type": "string"
+                        },
+                        "city": {
+                            "type": "string"
+                        },
+                        "country": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 2
+                        }
+                    },
+                    "required": [
+                        "street",
+                        "postal_code",
+                        "city",
+                        "country"
+                    ]
+                },
+                "contact_person": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "email": {
+                            "type": "string",
+                            "format": "email"
+                        },
+                        "phone": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "name",
+                        "email",
+                        "phone"
+                    ]
+                },
+                "eudr_details": {
+                    "type": "object",
+                    "properties": {
+                        "eudr_role": {
+                            "type": "string",
+                            "enum": [
+                                "SME-Operator",
+                                "SME-Trader",
+                                "LC-Operator",
+                                "LC-Trader"
+                            ]
+                        },
+                        "taric_document_code": {
+                            "type": "string",
+                            "enum": [
+                                "C716",
+                                "C717",
+                                "Y129",
+                                "Y132",
+                                "Y133",
+                                "Y142",
+                                "Y144"
+                            ]
+                        },
+                        "hs_code": {
+                            "type": "string",
+                            "pattern": "^(\\d{2}|\\d{4}|\\d{6})$"
+                        }
+                    },
+                    "required": [
+                        "eudr_role",
+                        "taric_document_code"
+                    ]
+                }
+            },
+            "required": [
+                "company_name",
+                "address",
+                "contact_person",
+                "eudr_details"
+            ]
+        },
+        "order_item": {
+            "type": "object",
+            "properties": {
+                "order_reference": {
+                    "type": "string"
+                },
+                "item_reference": {
+                    "type": "string"
+                },
+                "production_reference": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "order_reference",
+                "item_reference"
+            ]
+        },
+        "referenced_eudr_statements": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "reference_number": {
+                        "type": "string"
+                    },
+                    "verification_number": {
+                        "type": "string"
+                    },
+                    "serial_shipping_container_reference": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "reference_number",
+                    "verification_number"
+                ]
+            }
+        },
+        "document_meta": {
+            "type": "object",
+            "properties": {
+                "identifier": {
+                    "type": "string"
+                },
+                "submission_date": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "version": {
+                    "type": "string",
+                    "pattern": "^([1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
+                }
+            },
+            "required": [
+                "submission_date",
+                "version"
+            ]
+        }
+    },
+    "required": [
+        "operator",
+        "order_item",
+        "referenced_eudr_statements",
+        "document_meta"
+    ]
+}

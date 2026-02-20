@@ -1,0 +1,814 @@
+{
+  "$defs": {
+    "gitlab.agent.agentcfg.CiAccessAsAgentCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {},
+      "title": "Ci Access As AgentCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.CiAccessAsCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "agent": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.CiAccessAsAgentCF.jsonschema.json"
+        },
+        "ci_job": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.CiAccessAsCiJobCF.jsonschema.json"
+        },
+        "impersonate": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.CiAccessAsImpersonateCF.jsonschema.json"
+        }
+      },
+      "title": "Ci Access AsCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.CiAccessAsCiJobCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {},
+      "title": "Ci Access As Ci JobCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.CiAccessAsImpersonateCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "extra": {
+          "items": {
+            "$ref": "#/$defs/gitlab.agent.agentcfg.ExtraKeyValCF.jsonschema.json"
+          },
+          "type": "array"
+        },
+        "groups": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "uid": {
+          "default": "",
+          "type": "string"
+        },
+        "username": {
+          "default": "",
+          "type": "string"
+        }
+      },
+      "title": "Ci Access As ImpersonateCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.CiAccessCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "groups": {
+          "items": {
+            "$ref": "#/$defs/gitlab.agent.agentcfg.CiAccessGroupCF.jsonschema.json"
+          },
+          "type": "array"
+        },
+        "instance": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.CiAccessInstanceCF.jsonschema.json"
+        },
+        "projects": {
+          "items": {
+            "$ref": "#/$defs/gitlab.agent.agentcfg.CiAccessProjectCF.jsonschema.json"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Ci AccessCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.CiAccessGroupCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "access_as": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.CiAccessAsCF.jsonschema.json"
+        },
+        "annotations": {
+          "$ref": "#/$defs/google.protobuf.Struct.jsonschema.json"
+        },
+        "default_namespace": {
+          "default": "",
+          "type": "string"
+        },
+        "environments": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "id": {
+          "default": "",
+          "type": "string"
+        },
+        "protected_branches_only": {
+          "default": false,
+          "type": "boolean"
+        },
+        "resource_management": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.ResourceManagementCF.jsonschema.json"
+        }
+      },
+      "title": "Ci Access GroupCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.CiAccessInstanceCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "access_as": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.CiAccessAsCF.jsonschema.json"
+        },
+        "annotations": {
+          "$ref": "#/$defs/google.protobuf.Struct.jsonschema.json"
+        },
+        "default_namespace": {
+          "default": "",
+          "type": "string"
+        },
+        "environments": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "protected_branches_only": {
+          "default": false,
+          "type": "boolean"
+        },
+        "resource_management": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.ResourceManagementCF.jsonschema.json"
+        }
+      },
+      "title": "Ci Access InstanceCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.CiAccessProjectCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "access_as": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.CiAccessAsCF.jsonschema.json"
+        },
+        "annotations": {
+          "$ref": "#/$defs/google.protobuf.Struct.jsonschema.json"
+        },
+        "default_namespace": {
+          "default": "",
+          "type": "string"
+        },
+        "environments": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "id": {
+          "default": "",
+          "type": "string"
+        },
+        "protected_branches_only": {
+          "default": false,
+          "type": "boolean"
+        },
+        "resource_management": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.ResourceManagementCF.jsonschema.json"
+        }
+      },
+      "title": "Ci Access ProjectCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.ConfigurationFile.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "ci_access": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.CiAccessCF.jsonschema.json"
+        },
+        "container_scanning": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.ContainerScanningCF.jsonschema.json"
+        },
+        "flux": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.FluxCF.jsonschema.json"
+        },
+        "observability": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.ObservabilityCF.jsonschema.json"
+        },
+        "remote_development": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.RemoteDevelopmentCF.jsonschema.json"
+        },
+        "user_access": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.UserAccessCF.jsonschema.json"
+        }
+      },
+      "title": "Configuration File",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.ContainerScanningCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "cadence": {
+          "default": "",
+          "type": "string"
+        },
+        "delete_report_artifact": {
+          "type": "boolean"
+        },
+        "persist_ocs_status": {
+          "type": "boolean"
+        },
+        "report_max_size": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "pattern": "^[0-9]+$",
+              "type": "string"
+            }
+          ],
+          "default": 0
+        },
+        "resource_requirements": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.ResourceRequirements.jsonschema.json"
+        },
+        "scanner_timeout": {
+          "$ref": "#/$defs/google.protobuf.Duration.jsonschema.json"
+        },
+        "severity_threshold": {
+          "anyOf": [
+            {
+              "enum": [
+                "UNKNOWN",
+                "LOW",
+                "MEDIUM",
+                "HIGH",
+                "CRITICAL"
+              ],
+              "type": "string"
+            },
+            {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer"
+            }
+          ],
+          "title": "severity_level_enum"
+        },
+        "trivy_k8s_wrapper_image": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.TrivyK8sWrapperImage.jsonschema.json"
+        },
+        "vulnerability_report": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.VulnerabilityReport.jsonschema.json"
+        }
+      },
+      "title": "Container ScanningCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.ContainerScanningFilter.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "containers": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "kinds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "namespaces": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "resources": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Container Scanning Filter",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.ExtraKeyValCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "default": "",
+          "type": "string"
+        },
+        "val": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Extra Key ValCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.FluxCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "webhook_receiver_url": {
+          "default": "",
+          "type": "string"
+        }
+      },
+      "title": "FluxCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.GitLabWorkspacesProxy.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "http_enabled": {
+          "type": "boolean"
+        },
+        "namespace": {
+          "default": "",
+          "type": "string"
+        },
+        "ssh_enabled": {
+          "type": "boolean"
+        }
+      },
+      "title": "Git Lab Workspaces Proxy",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.GoogleProfilerCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "credentials_file": {
+          "default": "",
+          "type": "string"
+        },
+        "debug_logging": {
+          "default": false,
+          "type": "boolean"
+        },
+        "enabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "project_id": {
+          "default": "",
+          "type": "string"
+        }
+      },
+      "title": "Google ProfilerCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.LoggingCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "grpc_level": {
+          "anyOf": [
+            {
+              "enum": [
+                "info",
+                "debug",
+                "warn",
+                "error"
+              ],
+              "type": "string"
+            },
+            {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer"
+            }
+          ],
+          "title": "log_level_enum"
+        },
+        "level": {
+          "anyOf": [
+            {
+              "pattern": "^info$",
+              "type": "string"
+            },
+            {
+              "enum": [
+                "debug",
+                "warn",
+                "error"
+              ],
+              "type": "string"
+            },
+            {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer"
+            }
+          ],
+          "default": 0,
+          "title": "log_level_enum"
+        }
+      },
+      "title": "LoggingCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.ObservabilityCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "google_profiler": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.GoogleProfilerCF.jsonschema.json"
+        },
+        "logging": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.LoggingCF.jsonschema.json"
+        }
+      },
+      "title": "ObservabilityCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.RemoteDevelopmentCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "allow_privilege_escalation": {
+          "default": false,
+          "type": "boolean"
+        },
+        "annotations": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "propertyNames": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "default_resources_per_workspace_container": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.ResourceRequirements.jsonschema.json"
+        },
+        "default_runtime_class": {
+          "default": "",
+          "type": "string"
+        },
+        "dns_zone": {
+          "default": "",
+          "type": "string"
+        },
+        "enabled": {
+          "default": false,
+          "type": "boolean"
+        },
+        "gitlab_workspaces_proxy": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.GitLabWorkspacesProxy.jsonschema.json"
+        },
+        "image_pull_secrets": {
+          "items": {
+            "$ref": "#/$defs/gitlab.agent.agentcfg.WorkspaceImagePullSecret.jsonschema.json"
+          },
+          "type": "array"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "propertyNames": {
+            "type": "string"
+          },
+          "type": "object"
+        },
+        "max_active_hours_before_stop": {
+          "anyOf": [
+            {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer"
+            },
+            {
+              "pattern": "^-?[0-9]+$",
+              "type": "string"
+            }
+          ]
+        },
+        "max_resources_per_workspace": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.ResourceRequirements.jsonschema.json"
+        },
+        "max_stopped_hours_before_termination": {
+          "anyOf": [
+            {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer"
+            },
+            {
+              "pattern": "^-?[0-9]+$",
+              "type": "string"
+            }
+          ]
+        },
+        "network_policy": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.WorkspaceNetworkPolicy.jsonschema.json"
+        },
+        "shared_namespace": {
+          "type": "string"
+        },
+        "use_kubernetes_user_namespaces": {
+          "default": false,
+          "type": "boolean"
+        },
+        "workspaces_per_user_quota": {
+          "anyOf": [
+            {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer"
+            },
+            {
+              "pattern": "^-?[0-9]+$",
+              "type": "string"
+            }
+          ]
+        },
+        "workspaces_quota": {
+          "anyOf": [
+            {
+              "maximum": 2147483647,
+              "minimum": -2147483648,
+              "type": "integer"
+            },
+            {
+              "pattern": "^-?[0-9]+$",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "title": "Remote DevelopmentCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.Resource.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "cpu": {
+          "default": "",
+          "type": "string"
+        },
+        "ephemeral_storage": {
+          "default": "",
+          "type": "string"
+        },
+        "memory": {
+          "default": "",
+          "type": "string"
+        }
+      },
+      "title": "Resource",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.ResourceManagementCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "title": "Resource ManagementCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.ResourceRequirements.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "limits": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.Resource.jsonschema.json"
+        },
+        "requests": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.Resource.jsonschema.json"
+        }
+      },
+      "title": "Resource Requirements",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.TrivyK8sWrapperImage.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "repository": {
+          "default": "",
+          "type": "string"
+        },
+        "tag": {
+          "default": "",
+          "type": "string"
+        }
+      },
+      "title": "Trivy K8s Wrapper Image",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.UserAccessAsAgentCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {},
+      "title": "User Access As AgentCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.UserAccessAsCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "agent": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.UserAccessAsAgentCF.jsonschema.json"
+        },
+        "user": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.UserAccessAsUserCF.jsonschema.json"
+        }
+      },
+      "title": "User Access AsCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.UserAccessAsUserCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {},
+      "title": "User Access As UserCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.UserAccessCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "access_as": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.UserAccessAsCF.jsonschema.json"
+        },
+        "groups": {
+          "items": {
+            "$ref": "#/$defs/gitlab.agent.agentcfg.UserAccessGroupCF.jsonschema.json"
+          },
+          "type": "array"
+        },
+        "instance": {
+          "$ref": "#/$defs/gitlab.agent.agentcfg.UserAccessInstanceCF.jsonschema.json"
+        },
+        "projects": {
+          "items": {
+            "$ref": "#/$defs/gitlab.agent.agentcfg.UserAccessProjectCF.jsonschema.json"
+          },
+          "type": "array"
+        }
+      },
+      "title": "User AccessCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.UserAccessGroupCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "default": "",
+          "type": "string"
+        }
+      },
+      "title": "User Access GroupCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.UserAccessInstanceCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {},
+      "title": "User Access InstanceCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.UserAccessProjectCF.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "default": "",
+          "type": "string"
+        }
+      },
+      "title": "User Access ProjectCF",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.VulnerabilityReport.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "filters": {
+          "items": {
+            "$ref": "#/$defs/gitlab.agent.agentcfg.ContainerScanningFilter.jsonschema.json"
+          },
+          "type": "array"
+        },
+        "namespaces": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "resource_types": {
+          "items": {
+            "enum": [
+              "Pod",
+              "ReplicaSet",
+              "ReplicationController",
+              "StatefulSet",
+              "DaemonSet",
+              "CronJob",
+              "Job",
+              "Deployment"
+            ],
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Vulnerability Report",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.WorkspaceImagePullSecret.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "default": "",
+          "type": "string"
+        },
+        "namespace": {
+          "default": "",
+          "type": "string"
+        }
+      },
+      "title": "Workspace Image Pull Secret",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.WorkspaceNetworkPolicy.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "egress": {
+          "items": {
+            "$ref": "#/$defs/gitlab.agent.agentcfg.WorkspaceNetworkPolicyEgress.jsonschema.json"
+          },
+          "type": "array"
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "title": "Workspace Network Policy",
+      "type": "object"
+    },
+    "gitlab.agent.agentcfg.WorkspaceNetworkPolicyEgress.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "additionalProperties": false,
+      "properties": {
+        "allow": {
+          "default": "",
+          "type": "string"
+        },
+        "except": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "title": "Workspace Network Policy Egress",
+      "type": "object"
+    },
+    "google.protobuf.Duration.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "format": "duration",
+      "title": "Duration",
+      "type": "string"
+    },
+    "google.protobuf.Struct.jsonschema.json": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "title": "Struct",
+      "type": "object"
+    }
+  },
+  "$id": "gitlab.agent.agentcfg.ConfigurationFile.jsonschema.bundle.json",
+  "$ref": "#/$defs/gitlab.agent.agentcfg.ConfigurationFile.jsonschema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

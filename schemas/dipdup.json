@@ -1,0 +1,3528 @@
+{
+  "$defs": {
+    "AdvancedConfig": {
+      "additionalProperties": true,
+      "description": "This section allows users to tune some system-wide options, either experimental or unsuitable for generic configurations.",
+      "properties": {
+        "alt_operation_matcher": {
+          "default": false,
+          "description": "Use different algorithm to match Tezos operations (dev only)",
+          "title": "alt_operation_matcher",
+          "type": "boolean"
+        },
+        "decimal_precision": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Overwrite precision if it's not guessed correctly based on project models.",
+          "title": "decimal_precision"
+        },
+        "early_realtime": {
+          "default": false,
+          "description": "Establish realtime connection and start collecting messages while sync is in progress (faster, but consumes more RAM).",
+          "title": "early_realtime",
+          "type": "boolean"
+        },
+        "postpone_jobs": {
+          "default": false,
+          "description": "Do not start job scheduler until all indexes reach the realtime state.",
+          "title": "postpone_jobs",
+          "type": "boolean"
+        },
+        "reindex": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ReindexingAction"
+          },
+          "description": "Mapping of reindexing reasons and actions DipDup performs.",
+          "propertyNames": {
+            "$ref": "#/$defs/ReindexingReason"
+          },
+          "title": "reindex",
+          "type": "object"
+        },
+        "rollback_depth": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "A number of blocks to keep for rollback (affects all datasources)",
+          "title": "rollback_depth"
+        },
+        "scheduler": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "`apscheduler` scheduler config.",
+          "title": "scheduler"
+        },
+        "unsafe_sqlite": {
+          "default": false,
+          "description": "Disable journaling and data integrity checks. Use only for testing.",
+          "title": "unsafe_sqlite",
+          "type": "boolean"
+        },
+        "watchdog": {
+          "additionalProperties": {
+            "$ref": "#/$defs/WatchdogConfig"
+          },
+          "description": "Mapping of watchdog triggers and actions DipDup performs.",
+          "propertyNames": {
+            "$ref": "#/$defs/WatchdogTrigger"
+          },
+          "title": "watchdog",
+          "type": "object"
+        }
+      },
+      "title": "AdvancedConfig",
+      "type": "object"
+    },
+    "ApiConfig": {
+      "additionalProperties": false,
+      "description": "Management API config",
+      "properties": {
+        "host": {
+          "default": "127.0.0.1",
+          "description": "Host to bind to",
+          "title": "host",
+          "type": "string"
+        },
+        "port": {
+          "default": 46339,
+          "description": "Port to bind to",
+          "title": "port",
+          "type": "integer"
+        }
+      },
+      "title": "ApiConfig",
+      "type": "object"
+    },
+    "CoinbaseDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "Coinbase datasource config",
+      "properties": {
+        "api_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "API key",
+          "title": "api_key"
+        },
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "coinbase",
+          "default": "coinbase",
+          "description": "always 'coinbase'",
+          "title": "kind",
+          "type": "string"
+        },
+        "passphrase": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "API passphrase",
+          "title": "passphrase"
+        },
+        "secret_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "API secret key",
+          "title": "secret_key"
+        }
+      },
+      "title": "CoinbaseDatasourceConfig",
+      "type": "object"
+    },
+    "EvmAddress": {
+      "$ref": "#/$defs/Hex"
+    },
+    "EvmBlockvisionDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "Blockvision datasource config",
+      "properties": {
+        "api_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "API key",
+          "title": "api_key"
+        },
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "evm.blockvision",
+          "default": "evm.blockvision",
+          "description": "always 'evm.blockvision'",
+          "title": "kind",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "description": "API URL",
+          "title": "url"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "EvmBlockvisionDatasourceConfig",
+      "type": "object"
+    },
+    "EvmContractConfig": {
+      "additionalProperties": false,
+      "description": "EVM contract config",
+      "properties": {
+        "abi": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Contract ABI",
+          "title": "abi"
+        },
+        "address": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Contract address",
+          "title": "address"
+        },
+        "kind": {
+          "const": "evm",
+          "default": "evm",
+          "description": "Always `evm`",
+          "title": "kind",
+          "type": "string"
+        },
+        "typename": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Alias for the contract script",
+          "title": "typename"
+        }
+      },
+      "title": "EvmContractConfig",
+      "type": "object"
+    },
+    "EvmDatasourceConfigU": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/EvmSubsquidDatasourceConfig"
+        },
+        {
+          "$ref": "#/$defs/EvmNodeDatasourceConfig"
+        },
+        {
+          "$ref": "#/$defs/EvmSourcifyDatasourceConfig"
+        },
+        {
+          "$ref": "#/$defs/EvmBlockvisionDatasourceConfig"
+        },
+        {
+          "$ref": "#/$defs/EvmEtherscanDatasourceConfig"
+        }
+      ]
+    },
+    "EvmEtherscanDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "Etherscan datasource config",
+      "properties": {
+        "api_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "API key",
+          "title": "api_key"
+        },
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "anyOf": [
+            {
+              "const": "evm.etherscan",
+              "type": "string"
+            },
+            {
+              "const": "abi.etherscan",
+              "type": "string"
+            }
+          ],
+          "default": "evm.etherscan",
+          "description": "always 'evm.etherscan'",
+          "title": "kind"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "description": "API URL",
+          "title": "url"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "EvmEtherscanDatasourceConfig",
+      "type": "object"
+    },
+    "EvmEventsHandlerConfig": {
+      "additionalProperties": false,
+      "description": "Subsquid event handler",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "contract": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/EvmContractConfig"
+            }
+          ],
+          "description": "EVM contract",
+          "title": "contract"
+        },
+        "name": {
+          "description": "Event name",
+          "title": "name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "callback",
+        "contract",
+        "name"
+      ],
+      "title": "EvmEventsHandlerConfig",
+      "type": "object"
+    },
+    "EvmEventsIndexConfig": {
+      "additionalProperties": false,
+      "description": "Subsquid datasource config",
+      "properties": {
+        "datasources": {
+          "description": "`evm` datasources to use",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/EvmDatasourceConfigU"
+              }
+            ]
+          },
+          "title": "datasources",
+          "type": "array"
+        },
+        "first_level": {
+          "default": 0,
+          "description": "Level to start indexing from",
+          "title": "first_level",
+          "type": "integer"
+        },
+        "handlers": {
+          "description": "Event handlers",
+          "items": {
+            "$ref": "#/$defs/EvmEventsHandlerConfig"
+          },
+          "title": "handlers",
+          "type": "array"
+        },
+        "kind": {
+          "const": "evm.events",
+          "default": "evm.events",
+          "description": "Always 'evm.events'",
+          "title": "kind",
+          "type": "string"
+        },
+        "last_level": {
+          "default": 0,
+          "description": "Level to stop indexing and disable this index",
+          "title": "last_level",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "datasources",
+        "handlers"
+      ],
+      "title": "EvmEventsIndexConfig",
+      "type": "object"
+    },
+    "EvmNodeDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "EVM node datasource config",
+      "properties": {
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "evm.node",
+          "default": "evm.node",
+          "description": "Always 'evm.node'",
+          "title": "kind",
+          "type": "string"
+        },
+        "rollback_depth": {
+          "default": 32,
+          "description": "A number of blocks to store in database for rollback",
+          "title": "rollback_depth",
+          "type": "integer"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "description": "EVM node URL",
+          "title": "url"
+        },
+        "ws_url": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsUrl"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "EVM node WebSocket URL",
+          "title": "ws_url"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "EvmNodeDatasourceConfig",
+      "type": "object"
+    },
+    "EvmSourcifyDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "Sourcify datasource config",
+      "properties": {
+        "api_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "API key",
+          "title": "api_key"
+        },
+        "chain_id": {
+          "description": "Chain ID",
+          "title": "chain_id",
+          "type": "integer"
+        },
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "evm.sourcify",
+          "default": "evm.sourcify",
+          "description": "always 'evm.sourcify'",
+          "title": "kind",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "default": "https://sourcify.dev/server",
+          "description": "API URL",
+          "title": "url"
+        }
+      },
+      "required": [
+        "chain_id"
+      ],
+      "title": "EvmSourcifyDatasourceConfig",
+      "type": "object"
+    },
+    "EvmSubsquidDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "Subsquid datasource config",
+      "properties": {
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "evm.subsquid",
+          "default": "evm.subsquid",
+          "description": "always 'evm.subsquid'",
+          "title": "kind",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "description": "URL of Subsquid Network API",
+          "title": "url"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "EvmSubsquidDatasourceConfig",
+      "type": "object"
+    },
+    "EvmTransactionsHandlerConfig": {
+      "additionalProperties": false,
+      "description": "Subsquid transaction handler",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "from": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/EvmContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Transaction sender",
+          "title": "from"
+        },
+        "method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Method name",
+          "title": "method"
+        },
+        "signature": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Method signature",
+          "title": "signature"
+        },
+        "to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/EvmContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Transaction receiver",
+          "title": "to"
+        }
+      },
+      "required": [
+        "callback"
+      ],
+      "title": "EvmTransactionsHandlerConfig",
+      "type": "object"
+    },
+    "EvmTransactionsIndexConfig": {
+      "additionalProperties": false,
+      "description": "Index that uses Subsquid Network as a datasource for transactions",
+      "properties": {
+        "datasources": {
+          "description": "`evm` datasources to use",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/EvmDatasourceConfigU"
+              }
+            ]
+          },
+          "title": "datasources",
+          "type": "array"
+        },
+        "first_level": {
+          "default": 0,
+          "description": "Level to start indexing from",
+          "title": "first_level",
+          "type": "integer"
+        },
+        "handlers": {
+          "description": "Transaction handlers",
+          "items": {
+            "$ref": "#/$defs/EvmTransactionsHandlerConfig"
+          },
+          "title": "handlers",
+          "type": "array"
+        },
+        "kind": {
+          "const": "evm.transactions",
+          "default": "evm.transactions",
+          "description": "always 'evm.transactions'",
+          "title": "kind",
+          "type": "string"
+        },
+        "last_level": {
+          "default": 0,
+          "description": "Level to stop indexing at",
+          "title": "last_level",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "datasources",
+        "handlers"
+      ],
+      "title": "EvmTransactionsIndexConfig",
+      "type": "object"
+    },
+    "HasuraConfig": {
+      "additionalProperties": false,
+      "description": "Config for the Hasura integration.",
+      "properties": {
+        "admin_secret": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Admin secret of the Hasura instance.",
+          "title": "admin_secret"
+        },
+        "allow_aggregations": {
+          "default": true,
+          "description": "Whether to allow aggregations in unauthenticated queries.",
+          "title": "allow_aggregations",
+          "type": "boolean"
+        },
+        "allow_inconsistent_metadata": {
+          "default": false,
+          "description": "Whether to ignore errors when applying Hasura metadata.",
+          "title": "allow_inconsistent_metadata",
+          "type": "boolean"
+        },
+        "camel_case": {
+          "default": true,
+          "description": "Whether to use camelCase instead of default pascal_case for the field names.",
+          "title": "camel_case",
+          "type": "boolean"
+        },
+        "create_source": {
+          "default": false,
+          "description": "Whether source should be added to Hasura if missing.",
+          "title": "create_source",
+          "type": "boolean"
+        },
+        "hide": {
+          "description": "List of table/view names to make private.",
+          "items": {
+            "type": "string"
+          },
+          "title": "hide",
+          "type": "array"
+        },
+        "hide_internal": {
+          "default": false,
+          "description": "Whether to make internal tables (prefixed with \"dipdup\") private.",
+          "title": "hide_internal",
+          "type": "boolean"
+        },
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP connection tunables",
+          "title": "http"
+        },
+        "rest": {
+          "default": true,
+          "description": "Enable REST API both for autogenerated and custom queries.",
+          "title": "rest",
+          "type": "boolean"
+        },
+        "select_limit": {
+          "default": 10000,
+          "description": "Row limit for unauthenticated queries.",
+          "title": "select_limit",
+          "type": "integer"
+        },
+        "source": {
+          "default": "default",
+          "description": "Hasura source for DipDup to configure, others will be left untouched.",
+          "title": "source",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "description": "URL of the Hasura instance.",
+          "title": "url"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "HasuraConfig",
+      "type": "object"
+    },
+    "Hex": {
+      "type": "string"
+    },
+    "HookConfig": {
+      "additionalProperties": false,
+      "description": "Hook config",
+      "properties": {
+        "args": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Mapping of argument names and annotations (checked lazily when possible)",
+          "title": "args",
+          "type": "object"
+        },
+        "atomic": {
+          "default": false,
+          "description": "Wrap hook in a single database transaction",
+          "title": "atomic",
+          "type": "boolean"
+        },
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        }
+      },
+      "required": [
+        "callback"
+      ],
+      "title": "HookConfig",
+      "type": "object"
+    },
+    "HttpConfig": {
+      "additionalProperties": false,
+      "description": "Advanced configuration of HTTP client",
+      "properties": {
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Alias for this HTTP client (dev only)",
+          "title": "alias"
+        },
+        "batch_size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of items fetched in a single paginated request (when applicable)",
+          "title": "batch_size"
+        },
+        "connection_limit": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of simultaneous connections",
+          "title": "connection_limit"
+        },
+        "connection_timeout": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Connection timeout in seconds",
+          "title": "connection_timeout"
+        },
+        "polling_interval": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Interval between polling requests in seconds (when applicable)",
+          "title": "polling_interval"
+        },
+        "ratelimit_period": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Time period for rate limiting in seconds",
+          "title": "ratelimit_period"
+        },
+        "ratelimit_rate": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of requests per period (\"drops\" in leaky bucket)",
+          "title": "ratelimit_rate"
+        },
+        "ratelimit_sleep": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Sleep time between requests when rate limit is reached",
+          "title": "ratelimit_sleep"
+        },
+        "replay": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Use cached HTTP responses instead of making real requests (dev only)",
+          "title": "replay"
+        },
+        "replay_path": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "format": "path",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Use cached HTTP responses instead of making real requests (dev only)",
+          "title": "replay_path"
+        },
+        "request_timeout": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Request timeout in seconds",
+          "title": "request_timeout"
+        },
+        "retry_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of retries after request failed before giving up",
+          "title": "retry_count"
+        },
+        "retry_multiplier": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Multiplier for sleep time between retries",
+          "title": "retry_multiplier"
+        },
+        "retry_sleep": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Sleep time between retries",
+          "title": "retry_sleep"
+        }
+      },
+      "title": "HttpConfig",
+      "type": "object"
+    },
+    "HttpDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "Generic HTTP datasource config",
+      "properties": {
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "http",
+          "default": "http",
+          "description": "always 'http'",
+          "title": "kind",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "description": "URL to fetch data from",
+          "title": "url"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "HttpDatasourceConfig",
+      "type": "object"
+    },
+    "IndexTemplateConfig": {
+      "additionalProperties": false,
+      "description": "Index template config",
+      "properties": {
+        "first_level": {
+          "default": 0,
+          "description": "Level to start indexing from",
+          "title": "first_level",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "template",
+          "default": "template",
+          "description": "always 'template'",
+          "title": "kind",
+          "type": "string"
+        },
+        "last_level": {
+          "default": 0,
+          "description": "Level to stop indexing at",
+          "title": "last_level",
+          "type": "integer"
+        },
+        "template": {
+          "description": "Template alias in `templates` section",
+          "title": "template",
+          "type": "string"
+        },
+        "values": {
+          "description": "Values to be substituted in template (`<key>` -> `value`)",
+          "title": "values",
+          "type": "object"
+        }
+      },
+      "required": [
+        "template",
+        "values"
+      ],
+      "title": "IndexTemplateConfig",
+      "type": "object"
+    },
+    "IpfsDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "IPFS datasource config",
+      "properties": {
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "ipfs",
+          "default": "ipfs",
+          "description": "always 'ipfs'",
+          "title": "kind",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "default": "https://ipfs.io/ipfs",
+          "description": "IPFS node URL, e.g. https://ipfs.io/ipfs/",
+          "title": "url"
+        }
+      },
+      "title": "IpfsDatasourceConfig",
+      "type": "object"
+    },
+    "JobConfig": {
+      "additionalProperties": false,
+      "description": "Job schedule config",
+      "properties": {
+        "args": {
+          "description": "Arguments to pass to the hook",
+          "title": "args",
+          "type": "object"
+        },
+        "crontab": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Schedule with crontab syntax (`* * * * *`)",
+          "title": "crontab"
+        },
+        "daemon": {
+          "default": false,
+          "description": "Run hook as a daemon (never stops)",
+          "title": "daemon",
+          "type": "boolean"
+        },
+        "hook": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/HookConfig"
+            }
+          ],
+          "description": "Name of hook to run",
+          "title": "hook"
+        },
+        "interval": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Schedule with interval in seconds",
+          "title": "interval"
+        }
+      },
+      "required": [
+        "hook"
+      ],
+      "title": "JobConfig",
+      "type": "object"
+    },
+    "McpConfig": {
+      "additionalProperties": false,
+      "description": "Config for MCP server",
+      "properties": {
+        "api_url": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Url"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL of the management API",
+          "title": "api_url"
+        },
+        "compatibility": {
+          "default": true,
+          "description": "Whether to expose resources as tools for clients that don't support MCP resources",
+          "title": "compatibility",
+          "type": "boolean"
+        },
+        "host": {
+          "default": "127.0.0.1",
+          "description": "Host to bind to",
+          "title": "host",
+          "type": "string"
+        },
+        "port": {
+          "default": 9999,
+          "description": "Port to bind to",
+          "title": "port",
+          "type": "integer"
+        }
+      },
+      "title": "McpConfig",
+      "type": "object"
+    },
+    "PostgresDatabaseConfig": {
+      "additionalProperties": false,
+      "description": "Postgres database connection config",
+      "properties": {
+        "connection_timeout": {
+          "default": 60,
+          "description": "Connection timeout",
+          "title": "connection_timeout",
+          "type": "integer"
+        },
+        "database": {
+          "default": "postgres",
+          "description": "Database name",
+          "title": "database",
+          "type": "string"
+        },
+        "host": {
+          "description": "Host",
+          "title": "host",
+          "type": "string"
+        },
+        "immune_tables": {
+          "description": "List of tables to preserve during reindexing",
+          "items": {
+            "type": "string"
+          },
+          "title": "immune_tables",
+          "type": "array",
+          "uniqueItems": true
+        },
+        "kind": {
+          "const": "postgres",
+          "default": "postgres",
+          "description": "always 'postgres'",
+          "title": "kind",
+          "type": "string"
+        },
+        "password": {
+          "default": "",
+          "description": "Password",
+          "title": "password",
+          "type": "string"
+        },
+        "port": {
+          "default": 5432,
+          "description": "Port",
+          "title": "port",
+          "type": "integer"
+        },
+        "schema_name": {
+          "default": "public",
+          "description": "Schema name",
+          "title": "schema_name",
+          "type": "string"
+        },
+        "user": {
+          "default": "postgres",
+          "description": "User",
+          "title": "user",
+          "type": "string"
+        }
+      },
+      "required": [
+        "host"
+      ],
+      "title": "PostgresDatabaseConfig",
+      "type": "object"
+    },
+    "PrometheusConfig": {
+      "additionalProperties": false,
+      "description": "Config for Prometheus integration.",
+      "properties": {
+        "host": {
+          "default": "127.0.0.1",
+          "description": "Host to bind to",
+          "title": "host",
+          "type": "string"
+        },
+        "port": {
+          "default": 8000,
+          "description": "Port to bind to",
+          "title": "port",
+          "type": "integer"
+        },
+        "update_interval": {
+          "default": 1.0,
+          "description": "Interval to update some metrics in seconds",
+          "title": "update_interval",
+          "type": "number"
+        }
+      },
+      "title": "PrometheusConfig",
+      "type": "object"
+    },
+    "ReindexingAction": {
+      "description": "Action that should be performed on reindexing\n\n:param exception: Raise `ReindexingRequiredError` exception.\n:param wipe: Wipe the database and reindex from scratch. (WARNING: This action is irreversible! All indexed data will be lost!)\n:param ignore: Ignore the reindexing cause and continue.",
+      "enum": [
+        "exception",
+        "wipe",
+        "ignore"
+      ],
+      "title": "ReindexingAction",
+      "type": "string"
+    },
+    "ReindexingReason": {
+      "description": "Reason that caused reindexing\n\n:param manual: Manual reindexing.\n:param migration: Migration of the database schema.\n:param rollback: Rollback that couldn't be handled automatically.\n:param config_modified: Index config was modified.\n:param schema_modified: Project models or database schema were modified.",
+      "enum": [
+        "manual",
+        "migration",
+        "rollback",
+        "config_modified",
+        "schema_modified"
+      ],
+      "title": "ReindexingReason",
+      "type": "string"
+    },
+    "SentryConfig": {
+      "additionalProperties": false,
+      "description": "Config for Sentry integration.",
+      "properties": {
+        "debug": {
+          "default": false,
+          "description": "Catch warning messages, increase verbosity.",
+          "title": "debug",
+          "type": "boolean"
+        },
+        "dsn": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "DSN of the Sentry instance",
+          "title": "dsn"
+        },
+        "environment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Environment; if not set, guessed from docker/ci/gha/local.",
+          "title": "environment"
+        },
+        "release": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Release version; defaults to DipDup package version.",
+          "title": "release"
+        },
+        "server_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Server name; defaults to obfuscated hostname.",
+          "title": "server_name"
+        },
+        "user_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "User ID; defaults to obfuscated package/environment.",
+          "title": "user_id"
+        }
+      },
+      "title": "SentryConfig",
+      "type": "object"
+    },
+    "SkipHistory": {
+      "description": "Whether to skip indexing big map history and use only current state\n\n:param never: Always index big map historical updates.\n:param once: Skip history once after reindexing; process updates as usual on the next resync.\n:param always: Always skip big map history.",
+      "enum": [
+        "never",
+        "once",
+        "always"
+      ],
+      "title": "SkipHistory",
+      "type": "string"
+    },
+    "SqliteDatabaseConfig": {
+      "additionalProperties": false,
+      "description": "SQLite connection config",
+      "properties": {
+        "immune_tables": {
+          "description": "List of tables to preserve during reindexing",
+          "items": {
+            "type": "string"
+          },
+          "title": "immune_tables",
+          "type": "array",
+          "uniqueItems": true
+        },
+        "kind": {
+          "const": "sqlite",
+          "default": "sqlite",
+          "description": "always 'sqlite'",
+          "title": "kind",
+          "type": "string"
+        },
+        "path": {
+          "default": ":memory:",
+          "description": "Path to .sqlite file, leave default for in-memory database (`:memory:`)",
+          "title": "path",
+          "type": "string"
+        }
+      },
+      "title": "SqliteDatabaseConfig",
+      "type": "object"
+    },
+    "StarknetAddress": {
+      "$ref": "#/$defs/Hex"
+    },
+    "StarknetContractConfig": {
+      "additionalProperties": false,
+      "description": "Starknet contract config",
+      "properties": {
+        "abi": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Contract ABI",
+          "title": "abi"
+        },
+        "address": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Contract address",
+          "title": "address"
+        },
+        "kind": {
+          "const": "starknet",
+          "default": "starknet",
+          "description": "Always `starknet`",
+          "title": "kind",
+          "type": "string"
+        },
+        "typename": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Alias for the contract script",
+          "title": "typename"
+        }
+      },
+      "title": "StarknetContractConfig",
+      "type": "object"
+    },
+    "StarknetDatasourceConfigU": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/StarknetSubsquidDatasourceConfig"
+        },
+        {
+          "$ref": "#/$defs/StarknetNodeDatasourceConfig"
+        }
+      ]
+    },
+    "StarknetEventsHandlerConfig": {
+      "additionalProperties": false,
+      "description": "Subsquid event handler",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "contract": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/StarknetContractConfig"
+            }
+          ],
+          "description": "Starknet contract",
+          "title": "contract"
+        },
+        "name": {
+          "description": "Event name",
+          "title": "name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "callback",
+        "contract",
+        "name"
+      ],
+      "title": "StarknetEventsHandlerConfig",
+      "type": "object"
+    },
+    "StarknetEventsIndexConfig": {
+      "additionalProperties": false,
+      "description": "Starknet events index config",
+      "properties": {
+        "datasources": {
+          "description": "Aliases of index datasources in `datasources` section",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/StarknetDatasourceConfigU"
+              }
+            ]
+          },
+          "title": "datasources",
+          "type": "array"
+        },
+        "first_level": {
+          "default": 0,
+          "description": "Level to start indexing from",
+          "title": "first_level",
+          "type": "integer"
+        },
+        "handlers": {
+          "description": "Event handlers",
+          "items": {
+            "$ref": "#/$defs/StarknetEventsHandlerConfig"
+          },
+          "title": "handlers",
+          "type": "array"
+        },
+        "kind": {
+          "const": "starknet.events",
+          "default": "starknet.events",
+          "description": "Always 'starknet.events'",
+          "title": "kind",
+          "type": "string"
+        },
+        "last_level": {
+          "default": 0,
+          "description": "Level to stop indexing at",
+          "title": "last_level",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "datasources",
+        "handlers"
+      ],
+      "title": "StarknetEventsIndexConfig",
+      "type": "object"
+    },
+    "StarknetNodeDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "Starknet node datasource config",
+      "properties": {
+        "fetch_block_headers": {
+          "default": false,
+          "description": "Flag signalling that this datasource can be used for block headers fetching",
+          "title": "fetch_block_headers",
+          "type": "boolean"
+        },
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "starknet.node",
+          "default": "starknet.node",
+          "description": "Always 'starknet.node'",
+          "title": "kind",
+          "type": "string"
+        },
+        "rollback_depth": {
+          "default": 32,
+          "description": "A number of blocks to store in database for rollback",
+          "title": "rollback_depth",
+          "type": "integer"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "description": "Starknet node URL",
+          "title": "url"
+        },
+        "ws_url": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsUrl"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Starknet node WebSocket URL",
+          "title": "ws_url"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "StarknetNodeDatasourceConfig",
+      "type": "object"
+    },
+    "StarknetSubsquidDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "Subsquid datasource config",
+      "properties": {
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "starknet.subsquid",
+          "default": "starknet.subsquid",
+          "description": "always 'starknet.subsquid'",
+          "title": "kind",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "description": "URL of Subsquid Network API",
+          "title": "url"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "StarknetSubsquidDatasourceConfig",
+      "type": "object"
+    },
+    "SubstrateDatasourceConfigU": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SubstrateSubsquidDatasourceConfig"
+        },
+        {
+          "$ref": "#/$defs/SubstrateSubscanDatasourceConfig"
+        },
+        {
+          "$ref": "#/$defs/SubstrateNodeDatasourceConfig"
+        }
+      ]
+    },
+    "SubstrateEventsHandlerConfig": {
+      "additionalProperties": false,
+      "description": "Subsquid event handler",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "name": {
+          "description": "Event name (pallet.event)",
+          "title": "name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "callback",
+        "name"
+      ],
+      "title": "SubstrateEventsHandlerConfig",
+      "type": "object"
+    },
+    "SubstrateEventsIndexConfig": {
+      "additionalProperties": false,
+      "description": "Subsquid datasource config",
+      "properties": {
+        "datasources": {
+          "description": "`substrate` datasources to use",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/SubstrateDatasourceConfigU"
+              }
+            ]
+          },
+          "title": "datasources",
+          "type": "array"
+        },
+        "first_level": {
+          "default": 0,
+          "description": "Level to start indexing from",
+          "title": "first_level",
+          "type": "integer"
+        },
+        "handlers": {
+          "description": "Event handlers",
+          "items": {
+            "$ref": "#/$defs/SubstrateEventsHandlerConfig"
+          },
+          "title": "handlers",
+          "type": "array"
+        },
+        "kind": {
+          "const": "substrate.events",
+          "default": "substrate.events",
+          "description": "Always 'substrate.events'",
+          "title": "kind",
+          "type": "string"
+        },
+        "last_level": {
+          "default": 0,
+          "description": "Level to stop indexing and disable this index",
+          "title": "last_level",
+          "type": "integer"
+        },
+        "runtime": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/SubstrateRuntimeConfig"
+            }
+          ],
+          "description": "Substrate runtime",
+          "title": "runtime"
+        }
+      },
+      "required": [
+        "datasources",
+        "runtime",
+        "handlers"
+      ],
+      "title": "SubstrateEventsIndexConfig",
+      "type": "object"
+    },
+    "SubstrateNodeDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "Substrate node datasource config",
+      "properties": {
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "substrate.node",
+          "default": "substrate.node",
+          "description": "Always 'substrate.node'",
+          "title": "kind",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "description": "Substrate node URL",
+          "title": "url"
+        },
+        "ws_url": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsUrl"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Substrate node WebSocket URL",
+          "title": "ws_url"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "SubstrateNodeDatasourceConfig",
+      "type": "object"
+    },
+    "SubstrateRuntimeConfig": {
+      "additionalProperties": false,
+      "description": "Substrate runtime config",
+      "properties": {
+        "kind": {
+          "const": "substrate",
+          "default": "substrate",
+          "description": "Always 'substrate'",
+          "title": "kind",
+          "type": "string"
+        },
+        "type_registry": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Path to type registry or its alias",
+          "title": "type_registry"
+        }
+      },
+      "title": "SubstrateRuntimeConfig",
+      "type": "object"
+    },
+    "SubstrateSubscanDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "Subscan datasource config",
+      "properties": {
+        "api_key": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "API key",
+          "title": "api_key"
+        },
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "substrate.subscan",
+          "default": "substrate.subscan",
+          "description": "always 'substrate.subscan'",
+          "title": "kind",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "description": "API URL",
+          "title": "url"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "SubstrateSubscanDatasourceConfig",
+      "type": "object"
+    },
+    "SubstrateSubsquidDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "Subsquid datasource config",
+      "properties": {
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "substrate.subsquid",
+          "default": "substrate.subsquid",
+          "description": "always 'substrate.subsquid'",
+          "title": "kind",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "description": "URL of Subsquid Network API",
+          "title": "url"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "title": "SubstrateSubsquidDatasourceConfig",
+      "type": "object"
+    },
+    "TezosAddress": {
+      "type": "string"
+    },
+    "TezosBigMapsHandlerConfig": {
+      "additionalProperties": false,
+      "description": "Big map handler config",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "contract": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            }
+          ],
+          "description": "Contract to fetch big map from",
+          "title": "contract"
+        },
+        "path": {
+          "description": "Path to big map (alphanumeric string with dots)",
+          "title": "path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "callback",
+        "contract",
+        "path"
+      ],
+      "title": "TezosBigMapsHandlerConfig",
+      "type": "object"
+    },
+    "TezosBigMapsIndexConfig": {
+      "additionalProperties": false,
+      "description": "Big map index config",
+      "properties": {
+        "datasources": {
+          "description": "Tezos datasources to use",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/TezosTzktDatasourceConfig"
+              }
+            ]
+          },
+          "title": "datasources",
+          "type": "array"
+        },
+        "first_level": {
+          "default": 0,
+          "description": "Level to start indexing from",
+          "title": "first_level",
+          "type": "integer"
+        },
+        "handlers": {
+          "description": "Mapping of big map diff handlers",
+          "items": {
+            "$ref": "#/$defs/TezosBigMapsHandlerConfig"
+          },
+          "title": "handlers",
+          "type": "array"
+        },
+        "kind": {
+          "const": "tezos.big_maps",
+          "default": "tezos.big_maps",
+          "description": "always 'tezos.big_maps'",
+          "title": "kind",
+          "type": "string"
+        },
+        "last_level": {
+          "default": 0,
+          "description": "Level to stop indexing at",
+          "title": "last_level",
+          "type": "integer"
+        },
+        "skip_history": {
+          "$ref": "#/$defs/SkipHistory",
+          "default": "never",
+          "description": "Fetch only current big map keys ignoring historical changes",
+          "title": "skip_history"
+        }
+      },
+      "required": [
+        "datasources",
+        "handlers"
+      ],
+      "title": "TezosBigMapsIndexConfig",
+      "type": "object"
+    },
+    "TezosContractConfig": {
+      "additionalProperties": false,
+      "description": "Tezos contract config.",
+      "properties": {
+        "address": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TezosAddress"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Contract address",
+          "title": "address"
+        },
+        "code_hash": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "$ref": "#/$defs/TezosAddress"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Contract code hash or address to fetch it from",
+          "title": "code_hash"
+        },
+        "kind": {
+          "const": "tezos",
+          "default": "tezos",
+          "description": "Always `tezos`",
+          "title": "kind",
+          "type": "string"
+        },
+        "typename": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Alias for the contract script",
+          "title": "typename"
+        }
+      },
+      "title": "TezosContractConfig",
+      "type": "object"
+    },
+    "TezosEventsHandlerConfig": {
+      "additionalProperties": false,
+      "description": "Event handler config",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "contract": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            }
+          ],
+          "description": "Contract which emits event",
+          "title": "contract"
+        },
+        "tag": {
+          "description": "Event tag",
+          "title": "tag",
+          "type": "string"
+        }
+      },
+      "required": [
+        "callback",
+        "contract",
+        "tag"
+      ],
+      "title": "TezosEventsHandlerConfig",
+      "type": "object"
+    },
+    "TezosEventsIndexConfig": {
+      "additionalProperties": false,
+      "description": "Event index config",
+      "properties": {
+        "datasources": {
+          "description": "`evm` datasources to use",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/TezosTzktDatasourceConfig"
+              }
+            ]
+          },
+          "title": "datasources",
+          "type": "array"
+        },
+        "first_level": {
+          "default": 0,
+          "description": "First block level to index",
+          "title": "first_level",
+          "type": "integer"
+        },
+        "handlers": {
+          "description": "Event handlers",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/TezosEventsHandlerConfig"
+              },
+              {
+                "$ref": "#/$defs/TezosEventsUnknownEventHandlerConfig"
+              }
+            ]
+          },
+          "title": "handlers",
+          "type": "array"
+        },
+        "kind": {
+          "const": "tezos.events",
+          "default": "tezos.events",
+          "description": "always 'tezos.events'",
+          "title": "kind",
+          "type": "string"
+        },
+        "last_level": {
+          "default": 0,
+          "description": "Last block level to index",
+          "title": "last_level",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "datasources",
+        "handlers"
+      ],
+      "title": "TezosEventsIndexConfig",
+      "type": "object"
+    },
+    "TezosEventsUnknownEventHandlerConfig": {
+      "additionalProperties": false,
+      "description": "Unknown event handler config",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "contract": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            }
+          ],
+          "description": "Contract which emits event",
+          "title": "contract"
+        }
+      },
+      "required": [
+        "callback",
+        "contract"
+      ],
+      "title": "TezosEventsUnknownEventHandlerConfig",
+      "type": "object"
+    },
+    "TezosHeadIndexConfig": {
+      "additionalProperties": false,
+      "description": "Head block index config",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "datasources": {
+          "description": "`tezos` datasources to use",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/TezosTzktDatasourceConfig"
+              }
+            ]
+          },
+          "title": "datasources",
+          "type": "array"
+        },
+        "kind": {
+          "const": "tezos.head",
+          "default": "tezos.head",
+          "description": "always 'tezos.head'",
+          "title": "kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "datasources",
+        "callback"
+      ],
+      "title": "TezosHeadIndexConfig",
+      "type": "object"
+    },
+    "TezosOperationType": {
+      "description": "Type of blockchain operation\n\n:param transaction: transaction\n:param origination: origination\n:param migration: migration\n:param sr_execute: sr_execute\n:param sr_cement: sr_cement",
+      "enum": [
+        "transaction",
+        "origination",
+        "migration",
+        "sr_execute",
+        "sr_cement"
+      ],
+      "title": "TezosOperationType",
+      "type": "string"
+    },
+    "TezosOperationsHandlerConfig": {
+      "additionalProperties": false,
+      "description": "Operation handler config",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "pattern": {
+          "description": "Filters to match operation groups",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/TezosOperationsHandlerTransactionPatternConfig"
+              },
+              {
+                "$ref": "#/$defs/TezosOperationsHandlerOriginationPatternConfig"
+              },
+              {
+                "$ref": "#/$defs/TezosOperationsHandlerSmartRollupCementPatternConfig"
+              },
+              {
+                "$ref": "#/$defs/TezosOperationsHandlerSmartRollupExecutePatternConfig"
+              }
+            ]
+          },
+          "title": "pattern",
+          "type": "array"
+        }
+      },
+      "required": [
+        "callback",
+        "pattern"
+      ],
+      "title": "TezosOperationsHandlerConfig",
+      "type": "object"
+    },
+    "TezosOperationsHandlerOriginationPatternConfig": {
+      "additionalProperties": false,
+      "description": "Origination handler pattern config",
+      "properties": {
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Alias for operation (helps to avoid duplicates)",
+          "title": "alias"
+        },
+        "optional": {
+          "default": false,
+          "description": "Whether can operation be missing in operation group",
+          "title": "optional",
+          "type": "boolean"
+        },
+        "originated_contract": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Match origination of exact contract",
+          "title": "originated_contract"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Match operations by source contract alias",
+          "title": "source"
+        },
+        "strict": {
+          "default": false,
+          "description": "Match operations by storage only or by the whole code",
+          "title": "strict",
+          "type": "boolean"
+        },
+        "type": {
+          "const": "origination",
+          "default": "origination",
+          "description": "always 'origination'",
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "title": "TezosOperationsHandlerOriginationPatternConfig",
+      "type": "object"
+    },
+    "TezosOperationsHandlerSmartRollupCementPatternConfig": {
+      "additionalProperties": false,
+      "description": "Operation handler pattern config",
+      "properties": {
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Alias for operation (helps to avoid duplicates)",
+          "title": "alias"
+        },
+        "destination": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Match operations by destination contract alias",
+          "title": "destination"
+        },
+        "optional": {
+          "default": false,
+          "description": "Whether can operation be missing in operation group",
+          "title": "optional",
+          "type": "boolean"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Match operations by source contract alias",
+          "title": "source"
+        },
+        "type": {
+          "const": "sr_cement",
+          "default": "sr_cement",
+          "description": "always 'sr_cement'",
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "title": "TezosOperationsHandlerSmartRollupCementPatternConfig",
+      "type": "object"
+    },
+    "TezosOperationsHandlerSmartRollupExecutePatternConfig": {
+      "additionalProperties": false,
+      "description": "Operation handler pattern config",
+      "properties": {
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Alias for operation (helps to avoid duplicates)",
+          "title": "alias"
+        },
+        "destination": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Match operations by destination contract alias",
+          "title": "destination"
+        },
+        "optional": {
+          "default": false,
+          "description": "Whether can operation be missing in operation group",
+          "title": "optional",
+          "type": "boolean"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Match operations by source contract alias",
+          "title": "source"
+        },
+        "type": {
+          "const": "sr_execute",
+          "default": "sr_execute",
+          "description": "always 'sr_execute'",
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "title": "TezosOperationsHandlerSmartRollupExecutePatternConfig",
+      "type": "object"
+    },
+    "TezosOperationsHandlerTransactionPatternConfig": {
+      "additionalProperties": false,
+      "description": "Transaction handler pattern config",
+      "properties": {
+        "alias": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Alias for operation (helps to avoid duplicates)",
+          "title": "alias"
+        },
+        "destination": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Match operations by destination contract alias",
+          "title": "destination"
+        },
+        "entrypoint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Match operations by contract entrypoint",
+          "title": "entrypoint"
+        },
+        "optional": {
+          "default": false,
+          "description": "Whether can operation be missing in operation group",
+          "title": "optional",
+          "type": "boolean"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Match operations by source contract alias",
+          "title": "source"
+        },
+        "type": {
+          "const": "transaction",
+          "default": "transaction",
+          "description": "always 'transaction'",
+          "title": "type",
+          "type": "string"
+        }
+      },
+      "title": "TezosOperationsHandlerTransactionPatternConfig",
+      "type": "object"
+    },
+    "TezosOperationsIndexConfig": {
+      "additionalProperties": false,
+      "description": "Operation index config",
+      "properties": {
+        "contracts": {
+          "description": "Aliases of contracts being indexed in `contracts` section",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/TezosContractConfig"
+              }
+            ]
+          },
+          "title": "contracts",
+          "type": "array"
+        },
+        "datasources": {
+          "description": "`tezos` datasources to use",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/TezosTzktDatasourceConfig"
+              }
+            ]
+          },
+          "title": "datasources",
+          "type": "array"
+        },
+        "first_level": {
+          "default": 0,
+          "description": "Level to start indexing from",
+          "title": "first_level",
+          "type": "integer"
+        },
+        "handlers": {
+          "description": "List of indexer handlers",
+          "items": {
+            "$ref": "#/$defs/TezosOperationsHandlerConfig"
+          },
+          "title": "handlers",
+          "type": "array"
+        },
+        "kind": {
+          "const": "tezos.operations",
+          "default": "tezos.operations",
+          "description": "always 'tezos.operations'",
+          "title": "kind",
+          "type": "string"
+        },
+        "last_level": {
+          "default": 0,
+          "description": "Level to stop indexing at",
+          "title": "last_level",
+          "type": "integer"
+        },
+        "types": {
+          "default": [
+            "transaction"
+          ],
+          "description": "Types of transaction to fetch",
+          "items": {
+            "$ref": "#/$defs/TezosOperationType"
+          },
+          "title": "types",
+          "type": "array"
+        }
+      },
+      "required": [
+        "datasources",
+        "handlers"
+      ],
+      "title": "TezosOperationsIndexConfig",
+      "type": "object"
+    },
+    "TezosOperationsUnfilteredIndexConfig": {
+      "additionalProperties": false,
+      "description": "Operation index config",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "datasources": {
+          "description": "`tezos` datasources to use",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/TezosTzktDatasourceConfig"
+              }
+            ]
+          },
+          "title": "datasources",
+          "type": "array"
+        },
+        "first_level": {
+          "default": 0,
+          "description": "Level to start indexing from",
+          "title": "first_level",
+          "type": "integer"
+        },
+        "kind": {
+          "const": "tezos.operations_unfiltered",
+          "default": "tezos.operations_unfiltered",
+          "description": "always 'tezos.operations_unfiltered'",
+          "title": "kind",
+          "type": "string"
+        },
+        "last_level": {
+          "default": 0,
+          "description": "Level to stop indexing at",
+          "title": "last_level",
+          "type": "integer"
+        },
+        "types": {
+          "default": [
+            "transaction"
+          ],
+          "description": "Types of transaction to fetch",
+          "items": {
+            "$ref": "#/$defs/TezosOperationType"
+          },
+          "title": "types",
+          "type": "array"
+        }
+      },
+      "required": [
+        "datasources",
+        "callback"
+      ],
+      "title": "TezosOperationsUnfilteredIndexConfig",
+      "type": "object"
+    },
+    "TezosTokenBalancesHandlerConfig": {
+      "additionalProperties": false,
+      "description": "Token balance handler config",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "contract": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by contract",
+          "title": "contract"
+        },
+        "token_id": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by token ID",
+          "title": "token_id"
+        }
+      },
+      "required": [
+        "callback"
+      ],
+      "title": "TezosTokenBalancesHandlerConfig",
+      "type": "object"
+    },
+    "TezosTokenBalancesIndexConfig": {
+      "additionalProperties": false,
+      "description": "Token balance index config",
+      "properties": {
+        "datasources": {
+          "description": "`tezos` datasources to use",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/TezosTzktDatasourceConfig"
+              }
+            ]
+          },
+          "title": "datasources",
+          "type": "array"
+        },
+        "first_level": {
+          "default": 0,
+          "description": "Level to start indexing from",
+          "title": "first_level",
+          "type": "integer"
+        },
+        "handlers": {
+          "description": "Mapping of token transfer handlers",
+          "items": {
+            "$ref": "#/$defs/TezosTokenBalancesHandlerConfig"
+          },
+          "title": "handlers",
+          "type": "array"
+        },
+        "kind": {
+          "const": "tezos.token_balances",
+          "default": "tezos.token_balances",
+          "description": "always 'tezos.token_balances'",
+          "title": "kind",
+          "type": "string"
+        },
+        "last_level": {
+          "default": 0,
+          "description": "Level to stop indexing at",
+          "title": "last_level",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "datasources",
+        "handlers"
+      ],
+      "title": "TezosTokenBalancesIndexConfig",
+      "type": "object"
+    },
+    "TezosTokenTransfersHandlerConfig": {
+      "additionalProperties": false,
+      "description": "Token transfer handler config",
+      "properties": {
+        "callback": {
+          "description": "Callback name",
+          "title": "callback",
+          "type": "string"
+        },
+        "contract": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by contract",
+          "title": "contract"
+        },
+        "from": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by sender",
+          "title": "from"
+        },
+        "to": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/$defs/TezosContractConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by recipient",
+          "title": "to"
+        },
+        "token_id": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Filter by token ID",
+          "title": "token_id"
+        }
+      },
+      "required": [
+        "callback"
+      ],
+      "title": "TezosTokenTransfersHandlerConfig",
+      "type": "object"
+    },
+    "TezosTokenTransfersIndexConfig": {
+      "additionalProperties": false,
+      "description": "Token transfer index config",
+      "properties": {
+        "datasources": {
+          "description": "`tezos` datasources to use",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/$defs/TezosTzktDatasourceConfig"
+              }
+            ]
+          },
+          "title": "datasources",
+          "type": "array"
+        },
+        "first_level": {
+          "default": 0,
+          "description": "Level to start indexing from",
+          "title": "first_level",
+          "type": "integer"
+        },
+        "handlers": {
+          "description": "Mapping of token transfer handlers",
+          "items": {
+            "$ref": "#/$defs/TezosTokenTransfersHandlerConfig"
+          },
+          "title": "handlers",
+          "type": "array"
+        },
+        "kind": {
+          "const": "tezos.token_transfers",
+          "default": "tezos.token_transfers",
+          "description": "always 'tezos.token_transfers'",
+          "title": "kind",
+          "type": "string"
+        },
+        "last_level": {
+          "default": 0,
+          "description": "Level to stop indexing at",
+          "title": "last_level",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "datasources",
+        "handlers"
+      ],
+      "title": "TezosTokenTransfersIndexConfig",
+      "type": "object"
+    },
+    "TezosTzktDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "TzKT datasource config",
+      "properties": {
+        "buffer_size": {
+          "default": 0,
+          "description": "Number of levels to keep in FIFO buffer before processing",
+          "title": "buffer_size",
+          "type": "integer"
+        },
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "tezos.tzkt",
+          "default": "tezos.tzkt",
+          "description": "always 'tezos.tzkt'",
+          "title": "kind",
+          "type": "string"
+        },
+        "merge_subscriptions": {
+          "default": false,
+          "description": "Whether to merge realtime subscriptions",
+          "title": "merge_subscriptions",
+          "type": "boolean"
+        },
+        "rollback_depth": {
+          "default": 2,
+          "description": "Number of blocks to keep in the database to handle reorgs",
+          "title": "rollback_depth",
+          "type": "integer"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "default": "https://api.tzkt.io",
+          "description": "Base API URL, e.g. https://api.tzkt.io/",
+          "title": "url"
+        }
+      },
+      "title": "TezosTzktDatasourceConfig",
+      "type": "object"
+    },
+    "ToStr": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "number"
+        }
+      ]
+    },
+    "TzipMetadataDatasourceConfig": {
+      "additionalProperties": false,
+      "description": "DipDup Metadata datasource config",
+      "properties": {
+        "http": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/HttpConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "HTTP client configuration",
+          "title": "http"
+        },
+        "kind": {
+          "const": "tzip_metadata",
+          "default": "tzip_metadata",
+          "description": "always 'tzip_metadata'",
+          "title": "kind",
+          "type": "string"
+        },
+        "network": {
+          "description": "Network name, e.g. mainnet, ghostnet, etc.",
+          "title": "network",
+          "type": "string"
+        },
+        "url": {
+          "$ref": "#/$defs/Url",
+          "default": "https://metadata.dipdup.net",
+          "description": "GraphQL API URL, e.g. https://metadata.dipdup.net",
+          "title": "url"
+        }
+      },
+      "required": [
+        "network"
+      ],
+      "title": "TzipMetadataDatasourceConfig",
+      "type": "object"
+    },
+    "Url": {
+      "type": "string"
+    },
+    "WatchdogAction": {
+      "enum": [
+        "exception",
+        "warning",
+        "ignore"
+      ],
+      "title": "WatchdogAction",
+      "type": "string"
+    },
+    "WatchdogConfig": {
+      "additionalProperties": false,
+      "description": "Config for the watchdog",
+      "properties": {
+        "action": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WatchdogAction"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Action to perform when watchdog timeout is reached",
+          "title": "action"
+        },
+        "timeout": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Watchdog timeout in seconds",
+          "title": "timeout"
+        }
+      },
+      "title": "WatchdogConfig",
+      "type": "object"
+    },
+    "WatchdogTrigger": {
+      "enum": [
+        "callback",
+        "transaction",
+        "websocket"
+      ],
+      "title": "WatchdogTrigger",
+      "type": "string"
+    },
+    "WsUrl": {
+      "type": "string"
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "description": "DipDup project configuration file",
+  "properties": {
+    "advanced": {
+      "$ref": "#/$defs/AdvancedConfig",
+      "description": "Advanced config",
+      "title": "advanced"
+    },
+    "api": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ApiConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Management API config",
+      "title": "api"
+    },
+    "contracts": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/EvmContractConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosContractConfig"
+          },
+          {
+            "$ref": "#/$defs/StarknetContractConfig"
+          }
+        ]
+      },
+      "description": "Mapping of contract aliases and contract configs",
+      "title": "contracts",
+      "type": "object"
+    },
+    "custom": {
+      "description": "User-defined configuration to use in callbacks",
+      "title": "custom",
+      "type": "object"
+    },
+    "database": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SqliteDatabaseConfig"
+        },
+        {
+          "$ref": "#/$defs/PostgresDatabaseConfig"
+        }
+      ],
+      "description": "Database config",
+      "title": "database"
+    },
+    "datasources": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/CoinbaseDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/EvmEtherscanDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/EvmSourcifyDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/EvmBlockvisionDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/HttpDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/IpfsDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/EvmSubsquidDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/EvmNodeDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/TzipMetadataDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosTzktDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/StarknetSubsquidDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/StarknetNodeDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/SubstrateSubsquidDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/SubstrateSubscanDatasourceConfig"
+          },
+          {
+            "$ref": "#/$defs/SubstrateNodeDatasourceConfig"
+          }
+        ]
+      },
+      "description": "Mapping of datasource aliases and datasource configs",
+      "title": "datasources",
+      "type": "object"
+    },
+    "hasura": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/HasuraConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Hasura integration config",
+      "title": "hasura"
+    },
+    "hooks": {
+      "additionalProperties": {
+        "$ref": "#/$defs/HookConfig"
+      },
+      "description": "Mapping of hook aliases and hook configs",
+      "title": "hooks",
+      "type": "object"
+    },
+    "indexes": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/TezosBigMapsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosEventsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosHeadIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosOperationsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosOperationsUnfilteredIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosTokenTransfersIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosTokenBalancesIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/EvmEventsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/EvmTransactionsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/StarknetEventsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/SubstrateEventsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/IndexTemplateConfig"
+          }
+        ]
+      },
+      "description": "Mapping of index aliases and index configs",
+      "title": "indexes",
+      "type": "object"
+    },
+    "jobs": {
+      "additionalProperties": {
+        "$ref": "#/$defs/JobConfig"
+      },
+      "description": "Mapping of job aliases and job configs",
+      "title": "jobs",
+      "type": "object"
+    },
+    "logging": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ]
+          },
+          "type": "object"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "integer"
+        }
+      ],
+      "default": "INFO",
+      "description": "Modify logging verbosity",
+      "title": "logging"
+    },
+    "mcp": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/McpConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "MCP server config",
+      "title": "mcp"
+    },
+    "package": {
+      "description": "Name of indexer's Python package, existing or not",
+      "title": "package",
+      "type": "string"
+    },
+    "prometheus": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PrometheusConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Prometheus integration config",
+      "title": "prometheus"
+    },
+    "runtimes": {
+      "additionalProperties": {
+        "$ref": "#/$defs/SubstrateRuntimeConfig"
+      },
+      "description": "Mapping of runtime aliases and runtime configs",
+      "title": "runtimes",
+      "type": "object"
+    },
+    "sentry": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/SentryConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Sentry integration config",
+      "title": "sentry"
+    },
+    "spec_version": {
+      "$ref": "#/$defs/ToStr",
+      "description": "Version of config specification, currently always `3.0`",
+      "title": "spec_version"
+    },
+    "templates": {
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/TezosBigMapsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosEventsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosHeadIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosOperationsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosOperationsUnfilteredIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosTokenTransfersIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/TezosTokenBalancesIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/EvmEventsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/EvmTransactionsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/StarknetEventsIndexConfig"
+          },
+          {
+            "$ref": "#/$defs/SubstrateEventsIndexConfig"
+          }
+        ]
+      },
+      "description": "Mapping of template aliases and index templates",
+      "title": "templates",
+      "type": "object"
+    }
+  },
+  "required": [],
+  "title": "DipDup",
+  "type": "object"
+}

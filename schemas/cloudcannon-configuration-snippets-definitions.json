@@ -1,0 +1,287 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/cloudcannon/configuration-types/releases/latest/download/cloudcannon-snippets-definitions.schema.json",
+  "type": "object",
+  "propertyNames": {
+    "type": "string"
+  },
+  "additionalProperties": {
+    "$ref": "#/definitions/type.snippet-definition-value"
+  },
+  "definitions": {
+    "type.snippet-definition-value": {
+      "title": "Snippet Definition Value",
+      "description": "A reusable value that can be referenced in snippet templates via { ref: \"key\" } or { spread_ref: \"key\" }.",
+      "anyOf": [
+        {
+          "$ref": "#/definitions/type.snippet-format"
+        },
+        {
+          "$ref": "#/definitions/type.snippet-model"
+        },
+        {
+          "title": "Parser Model Array",
+          "description": "An array of model configurations, typically used for positional_args or named_args.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/type.snippet-model"
+          },
+          "markdownDescription": "An array of model configurations, typically used for positional_args or named_args."
+        },
+        {
+          "title": "Select Values Array",
+          "description": "An array of select options, typically used for language lists.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/type.snippet-definition-select-value"
+          },
+          "markdownDescription": "An array of select options, typically used for language lists."
+        },
+        {
+          "title": "String Value",
+          "description": "A string value, commonly used for shortcode_name, tag_name, content_key, and similar definitions.",
+          "type": "string",
+          "markdownDescription": "A string value, commonly used for shortcode_name, tag_name, content_key, and similar definitions."
+        },
+        {
+          "title": "Number Value",
+          "description": "A numeric value.",
+          "type": "number",
+          "markdownDescription": "A numeric value."
+        },
+        {
+          "title": "Boolean Value",
+          "description": "A boolean value.",
+          "type": "boolean",
+          "markdownDescription": "A boolean value."
+        },
+        {
+          "title": "String Array",
+          "description": "An array of strings.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "markdownDescription": "An array of strings."
+        }
+      ],
+      "markdownDescription": "A reusable value that can be referenced in snippet templates via { ref: \"key\" } or { spread_ref: \"key\" }."
+    },
+    "type.snippet-format": {
+      "title": "Snippet Format",
+      "type": "object",
+      "properties": {
+        "root_boundary": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "default": "",
+              "type": "string"
+            },
+            "end": {
+              "default": "",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "root_value_boundary": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "default": "",
+              "type": "string"
+            },
+            "end": {
+              "default": "",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "root_value_boundary_optional": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "boolean"
+          }
+        },
+        "root_value_delimiter": {
+          "type": "string"
+        },
+        "root_pair_delimiter": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "remove_empty_root_boundary": {
+          "type": "boolean"
+        },
+        "object_boundary": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "default": "",
+              "type": "string"
+            },
+            "end": {
+              "default": "",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "object_value_delimiter": {
+          "type": "string"
+        },
+        "object_pair_delimiter": {
+          "type": "string"
+        },
+        "array_boundary": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "default": "",
+              "type": "string"
+            },
+            "end": {
+              "default": "",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "array_delimiter": {
+          "type": "string"
+        },
+        "string_boundary": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "string_escape_character": {
+          "type": "string"
+        },
+        "allow_booleans": {
+          "type": "boolean"
+        },
+        "allow_numbers": {
+          "type": "boolean"
+        },
+        "allow_implied_values": {
+          "type": "boolean"
+        },
+        "allow_null": {
+          "type": "boolean"
+        },
+        "forbidden_tokens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowed_string_cases": {
+          "type": "object",
+          "properties": {
+            "any": {
+              "type": "boolean"
+            },
+            "leading_upper": {
+              "type": "boolean"
+            },
+            "leading_lower": {
+              "type": "boolean"
+            },
+            "lower": {
+              "type": "boolean"
+            },
+            "upper": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "type.snippet-model": {
+      "title": "Snippet Model",
+      "type": "object",
+      "properties": {
+        "source_key": {
+          "type": "string"
+        },
+        "editor_key": {
+          "type": "string"
+        },
+        "remove_empty": {
+          "default": false,
+          "type": "boolean"
+        },
+        "optional": {
+          "default": false,
+          "type": "boolean"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "array",
+            "object",
+            "string",
+            "boolean",
+            "number"
+          ]
+        },
+        "allowed_values": {
+          "type": "array",
+          "items": {}
+        },
+        "implied_boolean": {
+          "default": false,
+          "type": "boolean"
+        },
+        "default": {}
+      },
+      "additionalProperties": false
+    },
+    "type.snippet-definition-select-value": {
+      "title": "Snippet Definition Select Value",
+      "description": "A value option for select inputs, typically used in language lists.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The display name for this option.",
+          "type": "string",
+          "markdownDescription": "The display name for this option."
+        },
+        "value": {
+          "description": "The value for this option.",
+          "anyOf": [
+            {
+              "title": "String",
+              "type": "string"
+            },
+            {
+              "title": "Number",
+              "type": "number"
+            },
+            {
+              "title": "Boolean",
+              "type": "boolean"
+            }
+          ],
+          "markdownDescription": "The value for this option."
+        }
+      },
+      "required": [
+        "value"
+      ],
+      "additionalProperties": false,
+      "markdownDescription": "A value option for select inputs, typically used in language lists."
+    }
+  }
+}

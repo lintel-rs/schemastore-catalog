@@ -1,0 +1,511 @@
+{
+  "definitions": {
+    "connection": {
+      "if": {
+        "properties": {
+          "type": { "enum": ["cassandra", "mysql", "postgresql", "sqlserver"] }
+        }
+      },
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "description": "Schema for configuring Cassandra database connection parameters",
+          "examples": [
+            {
+              "cache": {
+                "database": "myDB",
+                "hosts": ["localhost"],
+                "password": "myPassword",
+                "port": 9042,
+                "type": "cassandra",
+                "user": "myUser"
+              }
+            }
+          ],
+          "properties": {
+            "database": { "description": "DB name", "type": "string" },
+            "hosts": {
+              "description": "Cassandra hosts",
+              "items": {
+                "title": "Address of Cassandra node",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "password": { "description": "DB password", "type": "string" },
+            "port": {
+              "default": 9042,
+              "description": "Cassandra DB port",
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "type": {
+              "const": "cassandra",
+              "description": "DB type",
+              "type": "string"
+            },
+            "user": { "description": "DB user", "type": "string" }
+          },
+          "required": ["type", "hosts"],
+          "title": "Cassandra",
+          "type": "object"
+        },
+        {
+          "description": "Schema for configuring DB2 database connection parameters",
+          "examples": [
+            {
+              "db2": {
+                "connect_args": {
+                  "ssl_ca": "/opt/ssl/ca.crt",
+                  "ssl_cert": "/opt/ssl/client.crt",
+                  "ssl_key": "/opt/ssl/client.key"
+                },
+                "database": "sample",
+                "host": "localhost",
+                "password": "mypass",
+                "port": 50000,
+                "type": "db2",
+                "user": "myuser"
+              }
+            }
+          ],
+          "properties": {
+            "connect_args": {
+              "additionalProperties": true,
+              "description": "Additional arguments to use when connecting to the DB",
+              "type": "object"
+            },
+            "database": { "description": "DB name", "type": "string" },
+            "host": { "description": "DB host", "type": "string" },
+            "password": { "description": "DB password", "type": "string" },
+            "port": {
+              "description": "DB port",
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "query_args": {
+              "additionalProperties": true,
+              "description": "Additional query string arguments to use when connecting to the DB",
+              "type": "object"
+            },
+            "type": {
+              "const": "db2",
+              "description": "Connection type",
+              "type": "string"
+            },
+            "user": { "description": "DB user", "type": "string" }
+          },
+          "required": ["type", "host", "port", "database", "user"],
+          "title": "DB2",
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Schema for configuring HTTP connection parameters",
+          "examples": [
+            {
+              "base_uri": "https://api.example.com",
+              "headers": {
+                "Authorization": {
+                  "expression": "concat([ 'Bearer ', token])",
+                  "language": "jmespath"
+                },
+                "Content-Type": "application/json"
+              },
+              "query_parameters": {
+                "id": { "expression": "user_id", "language": "jmespath" },
+                "timestamp": { "expression": "date('now')", "language": "sql" }
+              }
+            }
+          ],
+          "properties": {
+            "base_uri": {
+              "description": "Base URI for the API endpoint",
+              "type": "string"
+            },
+            "headers": {
+              "additionalProperties": {
+                "oneOf": [
+                  { "type": "string" },
+                  {
+                    "properties": {
+                      "expression": {
+                        "description": "Expression",
+                        "type": "string"
+                      },
+                      "language": {
+                        "description": "Language",
+                        "enum": ["jmespath", "sql"],
+                        "type": "string"
+                      }
+                    },
+                    "required": ["expression", "language"],
+                    "type": "object"
+                  }
+                ]
+              },
+              "description": "HTTP headers, including authorization token",
+              "type": "object"
+            },
+            "query_parameters": {
+              "additionalProperties": {
+                "oneOf": [
+                  { "type": "string" },
+                  {
+                    "properties": {
+                      "expression": {
+                        "description": "Expression",
+                        "type": "string"
+                      },
+                      "language": {
+                        "description": "Language",
+                        "enum": ["jmespath", "sql"],
+                        "type": "string"
+                      }
+                    },
+                    "required": ["expression", "language"],
+                    "type": "object"
+                  }
+                ]
+              },
+              "description": "Default query parameters for all API endpoints",
+              "type": "object"
+            },
+            "timeout": {
+              "default": 10,
+              "description": "Timeout for HTTP connection in seconds",
+              "type": "integer"
+            },
+            "type": {
+              "const": "http",
+              "description": "Connection type",
+              "type": "string"
+            }
+          },
+          "required": ["type", "base_uri"],
+          "title": "HTTP Connection",
+          "type": "object"
+        },
+        {
+          "description": "Schema for configuring MySQL database connection parameters",
+          "examples": [
+            {
+              "hr": {
+                "connect_args": {
+                  "ssl_ca": "/opt/ssl/ca.crt",
+                  "ssl_cert": "/opt/ssl/client.crt",
+                  "ssl_key": "/opt/ssl/client.key"
+                },
+                "database": "hr",
+                "host": "localhost",
+                "password": "mypass",
+                "port": 3306,
+                "type": "mysql",
+                "user": "myuser"
+              }
+            }
+          ],
+          "properties": {
+            "connect_args": {
+              "additionalProperties": true,
+              "description": "Additional arguments to use when connecting to the DB",
+              "type": "object"
+            },
+            "database": { "description": "DB name", "type": "string" },
+            "host": { "description": "DB host", "type": "string" },
+            "password": { "description": "DB password", "type": "string" },
+            "port": {
+              "description": "DB port",
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "query_args": {
+              "additionalProperties": true,
+              "description": "Additional query string arguments to use when connecting to the DB",
+              "type": "object"
+            },
+            "type": {
+              "const": "mysql",
+              "description": "Connection type",
+              "type": "string"
+            },
+            "user": { "description": "DB user", "type": "string" }
+          },
+          "required": ["type", "host", "port", "database", "user"],
+          "title": "MySQL",
+          "type": "object"
+        },
+        {
+          "description": "Schema for configuring Oracle database connection parameters",
+          "examples": [
+            {
+              "hr": {
+                "database": "orcl",
+                "host": "localhost",
+                "oracle_thick_mode": true,
+                "oracle_thick_mode_lib_dir": "/opt/oracle/instantclient_21_8/",
+                "password": "tiger",
+                "port": 5432,
+                "type": "oracle",
+                "user": "scott"
+              }
+            }
+          ],
+          "properties": {
+            "connect_args": {
+              "additionalProperties": true,
+              "description": "Additional arguments to use when connecting to the DB",
+              "type": "object"
+            },
+            "database": { "description": "DB name", "type": "string" },
+            "driver": { "description": "Driver", "type": "string" },
+            "host": { "description": "DB host", "type": "string" },
+            "oracle_thick_mode": {
+              "default": false,
+              "description": "Enable oracle's thick mode(requires installed Oracle Client)",
+              "type": "boolean"
+            },
+            "oracle_thick_mode_lib_dir": {
+              "description": "Path to Oracle Client libraries",
+              "type": "string"
+            },
+            "password": { "description": "DB password", "type": "string" },
+            "port": {
+              "description": "DB port",
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "query_args": {
+              "additionalProperties": true,
+              "description": "Additional query string arguments to use when connecting to the DB",
+              "type": "object"
+            },
+            "type": {
+              "const": "oracle",
+              "description": "Connection type",
+              "type": "string"
+            },
+            "user": { "description": "DB user", "type": "string" }
+          },
+          "required": ["type", "host", "port", "database", "user"],
+          "title": "Oracle",
+          "type": "object"
+        },
+        {
+          "description": "Schema for configuring PostgreSQL database connection parameters",
+          "examples": [
+            {
+              "hr": {
+                "connect_args": { "connect_timeout": 10 },
+                "database": "postgres",
+                "host": "localhost",
+                "password": "postgres",
+                "port": 5432,
+                "query_args": {
+                  "sslcert": "/opt/ssl/client.crt",
+                  "sslkey": "/opt/ssl/client.key",
+                  "sslmode": "verify-ca",
+                  "sslrootcert": "/opt/ssl/ca.crt"
+                },
+                "type": "postgresql",
+                "user": "postgres"
+              }
+            }
+          ],
+          "properties": {
+            "connect_args": {
+              "additionalProperties": true,
+              "description": "Additional arguments to use when connecting to the DB",
+              "type": "object"
+            },
+            "database": { "description": "DB name", "type": "string" },
+            "host": { "description": "DB host", "type": "string" },
+            "password": { "description": "DB password", "type": "string" },
+            "port": {
+              "description": "DB port",
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "query_args": {
+              "additionalProperties": true,
+              "description": "Additional query string arguments to use when connecting to the DB",
+              "type": "object"
+            },
+            "type": {
+              "const": "postgresql",
+              "description": "Connection type",
+              "type": "string"
+            },
+            "user": { "description": "DB user", "type": "string" }
+          },
+          "required": ["type", "host", "port", "database", "user"],
+          "title": "PostgreSQL",
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "dependentRequired": {
+            "cert": ["key"],
+            "key": ["cert"],
+            "key_password": ["key"]
+          },
+          "description": "Schema for configuring Redis database connection parameters",
+          "examples": [
+            {
+              "cache": {
+                "health_check_interval": 60,
+                "host": "localhost",
+                "port": 6379,
+                "socket_connect_timeout": 2.0,
+                "socket_keepalive": true,
+                "socket_timeout": 10.0,
+                "type": "redis"
+              }
+            }
+          ],
+          "properties": {
+            "cacert": {
+              "description": "CA certificate file to verify with",
+              "type": "string"
+            },
+            "cert": {
+              "description": "Client certificate file to authenticate with",
+              "type": "string"
+            },
+            "health_check_interval": {
+              "default": 60,
+              "description": "Interval for health checks in seconds",
+              "minimum": 0,
+              "type": "number"
+            },
+            "host": { "description": "Redis DB host", "type": "string" },
+            "key": {
+              "description": "Private key file to authenticate with",
+              "type": "string"
+            },
+            "key_password": {
+              "description": "Password for unlocking an encrypted private key",
+              "type": "string"
+            },
+            "password": {
+              "description": "Redis DB password",
+              "type": "string"
+            },
+            "port": {
+              "description": "Redis DB port",
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "socket_connect_timeout": {
+              "default": 2.0,
+              "description": "Socket connection timeout in seconds",
+              "minimum": 0,
+              "type": "number"
+            },
+            "socket_keepalive": {
+              "default": true,
+              "description": "Enable/disable TCP keepalive",
+              "type": "boolean"
+            },
+            "socket_timeout": {
+              "default": 10.0,
+              "description": "Socket timeout in seconds",
+              "minimum": 0,
+              "type": "number"
+            },
+            "type": {
+              "const": "redis",
+              "description": "Connection type",
+              "type": "string"
+            },
+            "user": { "description": "Redis DB user", "type": "string" }
+          },
+          "required": ["type", "host", "port"],
+          "title": "Redis",
+          "type": "object"
+        },
+        {
+          "description": "Schema for configuring SQL Server database connection parameters",
+          "examples": [
+            {
+              "hr": {
+                "database": "hr",
+                "host": "localhost",
+                "password": "mypass",
+                "port": 1433,
+                "type": "sqlserver",
+                "user": "myuser"
+              }
+            }
+          ],
+          "properties": {
+            "connect_args": {
+              "additionalProperties": true,
+              "description": "Additional arguments to use when connecting to the DB",
+              "type": "object"
+            },
+            "database": { "description": "DB name", "type": "string" },
+            "host": { "description": "DB host", "type": "string" },
+            "password": { "description": "DB password", "type": "string" },
+            "port": {
+              "description": "DB port",
+              "maximum": 65535,
+              "minimum": 1,
+              "type": "integer"
+            },
+            "query_args": {
+              "additionalProperties": true,
+              "description": "Additional query string arguments to use when connecting to the DB",
+              "type": "object"
+            },
+            "type": {
+              "const": "sqlserver",
+              "description": "Connection type",
+              "type": "string"
+            },
+            "user": { "description": "DB user", "type": "string" }
+          },
+          "required": ["type", "host", "port", "database", "user"],
+          "title": "SQL Server",
+          "type": "object"
+        }
+      ],
+      "required": ["type"],
+      "then": {
+        "properties": {
+          "connect_args": {
+            "description": "Additional arguments to use when connecting to the DB",
+            "type": "object"
+          },
+          "debug": {
+            "default": false,
+            "description": "Echo all SQL commands to stdout",
+            "title": "Debug mode",
+            "type": "boolean"
+          },
+          "driver": {
+            "description": "Explicit driver to use, if not using default",
+            "type": "string"
+          },
+          "query_args": {
+            "description": "Additional query string arguments to use when connecting to the DB",
+            "type": "object"
+          }
+        }
+      },
+      "type": "object"
+    }
+  },
+  "description": "Connection catalog",
+  "patternProperties": {
+    ".": { "$ref": "#/definitions/connection", "type": "object" }
+  },
+  "title": "Connections",
+  "type": ["object", "null"]
+}

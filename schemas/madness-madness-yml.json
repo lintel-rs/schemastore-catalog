@@ -1,0 +1,242 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "settings",
+    "description": "Settings for madness server\nhttps://madness.dannyb.co/#configuration-file",
+    "type": "object",
+    "properties": {
+        "path": {
+            "title": "path",
+            "description": "Path to the documentation root\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "string",
+            "minLength": 1,
+            "default": "."
+        },
+        "port": {
+            "title": "port",
+            "description": "Server port\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "integer",
+            "minimum": 0,
+            "default": "3000"
+        },
+        "bind": {
+            "title": "bind",
+            "description": "Server listening address\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "string",
+            "pattern": "^\\d+\\.\\d+\\.\\d+\\.\\d+$",
+            "default": "0.0.0.0"
+        },
+        "renderer": {
+            "title": "renderer",
+            "description": "The underlying markdown renderer to use\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "string",
+            "enum": [
+                "redcarpet",
+                "pandoc"
+            ],
+            "default": "redcarpet"
+        },
+        "base_uri": {
+            "title": "base uri",
+            "description": "Server root URI\nhttps://madness.dannyb.co/#configuration-file",
+            "oneOf": [
+                {
+                    "type": "string",
+                    "minLength": 1,
+                    "examples": [
+                        "/docs"
+                    ],
+                    "not": {
+                        "pattern": "//"
+                    }
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "sort_order": {
+            "title": "sort order",
+            "description": "Navigation sort order\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "string",
+            "enum": [
+                "dirs_first",
+                "mixed"
+            ],
+            "default": "dirs_first"
+        },
+        "sidebar": {
+            "title": "sidebar",
+            "description": "Whether to enable sidebar\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "boolean",
+            "default": "true"
+        },
+        "auto_h1": {
+            "title": "auto h1",
+            "description": "Whether to add H1 title to files that do not have one\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "boolean",
+            "default": "true"
+        },
+        "auto_nav": {
+            "title": "auto nav",
+            "description": "Whether to append navigation to directory READMEs\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "boolean",
+            "default": "true"
+        },
+        "auto_toc": {
+            "title": "auto toc",
+            "description": "Whether to enable table of contents\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "boolean",
+            "default": "true"
+        },
+        "highlighter": {
+            "title": "highlighter",
+            "description": "Whether to enable syntax highlighter for code snippets\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "boolean",
+            "default": "true"
+        },
+        "mermaid": {
+            "title": "mermaid",
+            "description": "Whether to enable support for mermaid diagrams\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "boolean",
+            "default": "true"
+        },
+
+        "copy_code": {
+            "title": "copy code",
+            "description": "Whether to enable the copy to clipboard icon for code snippets\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "boolean",
+            "default": "true"
+        },
+        "shortlinks": {
+            "title": "shortlinks",
+            "description": "Whether to convert [[Links]] to [Links](Links)\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "boolean",
+            "default": "false"
+        },
+        "toc": {
+            "title": "toc",
+            "description": "Whether to generate a table of contents file with this name\nhttps://madness.dannyb.co/#configuration-file",
+            "oneOf": [
+                {
+                    "type": "string",
+                    "minLength": 1,
+                    "examples": [
+                        "Table of Contents"
+                    ]
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "theme": {
+            "title": "theme",
+            "description": "Theme directory\nhttps://madness.dannyb.co/#configuration-file",
+            "oneOf": [
+                {
+                    "type": "string",
+                    "minLength": 1,
+                    "examples": [
+                        "_theme"
+                    ]
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "source_link": {
+            "title": "source link",
+            "description": "Template for source code links\nhttps://madness.dannyb.co/#configuration-file",
+            "oneOf": [
+                {
+                    "type": "string",
+                    "minLength": 1,
+                    "examples": [
+                        "http://example.com/%{path}"
+                    ]
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "source_link_label": {
+            "title": "source link label",
+            "description": "Label for the page source code link\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "string",
+            "minLength": 1,
+            "default": "Page Source"
+        },
+        "source_link_pos": {
+            "title": "source link pos",
+            "description": "The position of the page source code link\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "string",
+            "enum": [
+                "top",
+                "bottom"
+            ],
+            "default": "bottom"
+        },
+        "open": {
+            "title": "open",
+            "description": "Whether to open the server URL in the browser\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "boolean",
+            "default": "false"
+        },
+        "auth": {
+            "title": "auth",
+            "description": "Whether to provide user:password for basic authentication\nhttps://madness.dannyb.co/#configuration-file",
+            "oneOf": [
+                {
+                    "type": "boolean",
+                    "const": false
+                },
+                {
+                    "type": "string",
+                    "pattern": "^[^:]+:[^:]+$",
+                    "examples": [
+                        "admin:s3cr3t"
+                    ]
+                }
+            ]
+        },
+        "auth_zone": {
+            "title": "auth zone",
+            "description": "An auth realm name\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "string",
+            "default": "Restricted Documentation"
+        },
+        "expose_extensions": {
+            "title": "expose extensions",
+            "description": "Show files with these extensions in the navigation\nhttps://madness.dannyb.co/#configuration-file",
+            "oneOf": [
+                {
+                    "type": "string",
+                    "examples": [
+                        "pdf,docx,xlsx,txt"
+                    ],
+                    "not": {
+                        "pattern": ",,|^,|,$"
+                    }
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "exclude": {
+            "title": "exclude",
+            "description": "Excluded directories\nhttps://madness.dannyb.co/#configuration-file",
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+                "description": "An excluded directory\nhttps://madness.dannyb.co/#configuration-file",
+                "type": "string",
+                "default": "^[a-z_\\-0-9]+$"
+            }
+        }
+    },
+    "additionalProperties": false
+}

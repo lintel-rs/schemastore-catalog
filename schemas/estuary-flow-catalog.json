@@ -1,0 +1,1696 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Catalog",
+  "description": "Each catalog source defines a portion of a Flow Catalog, by defining\ncollections, derivations, tests, and materializations of the Catalog.\nCatalog sources may reference and import other sources, in order to\ncollections and other entities that source defines.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "title": "JSON-Schema against which the Catalog is validated.",
+      "type": "string"
+    },
+    "captures": {
+      "title": "Captures of this Catalog.",
+      "type": "object",
+      "additionalProperties": false,
+      "examples": [
+        {
+          "acmeCo/capture": {
+            "autoDiscover": {
+              "addNewBindings": true,
+              "evolveIncompatibleCollections": true
+            },
+            "bindings": [
+              {
+                "resource": {
+                  "stream": "a_stream"
+                },
+                "target": "target/collection"
+              }
+            ],
+            "endpoint": {
+              "connector": {
+                "config": "connector-config.yaml",
+                "image": "connector/image:tag"
+              }
+            }
+          }
+        }
+      ],
+      "patternProperties": {
+        "^[\\p{Letter}\\p{Number}\\-_\\.]+(/[\\p{Letter}\\p{Number}\\-_\\.]+)*$": {
+          "$ref": "#/$defs/CaptureDef"
+        }
+      }
+    },
+    "collections": {
+      "title": "Collections of this Catalog.",
+      "type": "object",
+      "additionalProperties": false,
+      "examples": [
+        {
+          "acmeCo/collection": {
+            "key": [
+              "/json/ptr"
+            ],
+            "schema": {
+              "properties": {
+                "bar": {
+                  "const": 42
+                },
+                "foo": {
+                  "type": "integer"
+                }
+              },
+              "type": "object"
+            }
+          }
+        }
+      ],
+      "patternProperties": {
+        "^[\\p{Letter}\\p{Number}\\-_\\.]+(/[\\p{Letter}\\p{Number}\\-_\\.]+)*$": {
+          "$ref": "#/$defs/CollectionDef"
+        }
+      }
+    },
+    "import": {
+      "title": "Import other Flow catalog sources.",
+      "description": "By importing another Flow catalog source, its collections, schemas, and derivations\nare bundled into the publication context of this specification.\nImports are relative or absolute URLs, relative to this specification's location.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/RelativeUrl"
+      }
+    },
+    "materializations": {
+      "title": "Materializations of this Catalog.",
+      "type": "object",
+      "additionalProperties": false,
+      "examples": [
+        {
+          "acmeCo/materialization": {
+            "bindings": [
+              {
+                "fields": {
+                  "recommended": true
+                },
+                "resource": {
+                  "table": "a_table"
+                },
+                "source": "source/collection"
+              }
+            ],
+            "endpoint": {
+              "connector": {
+                "config": "connector-config.yaml",
+                "image": "connector/image:tag"
+              }
+            }
+          }
+        }
+      ],
+      "patternProperties": {
+        "^[\\p{Letter}\\p{Number}\\-_\\.]+(/[\\p{Letter}\\p{Number}\\-_\\.]+)*$": {
+          "$ref": "#/$defs/MaterializationDef"
+        }
+      }
+    },
+    "tests": {
+      "title": "Tests of this Catalog.",
+      "type": "object",
+      "additionalProperties": false,
+      "examples": [
+        {
+          "acmeCo/conversions/test": [
+            {
+              "ingest": {
+                "collection": "acmeCo/collection",
+                "description": "Description of the ingestion.",
+                "documents": [
+                  {
+                    "a": "document"
+                  },
+                  {
+                    "another": "document"
+                  }
+                ]
+              }
+            },
+            {
+              "verify": {
+                "collection": "acmeCo/collection",
+                "description": "Description of the verification.",
+                "documents": [
+                  {
+                    "a": "document"
+                  },
+                  {
+                    "another": "document"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "patternProperties": {
+        "^[\\p{Letter}\\p{Number}\\-_\\.]+(/[\\p{Letter}\\p{Number}\\-_\\.]+)*$": {
+          "$ref": "#/$defs/TestDef"
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "AutoDiscover": {
+      "description": "Settings to determine how Flow should stay abreast of ongoing changes to collections and schemas.",
+      "type": "object",
+      "properties": {
+        "addNewBindings": {
+          "description": "Automatically add new bindings discovered from the source.",
+          "type": "boolean",
+          "default": false
+        },
+        "evolveIncompatibleCollections": {
+          "description": "Whether to automatically evolve collections and/or materialization\nbindings to handle changes to collections that would otherwise be\nincompatible with the existing catalog.",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "Capture": {
+      "description": "Capture names are paths of Unicode letters, numbers, '-', '_', or '.'.\nEach path component is separated by a slash '/',\nand a name may not begin or end in a '/'.",
+      "type": "string",
+      "examples": [
+        "acmeCo/capture"
+      ],
+      "pattern": "^[\\p{Letter}\\p{Number}\\-_\\.]+(/[\\p{Letter}\\p{Number}\\-_\\.]+)*$"
+    },
+    "CaptureBinding": {
+      "type": "object",
+      "properties": {
+        "backfill": {
+          "title": "Backfill counter for this binding.",
+          "description": "Every increment of this counter will result in a new backfill of this\nbinding from the captured endpoint. For example when capturing from a\nSQL table, incrementing this counter will cause the table to be\nre-captured in its entirety from the source database.\n\nNote that a backfill does *not* truncate the target collection,\nand documents published by a backfilled binding will coexist with\n(and be ordered after) any documents which were published as part\nof a preceding backfill.",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "disable": {
+          "title": "Whether to disable the binding",
+          "description": "Disabled bindings are inactive, and not validated.\nThey can be used to represent discovered resources that are\nintentionally not being captured.",
+          "type": "boolean"
+        },
+        "resource": {
+          "title": "Endpoint resource to capture from.",
+          "$ref": "#/$defs/Value"
+        },
+        "target": {
+          "title": "Name of the collection to capture into.",
+          "$ref": "#/$defs/Collection"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "resource": {
+            "stream": "a_stream"
+          },
+          "target": "target/collection"
+        }
+      ],
+      "required": [
+        "resource",
+        "target"
+      ]
+    },
+    "CaptureDef": {
+      "description": "A Capture binds an external system and target (e.x., a SQL table or cloud storage bucket)\nfrom which data should be continuously captured, with a Flow collection into that captured\ndata is ingested. Multiple Captures may be bound to a single collection, but only one\ncapture may exist for a given endpoint and target.",
+      "type": "object",
+      "properties": {
+        "autoDiscover": {
+          "title": "Continuously keep the collection spec and schema up-to-date",
+          "$ref": "#/$defs/AutoDiscover"
+        },
+        "bindings": {
+          "title": "Bound collections to capture from the endpoint.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CaptureBinding"
+          }
+        },
+        "delete": {
+          "title": "Delete this capture.",
+          "description": "When true, a publication will delete this capture.",
+          "type": "boolean"
+        },
+        "endpoint": {
+          "title": "Endpoint to capture from.",
+          "$ref": "#/$defs/CaptureEndpoint"
+        },
+        "expectPubId": {
+          "title": "Expected publication ID of this capture within the control plane.",
+          "description": "When present, a publication of the capture will fail if the\nlast publication ID in the control plane doesn't match this value.",
+          "$ref": "#/$defs/Id"
+        },
+        "interval": {
+          "title": "Interval of time between invocations of the capture.",
+          "description": "Configured intervals are applicable only to connectors which are\nunable to continuously tail their source, and which instead produce\na current quantity of output and then exit. Flow will start the\nconnector again after the given interval of time has passed.\n\nIntervals are relative to the start of an invocation and not its completion.\nFor example, if the interval is five minutes, and an invocation of the\ncapture finishes after two minutes, then the next invocation will be started\nafter three additional minutes.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^\\d+(s|m|h|d)$"
+        },
+        "redactSalt": {
+          "title": "Salt used for redacting sensitive fields in captured documents.",
+          "description": "When provided, this base64-encoded salt is used instead of a generated one.",
+          "type": "string"
+        },
+        "reset": {
+          "title": "Reset this capture.",
+          "description": "Publishing a value of `true` will reset this capture, which is\nequivalent to deleting and then re-creating the capture but\napplied as a single publication.",
+          "type": "boolean"
+        },
+        "shards": {
+          "title": "Template for shards of this capture task.",
+          "$ref": "#/$defs/ShardTemplate"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "endpoint",
+        "bindings"
+      ]
+    },
+    "CaptureEndpoint": {
+      "description": "An endpoint from which Flow will capture.",
+      "oneOf": [
+        {
+          "title": "A Connector.",
+          "type": "object",
+          "properties": {
+            "connector": {
+              "$ref": "#/$defs/ConnectorConfig"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "connector"
+          ]
+        },
+        {
+          "title": "A local command (development only).",
+          "type": "object",
+          "properties": {
+            "local": {
+              "$ref": "#/$defs/LocalConfig"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "local"
+          ]
+        }
+      ]
+    },
+    "Collection": {
+      "description": "Collection names are paths of Unicode letters, numbers, '-', '_', or '.'.\nEach path component is separated by a slash '/',\nand a name may not begin or end in a '/'.",
+      "type": "string",
+      "examples": [
+        "acmeCo/collection"
+      ],
+      "pattern": "^[\\p{Letter}\\p{Number}\\-_\\.]+(/[\\p{Letter}\\p{Number}\\-_\\.]+)*$"
+    },
+    "CollectionDef": {
+      "description": "Collection describes a set of related documents, where each adheres to a\ncommon schema and grouping key. Collections are append-only: once a document\nis added to a collection, it is never removed. However, it may be replaced\nor updated (either in whole, or in part) by a future document sharing its\nkey. Each new document of a given key is \"reduced\" into existing documents\nof the key. By default, this reduction is achieved by completely replacing\nthe previous document, but much richer reduction behaviors can be specified\nthrough the use of annotated reduction strategies of the collection schema.",
+      "type": "object",
+      "properties": {
+        "delete": {
+          "title": "Delete this collection.",
+          "description": "When true, a publication will delete this collection.",
+          "type": "boolean"
+        },
+        "derive": {
+          "$ref": "#/$defs/Derivation"
+        },
+        "expectPubId": {
+          "title": "Expected publication ID of this collection within the control plane.",
+          "description": "When present, a publication of the collection will fail if the\nlast publication ID in the control plane doesn't match this value.",
+          "$ref": "#/$defs/Id"
+        },
+        "journals": {
+          "title": "Template for journals of this collection.",
+          "$ref": "#/$defs/JournalTemplate"
+        },
+        "key": {
+          "title": "Composite key of this collection.",
+          "$ref": "#/$defs/CompositeKey"
+        },
+        "projections": {
+          "title": "Projections and logical partitions of this collection.",
+          "type": "object",
+          "additionalProperties": false,
+          "examples": [
+            {
+              "a_field": "/json/ptr",
+              "a_partition": {
+                "location": "/json/ptr",
+                "partition": true
+              }
+            }
+          ],
+          "patternProperties": {
+            "^([^/~]|(~[01]))+(/([^/~]|(~[01]))+)*$": {
+              "$ref": "#/$defs/Projection"
+            }
+          }
+        },
+        "readSchema": {
+          "title": "Schema against which collection documents are validated and reduced on read.",
+          "$ref": "#/$defs/Schema"
+        },
+        "reset": {
+          "title": "Reset this collection.",
+          "description": "Publishing a value of `true` will reset this collection, which is\nequivalent to deleting and then re-creating the collection but\napplied as a single publication.\nIf this is a derived collection then the derivation task state is\nalso reset, effectively re-building the derivation in its entirety.",
+          "type": "boolean"
+        },
+        "schema": {
+          "title": "Schema against which collection documents are validated and reduced on write and read.",
+          "$ref": "#/$defs/Schema",
+          "examples": [
+            "../path/to/schema#/$defs/subPath"
+          ]
+        },
+        "writeSchema": {
+          "title": "Schema against which collection documents are validated and reduced on write.",
+          "$ref": "#/$defs/Schema"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "key": [
+            "/json/ptr"
+          ],
+          "schema": {
+            "properties": {
+              "bar": {
+                "const": 42
+              },
+              "foo": {
+                "type": "integer"
+              }
+            },
+            "type": "object"
+          }
+        }
+      ],
+      "oneOf": [
+        {
+          "properties": {
+            "readSchema": false,
+            "writeSchema": false
+          },
+          "required": [
+            "schema"
+          ]
+        },
+        {
+          "properties": {
+            "schema": false
+          },
+          "required": [
+            "readSchema",
+            "writeSchema"
+          ]
+        }
+      ],
+      "required": [
+        "key"
+      ]
+    },
+    "CompositeKey": {
+      "description": "Ordered JSON-Pointers which define how a composite key may be extracted from\na collection document.",
+      "type": "array",
+      "examples": [
+        [
+          "/json/ptr"
+        ]
+      ],
+      "items": {
+        "$ref": "#/$defs/JsonPointer"
+      }
+    },
+    "CompressionCodec": {
+      "description": "A CompressionCodec may be applied to compress journal fragments before\nthey're persisted to cloud stoage. The compression applied to a journal\nfragment is included in its filename, such as \".gz\" for GZIP. A\ncollection's compression may be changed at any time, and will affect\nnewly-written journal fragments.",
+      "type": "string",
+      "enum": [
+        "NONE",
+        "GZIP",
+        "ZSTANDARD",
+        "SNAPPY",
+        "GZIP_OFFLOAD_DECOMPRESSION"
+      ],
+      "examples": [
+        "GZIP_OFFLOAD_DECOMPRESSION"
+      ]
+    },
+    "ConnectorConfig": {
+      "description": "Connector image and configuration specification.",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Configuration of the connector.",
+          "$ref": "#/$defs/Value"
+        },
+        "image": {
+          "title": "Image of the connector.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "image",
+        "config"
+      ]
+    },
+    "DekafConfig": {
+      "description": "Dekaf service configuration",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Dekaf endpoint config.",
+          "$ref": "#/$defs/Value"
+        },
+        "variant": {
+          "title": "Dekaf variant type.",
+          "description": "Since we support integrating with a bunch of different providers via Dekaf,\nthis allows us to store which of those connector variants this particular Dekaf connector was\ncreated as, in order to e.g link to the correct docs URL, show the correct name and logo, etc.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "variant",
+        "config"
+      ]
+    },
+    "Derivation": {
+      "description": "Derive specifies how a collection is derived from other collections.",
+      "type": "object",
+      "properties": {
+        "redactSalt": {
+          "title": "Salt used for redacting sensitive fields in derived documents.",
+          "description": "When provided, this base64-encoded salt is used instead of a generated one.",
+          "type": "string"
+        },
+        "shards": {
+          "title": "Template for shards of this derivation task.",
+          "$ref": "#/$defs/ShardTemplate"
+        },
+        "shuffleKeyTypes": {
+          "title": "Key component types of the shuffle keys used by derivation lambdas.",
+          "description": "Typically you omit this and Flow infers it from your transform shuffle keys.\nIn some circumstances, Flow may require that you explicitly tell it of\nyour shuffled key types.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ShuffleType"
+          }
+        },
+        "transforms": {
+          "title": "Transforms which make up this derivation.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TransformDef"
+          }
+        },
+        "using": {
+          "title": "The selected runtime for this derivation.",
+          "$ref": "#/$defs/DeriveUsing"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "using",
+        "transforms"
+      ]
+    },
+    "DeriveUsing": {
+      "description": "A derivation runtime implementation.",
+      "oneOf": [
+        {
+          "title": "A Connector.",
+          "type": "object",
+          "properties": {
+            "connector": {
+              "$ref": "#/$defs/ConnectorConfig"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "connector"
+          ]
+        },
+        {
+          "title": "A SQLite derivation.",
+          "type": "object",
+          "properties": {
+            "sqlite": {
+              "$ref": "#/$defs/DeriveUsingSqlite"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "sqlite"
+          ]
+        },
+        {
+          "title": "A TypeScript derivation.",
+          "type": "object",
+          "properties": {
+            "typescript": {
+              "$ref": "#/$defs/DeriveUsingTypescript"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "typescript"
+          ]
+        },
+        {
+          "title": "A Python derivation.",
+          "type": "object",
+          "properties": {
+            "python": {
+              "$ref": "#/$defs/DeriveUsingPython"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "python"
+          ]
+        },
+        {
+          "title": "A local command (development only).",
+          "type": "object",
+          "properties": {
+            "local": {
+              "$ref": "#/$defs/LocalConfig"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "local"
+          ]
+        }
+      ]
+    },
+    "DeriveUsingPython": {
+      "type": "object",
+      "properties": {
+        "dependencies": {
+          "title": "Python package dependencies.",
+          "description": "Map of package name to version specifier (e.g., {\"httpx\": \">=0.27\", \"pydantic\": \">=2.0\"}).\nThese dependencies will be included in the generated pyproject.toml.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {}
+        },
+        "module": {
+          "title": "Python module implementing this derivation.",
+          "description": "Module is either a relative URL of a Python module file,\nor is an inline representation of a Python module.\nThe module must have an exported Derivation class which\nextends the generated IDerivation base class.",
+          "oneOf": [
+            {
+              "description": "A URL identifying a resource, which may be a relative local path\nwith respect to the current resource (i.e, ../path/to/flow.yaml),\nor may be an external absolute URL (i.e., http://example/flow.yaml).",
+              "type": "string",
+              "examples": [
+                "https://example/resource"
+              ],
+              "pattern": "^[^ ]+$"
+            },
+            {
+              "type": "string",
+              "contentMediaType": "text/x.python"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "module"
+      ]
+    },
+    "DeriveUsingSqlite": {
+      "type": "object",
+      "properties": {
+        "migrations": {
+          "title": "Ordered migrations which are used to initialize the database.",
+          "description": "Migrations may be provided as an inline string,\nor as a relative URL to a file containing the migration SQL.",
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "description": "A URL identifying a resource, which may be a relative local path\nwith respect to the current resource (i.e, ../path/to/flow.yaml),\nor may be an external absolute URL (i.e., http://example/flow.yaml).",
+                "type": "string",
+                "examples": [
+                  "https://example/resource"
+                ],
+                "pattern": "^[^ ]+$"
+              },
+              {
+                "type": "string",
+                "contentMediaType": "text/x.sql"
+              }
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "DeriveUsingTypescript": {
+      "type": "object",
+      "properties": {
+        "module": {
+          "title": "TypeScript module implementing this derivation.",
+          "description": "Module is either a relative URL of a TypeScript module file,\nor is an inline representation of a Typescript module.\nThe module must have a exported Derivation variable which\nis an instance implementing the corresponding Derivation\ninterface.",
+          "oneOf": [
+            {
+              "description": "A URL identifying a resource, which may be a relative local path\nwith respect to the current resource (i.e, ../path/to/flow.yaml),\nor may be an external absolute URL (i.e., http://example/flow.yaml).",
+              "type": "string",
+              "examples": [
+                "https://example/resource"
+              ],
+              "pattern": "^[^ ]+$"
+            },
+            {
+              "type": "string",
+              "contentMediaType": "text/x.typescript"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "module"
+      ]
+    },
+    "Field": {
+      "description": "Field names a projection of a document location. They may include '/',\nbut cannot begin or end with one.\nMany Fields are automatically inferred by Flow from a collection JSON Schema,\nand are the JSON Pointer of the document location with the leading '/' removed.\nUser-provided Fields which act as a logical partitions are restricted to\nUnicode letters, numbers, '-', '_', or '.'",
+      "type": "string",
+      "examples": [
+        "my_field"
+      ],
+      "pattern": "^([^/~]|(~[01]))+(/([^/~]|(~[01]))+)*$"
+    },
+    "FragmentTemplate": {
+      "description": "A FragmentTemplate configures how journal fragment files are\nproduced as part of a collection.",
+      "type": "object",
+      "properties": {
+        "compressionCodec": {
+          "title": "Codec used to compress Journal Fragments.",
+          "$ref": "#/$defs/CompressionCodec"
+        },
+        "flushInterval": {
+          "title": "Maximum flush delay before in-progress fragments are closed and persisted",
+          "description": "into cloud storage. Intervals are converted into uniform time segments:\n24h will \"roll\" all fragments at midnight UTC every day, 1h at the top of\nevery hour, 15m a :00, :15, :30, :45 past the hour, and so on.\nIf not set, then fragments are not flushed on time-based intervals.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^\\d+(s|m|h|d)$"
+        },
+        "length": {
+          "title": "Desired content length of each fragment, in megabytes before compression.",
+          "description": "When a collection journal fragment reaches this threshold, it will be\nclosed off and pushed to cloud storage.\nIf not set, a default of 512MB is used.",
+          "type": "integer",
+          "format": "uint32",
+          "maximum": 4096,
+          "minimum": 32
+        },
+        "retention": {
+          "title": "Duration for which historical fragments of a collection should be kept.",
+          "description": "If not set, then fragments are retained indefinitely.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^\\d+(s|m|h|d)$"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "compressionCodec": "ZSTANDARD",
+          "flushInterval": "1h"
+        }
+      ]
+    },
+    "FullSource": {
+      "description": "A source collection and details of how it's read.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name of the collection to be read.",
+          "$ref": "#/$defs/Collection"
+        },
+        "notAfter": {
+          "title": "Upper bound date-time for documents which should be processed.",
+          "description": "Source collection documents published after this date-time are filtered.\n`notAfter` is *only* a filter. Updating its value will not cause Flow\nto re-process documents that have already been read.\nOptional. Default is to process all documents.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "notBefore": {
+          "title": "Lower bound date-time for documents which should be processed.",
+          "description": "Source collection documents published before this date-time are filtered.\n`notBefore` is *only* a filter. Updating its value will not cause Flow\nto re-process documents that have already been read.\nOptional. Default is to process all documents.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "partitions": {
+          "title": "Selector over partition of the source collection to read.",
+          "$ref": "#/$defs/PartitionSelector",
+          "examples": [
+            {
+              "exclude": {
+                "other_partition": [
+                  32,
+                  64
+                ]
+              },
+              "include": {
+                "a_partition": [
+                  "A",
+                  "B"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "name": "source/collection"
+        }
+      ],
+      "required": [
+        "name"
+      ]
+    },
+    "Id": {
+      "type": "string"
+    },
+    "JournalTemplate": {
+      "description": "A JournalTemplate configures the journals which make up the\nphysical partitions of a collection.",
+      "type": "object",
+      "properties": {
+        "fragments": {
+          "title": "Fragment configuration of collection journals.",
+          "$ref": "#/$defs/FragmentTemplate"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "fragments": {
+            "compressionCodec": "ZSTANDARD",
+            "flushInterval": "1h"
+          }
+        }
+      ],
+      "required": [
+        "fragments"
+      ]
+    },
+    "JsonPointer": {
+      "description": "JSON Pointer which identifies a location in a document.",
+      "type": "string",
+      "examples": [
+        "/json/ptr"
+      ],
+      "pattern": "^(/([^/~]|(~[01]))+)*$"
+    },
+    "LocalConfig": {
+      "description": "Local command and its configuration.",
+      "type": "object",
+      "properties": {
+        "command": {
+          "title": "Command to execute",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "config": {
+          "title": "Configuration of the command.",
+          "$ref": "#/$defs/Value"
+        },
+        "env": {
+          "title": "Environment variables",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "protobuf": {
+          "title": "Use protobuf codec instead of JSON.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "command",
+        "config"
+      ]
+    },
+    "MaterializationBinding": {
+      "type": "object",
+      "properties": {
+        "backfill": {
+          "title": "Backfill counter for this binding.",
+          "description": "Every increment of this counter will result in a new backfill of this\nbinding from its source collection to its materialized resource.\nFor example when materializing to a SQL table, incrementing this counter\ncauses the table to be dropped and then rebuilt by re-reading the source\ncollection.",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "disable": {
+          "title": "Whether to disable the binding",
+          "description": "Disabled bindings are inactive, and not validated.",
+          "type": "boolean"
+        },
+        "fields": {
+          "title": "Selected projections for this materialization.",
+          "$ref": "#/$defs/MaterializationFields",
+          "default": {
+            "recommended": true
+          }
+        },
+        "onIncompatibleSchemaChange": {
+          "title": "Action to take when a schema change is rejected due to incompatibility.",
+          "description": "This setting is used to determine the action to take when a schema change\nis rejected due to incompatibility with the target resource. By default,\nthe binding will have its `backfill` counter incremented, causing it to\nbe re-materialized from the source collection.",
+          "$ref": "#/$defs/OnIncompatibleSchemaChange"
+        },
+        "priority": {
+          "title": "Priority applied to documents processed by this binding.",
+          "description": "When all bindings are of equal priority, Flow processes documents\naccording to their associated publishing time, as encoded in the\ndocument UUID.\n\nHowever, when one binding has a higher priority than others,\nthen *all* ready documents are processed through the binding\nbefore *any* documents of other bindings are processed.",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "resource": {
+          "title": "Endpoint resource to materialize into.",
+          "$ref": "#/$defs/Value"
+        },
+        "source": {
+          "title": "The collection to be materialized.",
+          "$ref": "#/$defs/Source"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "fields": {
+            "recommended": true
+          },
+          "resource": {
+            "table": "a_table"
+          },
+          "source": "source/collection"
+        }
+      ],
+      "required": [
+        "resource",
+        "source"
+      ]
+    },
+    "MaterializationDef": {
+      "description": "A Materialization binds a Flow collection with an external system & target\n(e.x, a SQL table) into which the collection is to be continuously materialized.",
+      "type": "object",
+      "properties": {
+        "bindings": {
+          "title": "Bound collections to materialize into the endpoint.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/MaterializationBinding"
+          }
+        },
+        "delete": {
+          "title": "Delete this materialization.",
+          "description": "When true, a publication will delete this materialization.",
+          "type": "boolean"
+        },
+        "endpoint": {
+          "title": "Endpoint to materialize into.",
+          "$ref": "#/$defs/MaterializationEndpoint"
+        },
+        "expectPubId": {
+          "title": "Expected publication ID of this materialization within the control plane.",
+          "description": "When present, a publication of the materialization will fail if the\nlast publication ID in the control plane doesn't match this value.",
+          "$ref": "#/$defs/Id"
+        },
+        "onIncompatibleSchemaChange": {
+          "title": "Default handling of schema changes that are incompatible with the target resource.",
+          "description": "This can be overridden on a per-binding basis.",
+          "$ref": "#/$defs/OnIncompatibleSchemaChange"
+        },
+        "reset": {
+          "title": "Reset this materialization.",
+          "description": "Publishing a value of `true` will reset this materialization, which is\nequivalent to deleting and then re-creating the materialization but\napplied as a single publication.",
+          "type": "boolean"
+        },
+        "shards": {
+          "title": "Template for shards of this materialization task.",
+          "$ref": "#/$defs/ShardTemplate"
+        },
+        "source": {
+          "title": "Automatically materialize new bindings from a named capture",
+          "$ref": "#/$defs/SourceType"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "endpoint",
+        "bindings"
+      ]
+    },
+    "MaterializationEndpoint": {
+      "description": "An Endpoint connector used for Flow materializations.",
+      "oneOf": [
+        {
+          "title": "A Connector.",
+          "type": "object",
+          "properties": {
+            "connector": {
+              "$ref": "#/$defs/ConnectorConfig"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "connector"
+          ]
+        },
+        {
+          "title": "A local command (development only).",
+          "type": "object",
+          "properties": {
+            "local": {
+              "$ref": "#/$defs/LocalConfig"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "local"
+          ]
+        },
+        {
+          "title": "A Dekaf connection",
+          "type": "object",
+          "properties": {
+            "dekaf": {
+              "$ref": "#/$defs/DekafConfig"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "dekaf"
+          ]
+        }
+      ]
+    },
+    "MaterializationFields": {
+      "description": "MaterializationFields defines a selection of projections to materialize,\nas well as optional per-projection, driver-specific configuration.",
+      "type": "object",
+      "properties": {
+        "exclude": {
+          "title": "Fields to exclude.",
+          "description": "This removes from recommended projections, where enabled.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Field"
+          }
+        },
+        "groupBy": {
+          "title": "Fields to use as the grouping key of this materialization.",
+          "description": "If not specified, the key of the source collection is used.\nMaterialization bindings may select an ordered subset of scalar fields\nwhich will be grouped over, resulting in a natural index over the chosen\ngroup-by key. Fields may or may not be part of the collection key.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Field"
+          }
+        },
+        "recommended": {
+          "title": "Mode for automatic field selection of this materialization binding.",
+          "$ref": "#/$defs/RecommendedDepth"
+        },
+        "require": {
+          "title": "Fields to require.",
+          "description": "This supplements any selected fields, where enabled.\nValues are passed to and interpreted by the connector, which may use it\nto customize DDL generation or other behaviors with respect to the field.\nConsult connector documentation to see what it supports.\n\nNote that this field has been renamed from `include`,\nwhich will continue to be accepted as an alias.",
+          "type": "object",
+          "additionalProperties": false,
+          "patternProperties": {
+            "^([^/~]|(~[01]))+(/([^/~]|(~[01]))+)*$": {
+              "$ref": "#/$defs/Value"
+            }
+          }
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "exclude": [
+            "removed"
+          ],
+          "recommended": true,
+          "require": {
+            "added": {}
+          }
+        }
+      ],
+      "required": [
+        "recommended"
+      ]
+    },
+    "OnIncompatibleSchemaChange": {
+      "description": "Determines how to handle incompatible schema changes for a given binding.",
+      "examples": [
+        "backfill"
+      ],
+      "oneOf": [
+        {
+          "description": "Fail the publication of the incompatible schema change. This prevents any schema change\nfrom being applied if it is incompatible with the existing schema, as determined by the\nconnector.",
+          "type": "string",
+          "const": "abort"
+        },
+        {
+          "description": "Increment the backfill counter of the binding, causing it to start over from the beginning.",
+          "type": "string",
+          "const": "backfill"
+        },
+        {
+          "description": "Disable the binding, which will be effectively excluded from the task until it is re-enabled.",
+          "type": "string",
+          "const": "disableBinding"
+        },
+        {
+          "description": "Disable the entire task, preventing it from running until it is re-enabled.",
+          "type": "string",
+          "const": "disableTask"
+        }
+      ]
+    },
+    "PartitionSelector": {
+      "description": "Partition selectors identify a desired subset of the\navailable logical partitions of a collection.",
+      "type": "object",
+      "properties": {
+        "exclude": {
+          "description": "Partition field names and values which are excluded from the source\ncollection. Any documents matching *any one* of the partition values\nwill be excluded.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": true
+          },
+          "default": {}
+        },
+        "include": {
+          "description": "Partition field names and corresponding values which must be matched\nfrom the Source collection. Only documents having one of the specified\nvalues across all specified partition names will be matched. For example,\n  source: [App, Web]\n  region: [APAC]\nwould mean only documents of 'App' or 'Web' source and also occurring\nin the 'APAC' region will be processed.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": true
+          },
+          "default": {}
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "exclude": {
+            "other_partition": [
+              32,
+              64
+            ]
+          },
+          "include": {
+            "a_partition": [
+              "A",
+              "B"
+            ]
+          }
+        }
+      ]
+    },
+    "Projection": {
+      "description": "Projections are named locations within a collection document which\nmay be used for logical partitioning or directly exposed to databases\ninto which collections are materialized.",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/JsonPointer"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "location": {
+              "title": "Location of this projection.",
+              "$ref": "#/$defs/JsonPointer"
+            },
+            "partition": {
+              "title": "Is this projection a logical partition?",
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "location"
+          ]
+        }
+      ]
+    },
+    "RecommendedDepth": {
+      "description": "Available selection modes and their meanings:\n `false`/`0` = Only fields required by the user or the connector are materialized.\n `1` = Only top-level fields are selected.\n `2` = Second-level fields are selected, or top-level fields having no children.\n `3`, `4`, ... = Further levels of nesting are selected.\n `true` = Select nested fields regardless of their depth.",
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0
+        }
+      ]
+    },
+    "RelativeUrl": {
+      "description": "A URL identifying a resource, which may be a relative local path\nwith respect to the current resource (i.e, ../path/to/flow.yaml),\nor may be an external absolute URL (i.e., http://example/flow.yaml).",
+      "type": "string",
+      "examples": [
+        "https://example/resource"
+      ],
+      "pattern": "^[^ ]+$"
+    },
+    "Schema": {
+      "description": "A schema is a draft 2020-12 JSON Schema which validates Flow documents.\nSchemas also provide annotations at document locations, such as reduction\nstrategies for combining one document into another.\n\nSchemas may be defined inline to the catalog, or given as a relative\nor absolute URI. URIs may optionally include a JSON fragment pointer that\nlocates a specific sub-schema therein.\n\nFor example, \"schemas/marketing.yaml#/$defs/campaign\" would reference the schema\nat location {\"$defs\": {\"campaign\": ...}} within ./schemas/marketing.yaml.",
+      "$ref": "#/$defs/Value",
+      "examples": [
+        "http://example/schema#/$defs/subPath",
+        "../path/to/schema#/$defs/subPath",
+        {
+          "properties": {
+            "bar": {
+              "const": 42
+            },
+            "foo": {
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "ShardTemplate": {
+      "description": "A ShardTemplate configures how shards process a catalog task.",
+      "type": "object",
+      "properties": {
+        "disable": {
+          "title": "Disable processing of the task's shards.",
+          "type": "boolean"
+        },
+        "hotStandbys": {
+          "title": "Number of hot standbys to keep for each task shard.",
+          "description": "Hot standbys of a shard actively replicate the shard's state to another\nmachine, and are able to be quickly promoted to take over processing for\nthe shard should its current primary fail.\nIf not set, then no hot standbys are maintained.\nEXPERIMENTAL: this field MAY be removed.",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "logLevel": {
+          "title": "Log level of this tasks's shards.",
+          "description": "Log levels may currently be \"error\", \"warn\", \"info\", \"debug\", or \"trace\".\nIf not set, the effective log level is \"info\".",
+          "type": "string"
+        },
+        "maxTxnDuration": {
+          "title": "Maximum duration of task transactions.",
+          "description": "This duration upper-bounds the amount of time during which a transaction\nmay process documents before it must flush and commit.\nIt may run for less time if there aren't additional ready documents for\nit to process.\nIf not set, the maximum duration defaults to five minutes for materializations,\nand one second for captures and derivations.\nEXPERIMENTAL: this field MAY be removed.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^\\d+(s|m|h|d)$"
+        },
+        "minTxnDuration": {
+          "title": "Minimum duration of task transactions.",
+          "description": "This duration lower-bounds the amount of time during which a transaction\nmust process documents before it must flush and commit.\nIt may run for more time if additional documents are available.\nThe default value is zero seconds.\nLarger values may result in more data reduction, at the cost of\nmore latency.\nEXPERIMENTAL: this field MAY be removed.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^\\d+(s|m|h|d)$"
+        },
+        "readChannelSize": {
+          "title": "Size of the reader channel used for decoded documents.",
+          "description": "Larger values are recommended for tasks having more than one\nshard split and long, bursty transaction durations.\nIf not set, a reasonable default (currently 4,096) is used.\nEXPERIMENTAL: this field is LIKELY to be removed.",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "ringBufferSize": {
+          "title": "Size of the ring buffer used to sequence documents for exactly-once semantics.",
+          "description": "The ring buffer is a performance optimization only:\ncatalog tasks will replay portions of journals as\nneeded when messages aren't available in the buffer.\nIt can remain small if upstream task transactions are small,\nbut larger transactions will achieve better performance with a\nlarger ring.\nIf not set, a reasonable default (currently 65,536) is used.\nEXPERIMENTAL: this field is LIKELY to be removed.",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "hotStandbys": 1,
+          "maxTxnDuration": "30s"
+        }
+      ]
+    },
+    "Shuffle": {
+      "description": "A Shuffle specifies how a shuffling key is to be extracted from\ncollection documents.",
+      "examples": [
+        {
+          "key": [
+            "/json/ptr"
+          ]
+        }
+      ],
+      "oneOf": [
+        {
+          "title": "A Document may be shuffled to any task shard.",
+          "description": "Use 'any' if your transformation does not rely on internal task state,\nor if your derivation is not intended to scale beyond a single shard.",
+          "type": "string",
+          "const": "any"
+        },
+        {
+          "title": "Key which identifies fields of sourced documents to extract and shuffle upon.",
+          "type": "object",
+          "properties": {
+            "key": {
+              "$ref": "#/$defs/CompositeKey"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "key"
+          ]
+        },
+        {
+          "title": "Lambda which extracts a shuffle key from the sourced documents of this transform.",
+          "description": "Lambdas may be provided inline, or as a relative URL to a file containing the lambda.",
+          "type": "object",
+          "properties": {
+            "lambda": {
+              "$ref": "#/$defs/Value"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "lambda"
+          ]
+        }
+      ]
+    },
+    "ShuffleType": {
+      "description": "Type of a shuffled key component.",
+      "type": "string",
+      "enum": [
+        "boolean",
+        "integer",
+        "string"
+      ]
+    },
+    "Source": {
+      "description": "A source collection and details of how it's read.",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/FullSource"
+        },
+        {
+          "$ref": "#/$defs/Collection"
+        }
+      ],
+      "examples": [
+        "source/collection"
+      ]
+    },
+    "SourceDef": {
+      "description": "Specifies configuration for source captures, and defaults for new bindings\nthat are added to the materialization. Changing these defaults has no effect\non existing bindings.",
+      "type": "object",
+      "properties": {
+        "capture": {
+          "title": "Capture to source from",
+          "description": "The materialization will follow the bindings of the named capture\nas they change over time.",
+          "$ref": "#/$defs/Capture"
+        },
+        "deltaUpdates": {
+          "title": "Delta-updates for new bindings",
+          "description": "New bindings will apply this as their delta-updates setting.",
+          "type": "boolean",
+          "default": false
+        },
+        "fieldsRecommended": {
+          "title": "Mode for automatic field selection of new bindings",
+          "$ref": "#/$defs/RecommendedDepth"
+        },
+        "targetNaming": {
+          "title": "Naming convention for new bindings",
+          "description": "New bindings will apply the naming convention to determine the\ntarget's name and schema within the endpoint.",
+          "$ref": "#/$defs/TargetNaming",
+          "default": "prefixNonDefaultSchema"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "capture"
+      ]
+    },
+    "SourceType": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Capture"
+        },
+        {
+          "$ref": "#/$defs/SourceDef"
+        }
+      ]
+    },
+    "TargetNaming": {
+      "description": "How to name target resources (database tables, for example) for materializing\na given Collection.",
+      "oneOf": [
+        {
+          "description": "Leave the materialization binding's schema field empty, therefore\nfalling back to the default schema of the materialization. For example,\nmaterialize the collection `acmeCo/mySchema/myTable` to a table called\n`myTable`, without specifying the schema.\n\nThis used to be called `leaveEmpty`, and that value is still accepted,\nbut specs will always be written with `noSchema` instead.",
+          "type": "string",
+          "const": "noSchema"
+        },
+        {
+          "description": "Use the 2nd-to-last component of the collection name as the schema of\nthe materialization binding. For example, materialize the collection\n`acmeCo/mySchema/myTable` to a table called `myTable` in the schema\n`mySchema`.\n\nThis used to be called `fromSourceName`, and that value is still\naccepted, but specs will always be written with `withSchema` instead.",
+          "type": "string",
+          "const": "withSchema"
+        },
+        {
+          "description": "Use the 2nd-to-last component of the collection name to prefix the\ndestination resource name, leaving the schema unspecified. For example,\nmaterialize the collection `acmeCo/mySchema/myTable` to a table called\n`mySchema_myTable`.",
+          "type": "string",
+          "const": "prefixSchema"
+        },
+        {
+          "description": "Like `prefixSchema`, except that it will omit the prefix for the\nfollowing common default schema names:\n- public\n- dbo",
+          "type": "string",
+          "const": "prefixNonDefaultSchema"
+        }
+      ]
+    },
+    "TestDef": {
+      "description": "Test the behavior of reductions and derivations, through a sequence of test steps.",
+      "type": "object",
+      "properties": {
+        "delete": {
+          "title": "Delete this test within the control plane.",
+          "description": "When true, a publication will delete this test.",
+          "type": "boolean"
+        },
+        "description": {
+          "title": "Description of this test.",
+          "type": "string"
+        },
+        "expectPubId": {
+          "title": "Expected publication ID of this test within the control plane.",
+          "description": "When present, a publication of the test will fail if the\nlast publication ID in the control plane doesn't match this value.",
+          "$ref": "#/$defs/Id"
+        },
+        "steps": {
+          "title": "Sequential steps of this test.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TestStep"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "description": "An example test",
+          "steps": [
+            {
+              "ingest": {
+                "collection": "acmeCo/collection",
+                "description": "Description of the ingestion.",
+                "documents": [
+                  {
+                    "a": "document"
+                  },
+                  {
+                    "another": "document"
+                  }
+                ]
+              }
+            },
+            {
+              "verify": {
+                "collection": "acmeCo/collection",
+                "description": "Description of the verification.",
+                "documents": [
+                  {
+                    "a": "document"
+                  },
+                  {
+                    "another": "document"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ],
+      "required": [
+        "steps"
+      ]
+    },
+    "TestDocuments": {
+      "description": "A test step describes either an \"ingest\" of document fixtures into a\ncollection, or a \"verify\" of expected document fixtures from a collection.",
+      "$ref": "#/$defs/Value",
+      "examples": [
+        "../path/to/test-documents.json",
+        [
+          {
+            "a": "document"
+          },
+          {
+            "another": "document"
+          }
+        ]
+      ]
+    },
+    "TestStep": {
+      "description": "A test step describes either an \"ingest\" of document fixtures into a\ncollection, or a \"verify\" of expected document fixtures from a collection.",
+      "examples": [
+        {
+          "ingest": {
+            "collection": "acmeCo/collection",
+            "description": "Description of the ingestion.",
+            "documents": [
+              {
+                "a": "document"
+              },
+              {
+                "another": "document"
+              }
+            ]
+          }
+        },
+        {
+          "verify": {
+            "collection": "acmeCo/collection",
+            "description": "Description of the verification.",
+            "documents": [
+              {
+                "a": "document"
+              },
+              {
+                "another": "document"
+              }
+            ]
+          }
+        }
+      ],
+      "oneOf": [
+        {
+          "description": "Ingest document fixtures into a collection.",
+          "type": "object",
+          "properties": {
+            "ingest": {
+              "$ref": "#/$defs/TestStepIngest"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "ingest"
+          ]
+        },
+        {
+          "description": "Verify the contents of a collection match a set of document fixtures.",
+          "type": "object",
+          "properties": {
+            "verify": {
+              "$ref": "#/$defs/TestStepVerify"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "verify"
+          ]
+        }
+      ]
+    },
+    "TestStepIngest": {
+      "description": "An ingestion test step ingests document fixtures into the named\ncollection.",
+      "type": "object",
+      "properties": {
+        "collection": {
+          "title": "Name of the collection into which the test will ingest.",
+          "$ref": "#/$defs/Collection"
+        },
+        "description": {
+          "title": "Description of this test ingestion.",
+          "type": "string"
+        },
+        "documents": {
+          "title": "Documents to ingest.",
+          "description": "Each document must conform to the collection's schema.",
+          "$ref": "#/$defs/TestDocuments"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "collection": "acmeCo/collection",
+          "description": "Description of the ingestion.",
+          "documents": [
+            {
+              "a": "document"
+            },
+            {
+              "another": "document"
+            }
+          ]
+        }
+      ],
+      "required": [
+        "collection",
+        "documents"
+      ]
+    },
+    "TestStepVerify": {
+      "description": "A verification test step verifies that the contents of the named\ncollection match the expected fixtures, after fully processing all\npreceding ingestion test steps.",
+      "type": "object",
+      "properties": {
+        "collection": {
+          "title": "Collection from which the test will verify.",
+          "$ref": "#/$defs/Source"
+        },
+        "description": {
+          "title": "Description of this test verification.",
+          "type": "string"
+        },
+        "documents": {
+          "title": "Documents to verify.",
+          "description": "Each document may contain only a portion of the matched document's\nproperties, and any properties present in the actual document but\nnot in this document fixture are ignored. All other values must\nmatch or the test will fail.",
+          "$ref": "#/$defs/TestDocuments"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "collection": "acmeCo/collection",
+          "description": "Description of the verification.",
+          "documents": [
+            {
+              "a": "document"
+            },
+            {
+              "another": "document"
+            }
+          ]
+        }
+      ],
+      "required": [
+        "collection",
+        "documents"
+      ]
+    },
+    "Transform": {
+      "description": "Transform names are Unicode letters, numbers, '-', '_', or '.'.",
+      "type": "string",
+      "examples": [
+        "myTransform"
+      ],
+      "pattern": "^[\\p{Letter}\\p{Number}\\-_\\.]+$"
+    },
+    "TransformDef": {
+      "description": "A Transform reads and shuffles documents of a source collection,\nand processes each document through either one or both of a register\n\"update\" lambda and a derived document \"publish\" lambda.",
+      "type": "object",
+      "properties": {
+        "backfill": {
+          "title": "Backfill counter for this transform.",
+          "description": "Every increment of this counter will result in a new backfill of this\ntransform. Specifically, the transform's lambda will be re-invoked for\nevery applicable document of its source collection.\n\nNote that a backfill does *not* truncate the derived collection,\nand documents published by a backfilled transform will coexist with\n(and be ordered after) any documents which were published as part\nof a preceding backfill.",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "disable": {
+          "title": "Whether to disable this transform.",
+          "description": "Disabled transforms are completely ignored at runtime and are not validated.",
+          "type": "boolean"
+        },
+        "lambda": {
+          "title": "Lambda applied to the sourced documents of this transform.",
+          "description": "Lambdas may be provided inline,\nor as a relative URL to a file containing the lambda.",
+          "$ref": "#/$defs/Value"
+        },
+        "name": {
+          "title": "Name of this transformation.",
+          "description": "The names of transforms within a derivation must be unique and stable.",
+          "$ref": "#/$defs/Transform"
+        },
+        "priority": {
+          "title": "Priority applied to documents processed by this transform.",
+          "description": "When all transforms are of equal priority, Flow processes documents\naccording to their associated publishing time, as encoded in the\ndocument UUID.\n\nHowever, when one transform has a higher priority than others,\nthen *all* ready documents are processed through the transform\nbefore *any* documents of other transforms are processed.",
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "readDelay": {
+          "title": "Delay applied to documents processed by this transform.",
+          "description": "Delays are applied as an adjustment to the UUID clock encoded within each\ndocument, which is then used to impose a relative ordering of all documents\nread by this derivation. This means that read delays are applied in a\nconsistent way, even when back-filling over historical documents. When caught\nup and tailing the source collection, delays also \"gate\" documents such that\nthey aren't processed until the current wall-time reflects the delay.",
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^\\d+(s|m|h|d)$"
+        },
+        "shuffle": {
+          "title": "Shuffle by which source documents are mapped to processing shards.",
+          "$ref": "#/$defs/Shuffle"
+        },
+        "source": {
+          "title": "Source collection read by this transform.",
+          "$ref": "#/$defs/Source"
+        }
+      },
+      "additionalProperties": false,
+      "examples": [
+        {
+          "name": "my-transform",
+          "shuffle": "any",
+          "source": "some/source/collection"
+        }
+      ],
+      "required": [
+        "name",
+        "source",
+        "shuffle"
+      ]
+    },
+    "Value": true
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "description": "Path to the JSON schema for IDE autocompletion.",
+      "type": "string"
+    },
+    "dryRun": {
+      "description": "Run commands in dry-run mode without making actual changes.",
+      "default": false,
+      "type": "boolean"
+    },
+    "defaultReleaseType": {
+      "description": "Default release type",
+      "default": "patch",
+      "type": "string",
+      "enum": ["major", "minor", "patch"]
+    },
+    "targets": {
+      "description": "Which manifest targets to update their version fields.",
+      "default": {
+        "node": true,
+        "jsr": false,
+        "deno": false,
+        "webext": false
+      },
+      "type": "object",
+      "properties": {
+        "node": {
+          "description": "Update version in package.json (Node.js).",
+          "default": true,
+          "type": "boolean"
+        },
+        "jsr": {
+          "description": "Update version in jsr.json (JSR registry).",
+          "default": false,
+          "type": "boolean"
+        },
+        "deno": {
+          "description": "Update version in deno.json (Deno project).",
+          "default": false,
+          "type": "boolean"
+        },
+        "webext": {
+          "description": "Update version in any WebExtension manifest.json (Chrome, Firefox, Edge, Opera, Brave, Safari).",
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "targetsPath": {
+      "description": "Custom file paths for each manifest target, overriding their default locations.",
+      "default": {
+        "node": "./package.json",
+        "jsr": "./jsr.json",
+        "deno": "./deno.json",
+        "webext": "./manifest.json"
+      },
+      "type": "object",
+      "properties": {
+        "node": {
+          "description": "Path to the manifest package.json file.",
+          "default": "./package.json",
+          "type": "string"
+        },
+        "jsr": {
+          "description": "Path to the manifest jsr.json file.",
+          "default": "./jsr.json",
+          "type": "string"
+        },
+        "deno": {
+          "description": "Path to the manifest deno.json file.",
+          "default": "./deno.json",
+          "type": "string"
+        },
+        "webext": {
+          "description": "Path to the manifest manifest.json file.",
+          "default": "./manifest.json",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "sync": {
+      "description": "Defines how versions across multiple targets should stay synchronized.",
+      "default": true,
+      "anyOf": [
+        {
+          "description": "Whether to sync versions across all or none of the targets.",
+          "type": "boolean"
+        },
+        {
+          "description": "Sync only specific groups of targets.",
+          "type": "array",
+          "items": {
+            "description": "A group of targets to sync together.",
+            "minItems": 2,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["node", "jsr", "deno", "webext"]
+            }
+          }
+        }
+      ]
+    },
+    "hooks": {
+      "description": "Lifecycle hooks to run before/after release commands.",
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "pattern": "^(before|after):(init|version|commit|tag|push|publish(?::(npm|jsr))?)$"
+      },
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}

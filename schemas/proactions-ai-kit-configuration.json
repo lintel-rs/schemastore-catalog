@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ProActions AI-Kit Configuration Schema",
+  "description": "Schema for ProActions AI-Kit configuration files",
+  "type": "object",
+  "required": ["AI_KIT"],
+  "properties": {
+    "AI_KIT": {
+      "type": "object",
+      "description": "Root configuration object for AI-Kit",
+      "properties": {
+        "SERVICES": {
+          "oneOf": [
+            {
+              "$ref": "https://raw.githubusercontent.com/em-al-wi/proactions-schema/main/schema/partial-services.schema.json"
+            },
+            {
+              "type": "string",
+              "description": "Path to an external services file using !include directive"
+            }
+          ]
+        },
+        "TEXT_MENU": {
+          "oneOf": [
+            {
+              "$ref": "https://raw.githubusercontent.com/em-al-wi/proactions-schema/main/schema/partial-floatingMenu.schema.json"
+            },
+            {
+              "type": "string",
+              "description": "Path to an external text menu file using !include directive"
+            }
+          ]
+        },
+        "ONECLICK_MENU": {
+          "oneOf": [
+            {
+              "$ref": "https://raw.githubusercontent.com/em-al-wi/proactions-schema/main/schema/partial-floatingMenu.schema.json"
+            },
+            {
+              "type": "string",
+              "description": "Path to an external oneclick menu file using !include directive"
+            }
+          ]
+        },
+        "SLASH_MENU": {
+          "oneOf": [
+            {
+              "$ref": "https://raw.githubusercontent.com/em-al-wi/proactions-schema/main/schema/partial-floatingMenu.schema.json"
+            },
+            {
+              "type": "string",
+              "description": "Path to an external slash menu file using !include directive"
+            }
+          ]
+        },
+        "TEMPLATES": {
+          "oneOf": [
+            {
+              "$ref": "https://raw.githubusercontent.com/em-al-wi/proactions-schema/main/schema/partial-templates.schema.json"
+            },
+            {
+              "type": "string",
+              "description": "Path to an external file using !include directive"
+            }
+          ]
+        },
+        "SECTIONS": {
+          "type": "array",
+          "description": "Sections defining the grouping of actions in the UI",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "https://raw.githubusercontent.com/em-al-wi/proactions-schema/main/schema/partial-section.schema.json"
+              },
+              {
+                "type": "string",
+                "description": "Path to an external file using !include directive"
+              }
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

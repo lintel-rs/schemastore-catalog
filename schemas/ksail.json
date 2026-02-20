@@ -1,0 +1,247 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "kind": {
+      "type": "string",
+      "enum": [
+        "Cluster"
+      ]
+    },
+    "apiVersion": {
+      "type": "string",
+      "enum": [
+        "ksail.io/v1alpha1"
+      ]
+    },
+    "spec": {
+      "properties": {
+        "editor": {
+          "type": "string",
+          "description": "Editor command for interactive workflows (e.g. code --wait)"
+        },
+        "cluster": {
+          "properties": {
+            "distributionConfig": {
+              "type": "string"
+            },
+            "connection": {
+              "properties": {
+                "kubeconfig": {
+                  "type": "string"
+                },
+                "context": {
+                  "type": "string"
+                },
+                "timeout": {
+                  "type": "string",
+                  "pattern": "^[0-9]+(ns|us|µs|ms|s|m|h)$"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "distribution": {
+              "type": "string",
+              "enum": [
+                "Vanilla",
+                "K3s",
+                "Talos",
+                "VCluster"
+              ]
+            },
+            "provider": {
+              "type": "string",
+              "enum": [
+                "Docker",
+                "Hetzner"
+              ]
+            },
+            "cni": {
+              "type": "string",
+              "enum": [
+                "Default",
+                "Cilium",
+                "Calico"
+              ]
+            },
+            "csi": {
+              "type": "string",
+              "enum": [
+                "Default",
+                "Enabled",
+                "Disabled"
+              ]
+            },
+            "metricsServer": {
+              "type": "string",
+              "enum": [
+                "Default",
+                "Enabled",
+                "Disabled"
+              ]
+            },
+            "loadBalancer": {
+              "type": "string",
+              "enum": [
+                "Default",
+                "Enabled",
+                "Disabled"
+              ]
+            },
+            "certManager": {
+              "type": "string",
+              "enum": [
+                "Enabled",
+                "Disabled"
+              ]
+            },
+            "policyEngine": {
+              "type": "string",
+              "enum": [
+                "None",
+                "Kyverno",
+                "Gatekeeper"
+              ]
+            },
+            "localRegistry": {
+              "properties": {
+                "registry": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "gitOpsEngine": {
+              "type": "string",
+              "enum": [
+                "None",
+                "Flux",
+                "ArgoCD"
+              ]
+            },
+            "importImages": {
+              "type": "string",
+              "description": "Path to tar archive with container images to import after cluster creation but before component installation"
+            },
+            "vanilla": {
+              "properties": {
+                "mirrorsDir": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "talos": {
+              "properties": {
+                "controlPlanes": {
+                  "type": "integer"
+                },
+                "workers": {
+                  "type": "integer"
+                },
+                "config": {
+                  "type": "string"
+                },
+                "iso": {
+                  "type": "integer"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            },
+            "hetzner": {
+              "properties": {
+                "controlPlaneServerType": {
+                  "type": "string"
+                },
+                "workerServerType": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "networkName": {
+                  "type": "string"
+                },
+                "networkCidr": {
+                  "type": "string"
+                },
+                "sshKeyName": {
+                  "type": "string"
+                },
+                "tokenEnvVar": {
+                  "type": "string"
+                },
+                "placementGroupStrategy": {
+                  "type": "string",
+                  "enum": [
+                    "None",
+                    "Spread"
+                  ]
+                },
+                "placementGroup": {
+                  "type": "string"
+                },
+                "fallbackLocations": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "placementGroupFallbackToNone": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false,
+              "type": "object"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "workload": {
+          "properties": {
+            "sourceDirectory": {
+              "type": "string"
+            },
+            "validateOnPush": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "chat": {
+          "properties": {
+            "model": {
+              "type": "string",
+              "description": "Chat model (empty or 'auto' for API default)"
+            },
+            "reasoningEffort": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "description": "Reasoning effort level for chat responses (low, medium, or high)"
+            }
+          },
+          "additionalProperties": false,
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "spec"
+  ],
+  "title": "KSail Cluster Configuration",
+  "description": "JSON schema for KSail cluster configuration (ksail.yaml)"
+}

@@ -1,0 +1,34 @@
+{
+"$schema":"http://json-schema.org/draft-07/schema#",
+"title":"Spack cdash configuration file schema",
+"type":"object",
+"additionalProperties":false,
+"properties":{
+"cdash":{
+"type":"object",
+"additionalProperties":false,
+"required":[
+"build-group"
+],
+"description":"Configuration for uploading build results to CDash",
+"properties":{
+"build-group":{
+"type":"string",
+"description":"Unique build group name for this stack"
+},
+"url":{
+"type":"string",
+"description":"CDash server URL"
+},
+"project":{
+"type":"string",
+"description":"CDash project name"
+},
+"site":{
+"type":"string",
+"description":"Site identifier for CDash reporting"
+}
+}
+}
+}
+}

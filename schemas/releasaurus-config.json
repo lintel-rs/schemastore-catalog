@@ -1,0 +1,429 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Releasaurus TOML Configuration Schema",
+  "description": "Configuration properties for `releasaurus.toml`",
+  "type": "object",
+  "properties": {
+    "base_branch": {
+      "description": "The base branch to target for release PRs, tagging, and releases\ndefaults to default_branch for repository",
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null
+    },
+    "first_release_search_depth": {
+      "description": "Maximum number of commits to search for the first release when no\ntags exist",
+      "type": "integer",
+      "format": "uint64",
+      "minimum": 0,
+      "default": 400
+    },
+    "separate_pull_requests": {
+      "description": "Generates different release PRs for each package defined in config",
+      "type": "boolean",
+      "default": false
+    },
+    "prerelease": {
+      "description": "Global prerelease configuration (suffix + strategy). Packages can\noverride this configuration",
+      "$ref": "#/$defs/PrereleaseConfig",
+      "default": {
+        "suffix": null,
+        "strategy": "versioned"
+      }
+    },
+    "auto_start_next": {
+      "description": "Global config to auto start next release for all packages. Packages\ncan override this configuration",
+      "type": [
+        "boolean",
+        "null"
+      ],
+      "default": null
+    },
+    "breaking_always_increment_major": {
+      "description": "Always increments major version on breaking commits",
+      "type": "boolean",
+      "default": true
+    },
+    "features_always_increment_minor": {
+      "description": "Always increments minor version on feature commits",
+      "type": "boolean",
+      "default": true
+    },
+    "custom_major_increment_regex": {
+      "description": "Custom commit type regex matcher to increment major version",
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null
+    },
+    "custom_minor_increment_regex": {
+      "description": "Custom commit type regex matcher to increment minor version",
+      "type": [
+        "string",
+        "null"
+      ],
+      "default": null
+    },
+    "changelog": {
+      "description": "Changelog generation settings.",
+      "$ref": "#/$defs/ChangelogConfig",
+      "default": {
+        "body": "# [{{ version  }}]{% if tag_compare_link %}({{ tag_compare_link }}){% else %}({{ link }}){% endif %} - {{ timestamp | date(format=\"%Y-%m-%d\") }}\n{% for group, commits in commits | filter(attribute=\"merge_commit\", value=false) | sort(attribute=\"group\") | group_by(attribute=\"group\") %}\n### {{ group | striptags | trim }}\n{% for commit in commits %}\n{% if commit.breaking -%}\n{% if commit.scope %}_({{ commit.scope }})_ {% endif -%}[**breaking**]: {{ commit.title }} [_({{ commit.short_id }})_]({{ commit.link }}){% if include_author %} ({{ commit.author_name }}){% endif %}\n{% if commit.body -%}\n> {{ commit.body }}\n{% endif -%}\n{% if commit.breaking_description -%}\n> {{ commit.breaking_description }}\n{% endif -%}\n{% else -%}\n- {% if commit.scope %}_({{ commit.scope }})_ {% endif %}{{ commit.title }} [_({{ commit.short_id }})_]({{ commit.link }}){% if include_author %} ({{ commit.author_name }}){% endif %}\n{% endif -%}\n{% endfor %}\n{% endfor %}\n ",
+        "skip_ci": false,
+        "skip_chore": false,
+        "skip_miscellaneous": false,
+        "skip_merge_commits": true,
+        "skip_release_commits": true,
+        "skip_shas": null,
+        "reword": null,
+        "include_author": false
+      }
+    },
+    "package": {
+      "description": "Packages to manage in this repository (supports monorepos)",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PackageConfig"
+      },
+      "default": [
+        {
+          "name": "",
+          "workspace_root": ".",
+          "path": ".",
+          "release_type": null,
+          "tag_prefix": null,
+          "sub_packages": null,
+          "prerelease": null,
+          "auto_start_next": null,
+          "additional_paths": null,
+          "additional_manifest_files": null,
+          "breaking_always_increment_major": null,
+          "features_always_increment_minor": null,
+          "custom_major_increment_regex": null,
+          "custom_minor_increment_regex": null
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "PrereleaseConfig": {
+      "description": "Configurable prerelease settings for both global and package scopes",
+      "type": "object",
+      "properties": {
+        "suffix": {
+          "description": "Prerelease identifier (e.g., \"alpha\", \"beta\", \"rc\", \"SNAPSHOT\")",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "strategy": {
+          "description": "How prerelease suffixes should be applied to versions",
+          "$ref": "#/$defs/PrereleaseStrategy",
+          "default": "versioned"
+        }
+      }
+    },
+    "PrereleaseStrategy": {
+      "description": "Determines how prerelease identifiers should be appended to versions",
+      "oneOf": [
+        {
+          "description": "Adds numeric suffixes like `.1`, `.2`, etc. to prerelease identifiers.",
+          "type": "string",
+          "const": "versioned"
+        },
+        {
+          "description": "Reuses the exact prerelease identifier without numeric suffixes",
+          "type": "string",
+          "const": "static"
+        }
+      ]
+    },
+    "ChangelogConfig": {
+      "description": "Changelog configuration (applies to all packages)",
+      "type": "object",
+      "properties": {
+        "body": {
+          "description": "Main changelog body template.",
+          "type": "string",
+          "default": "# [{{ version  }}]{% if tag_compare_link %}({{ tag_compare_link }}){% else %}({{ link }}){% endif %} - {{ timestamp | date(format=\"%Y-%m-%d\") }}\n{% for group, commits in commits | filter(attribute=\"merge_commit\", value=false) | sort(attribute=\"group\") | group_by(attribute=\"group\") %}\n### {{ group | striptags | trim }}\n{% for commit in commits %}\n{% if commit.breaking -%}\n{% if commit.scope %}_({{ commit.scope }})_ {% endif -%}[**breaking**]: {{ commit.title }} [_({{ commit.short_id }})_]({{ commit.link }}){% if include_author %} ({{ commit.author_name }}){% endif %}\n{% if commit.body -%}\n> {{ commit.body }}\n{% endif -%}\n{% if commit.breaking_description -%}\n> {{ commit.breaking_description }}\n{% endif -%}\n{% else -%}\n- {% if commit.scope %}_({{ commit.scope }})_ {% endif %}{{ commit.title }} [_({{ commit.short_id }})_]({{ commit.link }}){% if include_author %} ({{ commit.author_name }}){% endif %}\n{% endif -%}\n{% endfor %}\n{% endfor %}\n "
+        },
+        "skip_ci": {
+          "description": "Skips including ci commits in changelog",
+          "type": "boolean",
+          "default": false
+        },
+        "skip_chore": {
+          "description": "Skips including ci commits in changelog",
+          "type": "boolean",
+          "default": false
+        },
+        "skip_miscellaneous": {
+          "description": "Skips including miscellaneous commits in changelog",
+          "type": "boolean",
+          "default": false
+        },
+        "skip_merge_commits": {
+          "description": "Skips including merge commits in changelog",
+          "type": "boolean",
+          "default": true
+        },
+        "skip_release_commits": {
+          "description": "Skips including release commits in changelog",
+          "type": "boolean",
+          "default": true
+        },
+        "skip_shas": {
+          "description": "Skips targeted commit shas (or prefixes) when generating next version\nand changelog. Each value matches any commit whose SHA starts with the\nprovided value",
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        },
+        "reword": {
+          "description": "Rewords commit messages for targeted shas when generated changelog.\nEach SHA can be a prefix - matches any commit whose SHA starts with the\nprovided value",
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/RewordedCommit"
+          },
+          "default": null
+        },
+        "include_author": {
+          "description": "Includes commit author name in default body template",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "RewordedCommit": {
+      "description": "Rewords messages in changelog for targeted commit shas",
+      "type": "object",
+      "properties": {
+        "sha": {
+          "description": "Sha (or prefix) of the commit to reword. Matches any commit whose SHA\nstarts with this value",
+          "type": "string"
+        },
+        "message": {
+          "description": "The new message to display in changelog",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sha",
+        "message"
+      ]
+    },
+    "PackageConfig": {
+      "description": "Package configuration for multi-package repositories and monorepos",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name for this package (default derived from path if not provided). For\nproper manifest version file updates this should match the\ncanonical name field in the release_type manifest file.\ni.e. name = \"...\" in Cargo.toml or \"name\": \"...\" in package.json",
+          "type": "string",
+          "default": ""
+        },
+        "workspace_root": {
+          "description": "Path to the workspace root directory for this package relative to the\nrepository root",
+          "type": "string",
+          "default": "."
+        },
+        "path": {
+          "description": "Path to package directory relative to workspace_root",
+          "type": "string",
+          "default": "."
+        },
+        "release_type": {
+          "description": "[`ReleaseType`] type for determining which version files to update",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReleaseType"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "tag_prefix": {
+          "description": "Git tag prefix for this package (e.g., \"v\" or \"api-v\")",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "sub_packages": {
+          "description": "Groups sub-packages under a single release. Each will share changelog,\ntag, and release, but will receive independent manifest version updates\naccording to their type",
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/SubPackage"
+          },
+          "default": null
+        },
+        "prerelease": {
+          "description": "Optional prerelease configuration that overrides global settings",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/PrereleaseConfig"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "auto_start_next": {
+          "description": "Auto starts next release for this package by performing a patch version\nupdate to version files and pushing a \"chore\" commit to the base_branch",
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null
+        },
+        "additional_paths": {
+          "description": "Additional directory paths to include commits from",
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        },
+        "additional_manifest_files": {
+          "description": "Additional paths to generic version manifest files to update. Paths must\nbe relative to the package path. Accepts either simple string paths or\nfull config objects with custom regex patterns.",
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/AdditionalManifestSpec"
+          },
+          "default": null
+        },
+        "breaking_always_increment_major": {
+          "description": "Always increments major version on breaking commits",
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null
+        },
+        "features_always_increment_minor": {
+          "description": "Always increments minor version on feature commits",
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "default": null
+        },
+        "custom_major_increment_regex": {
+          "description": "Custom commit type regex matcher to increment major version",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        },
+        "custom_minor_increment_regex": {
+          "description": "Custom commit type regex matcher to increment minor version",
+          "type": [
+            "string",
+            "null"
+          ],
+          "default": null
+        }
+      }
+    },
+    "ReleaseType": {
+      "description": "Supported release types for updating package manifest files",
+      "type": "string",
+      "enum": [
+        "generic",
+        "go",
+        "node",
+        "rust",
+        "python",
+        "php",
+        "ruby",
+        "java"
+      ]
+    },
+    "SubPackage": {
+      "description": "Sub-package definition allowing grouping of packages under a parent package\nconfiguration. Sub-packages share changelog, tag, and release with the\nparent package definition but receive independent manifest version file\nupdates according to their defined release type",
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "Name for this sub-package (default derived from path if not provided).\nFor proper manifest version file updates this should match the\ncanonical name field in the release_type manifest file.\ni.e. name = \"...\" in Cargo.toml or \"name\": \"...\" in package.json",
+          "type": "string"
+        },
+        "path": {
+          "description": "Path to the subpackage directory relative to the workspace_root of\nthe parent package",
+          "type": "string"
+        },
+        "release_type": {
+          "description": "[`ReleaseType`] type for determining which version files to update",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReleaseType"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "path"
+      ]
+    },
+    "AdditionalManifestSpec": {
+      "description": "Additional manifest specification that accepts either a string path or full\nconfig. Allows users to specify version files in a concise way while still\nsupporting custom regex patterns when needed.\n\n# Examples\n\nSimple string path (uses default GENERIC_VERSION_REGEX):\n```toml\nadditional_manifest_files = [\"VERSION\", \"README.md\"]\n```\n\nFull config with custom regex:\n```toml\nadditional_manifest_files = [\n    { path = \"VERSION.txt\", version_regex = \"version:\\\\s*(\\\\d+\\\\.\\\\d+\\\\.\\\\d+)\" }\n]\n```",
+      "anyOf": [
+        {
+          "description": "Simple string path - uses default GENERIC_VERSION_REGEX",
+          "type": "string"
+        },
+        {
+          "description": "Full configuration with optional custom regex",
+          "$ref": "#/$defs/AdditionalManifest"
+        }
+      ]
+    },
+    "AdditionalManifest": {
+      "description": "Additional manifest configuration for version updates on arbitrary files.\nThis is the internal representation after conversion from AdditionalManifestSpec.",
+      "type": "object",
+      "properties": {
+        "path": {
+          "description": "The path to the manifest file relative to package path",
+          "type": "string"
+        },
+        "version_regex": {
+          "description": "The regex to use to match and replace versions\ndefault: (?<start>.*version\"?:?\\s*=?\\s*['\"]?)(?<version>\\d\\.\\d\\.\\d-?.*?)(?<end>['\",].*)?$",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "path"
+      ]
+    }
+  }
+}

@@ -1,0 +1,1701 @@
+{
+  "$schema" : "http://json-schema.org/draft-07/schema#",
+  "title" : "Process Definition",
+  "type" : "object",
+  "additionalProperties" : false,
+  "properties" : {
+    "flows" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "array",
+        "items" : {
+          "oneOf" : [ {
+            "$ref" : "#/definitions/TaskCall"
+          }, {
+            "$ref" : "#/definitions/ThrowStep"
+          }, {
+            "$ref" : "#/definitions/ScriptCall"
+          }, {
+            "$ref" : "#/definitions/SetStep"
+          }, {
+            "$ref" : "#/definitions/ReturnStep"
+          }, {
+            "$ref" : "#/definitions/LogStep"
+          }, {
+            "$ref" : "#/definitions/SuspendStep"
+          }, {
+            "$ref" : "#/definitions/ParallelStep"
+          }, {
+            "$ref" : "#/definitions/CheckpointStep"
+          }, {
+            "$ref" : "#/definitions/ExpressionFullStep"
+          }, {
+            "$ref" : "#/definitions/ExitStep"
+          }, {
+            "$ref" : "#/definitions/FormCallStep"
+          }, {
+            "$ref" : "#/definitions/SwitchStep"
+          }, {
+            "$ref" : "#/definitions/IfStep"
+          }, {
+            "$ref" : "#/definitions/LogYamlStep"
+          }, {
+            "$ref" : "#/definitions/FlowCallStep"
+          }, {
+            "$ref" : "#/definitions/BlockStep"
+          }, {
+            "$ref" : "#/definitions/ExpressionShortStep"
+          }, {
+            "$ref" : "#/definitions/TryStep"
+          } ]
+        }
+      }
+    },
+    "publicFlows" : {
+      "type" : "array",
+      "items" : {
+        "type" : "string"
+      }
+    },
+    "triggers" : {
+      "type" : "array",
+      "items" : {
+        "oneOf" : [ {
+          "$ref" : "#/definitions/GenericTrigger"
+        }, {
+          "$ref" : "#/definitions/CronTrigger"
+        }, {
+          "$ref" : "#/definitions/ManualTrigger"
+        }, {
+          "$ref" : "#/definitions/GithubTrigger"
+        }, {
+          "$ref" : "#/definitions/OneOpsTrigger"
+        } ]
+      }
+    },
+    "resources" : {
+      "$ref" : "#/definitions/Resources"
+    },
+    "configuration" : {
+      "$ref" : "#/definitions/ProcessDefinitionConfiguration"
+    },
+    "forms" : {
+      "type" : "object"
+    },
+    "imports" : {
+      "type" : "array",
+      "items" : {
+        "oneOf" : [ {
+          "$ref" : "#/definitions/MvnImport"
+        }, {
+          "$ref" : "#/definitions/DirImport"
+        }, {
+          "$ref" : "#/definitions/GitImport"
+        } ]
+      }
+    },
+    "profiles" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "$ref" : "#/definitions/Profile"
+      }
+    }
+  },
+  "definitions" : {
+    "TaskCall" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "ignoreErrors" : {
+          "type" : "boolean"
+        },
+        "error" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            } ]
+          }
+        },
+        "out" : {
+          "oneOf" : [ {
+            "type" : "string"
+          }, {
+            "type" : "object"
+          } ]
+        },
+        "loop" : {
+          "$ref" : "#/definitions/Loop"
+        },
+        "in" : {
+          "oneOf" : [ {
+            "type" : "string"
+          }, {
+            "type" : "object"
+          } ]
+        },
+        "task" : {
+          "type" : "string"
+        },
+        "retry" : {
+          "$ref" : "#/definitions/Retry"
+        },
+        "meta" : {
+          "type" : "object"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "title" : "Task call",
+      "required" : [ "task" ]
+    },
+    "ReturnStep" : {
+      "type" : "string",
+      "enum" : [ "return" ],
+      "default" : "return",
+      "title" : "Return step"
+    },
+    "ExitStep" : {
+      "type" : "string",
+      "enum" : [ "exit" ],
+      "default" : "exit",
+      "title" : "Exit step"
+    },
+    "CheckpointStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "checkpoint" : {
+          "type" : "string",
+          "title" : "Checkpoint step"
+        },
+        "meta" : {
+          "type" : "object"
+        }
+      },
+      "title" : "Checkpoint",
+      "required" : [ "checkpoint" ]
+    },
+    "Object" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : { }
+    },
+    "ExpressionShortStep" : {
+      "type" : "string",
+      "pattern" : "^\\$\\{.*}",
+      "title" : "Expression step (short form)"
+    },
+    "ExpressionFullStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "out" : {
+          "oneOf" : [ {
+            "type" : "string"
+          }, {
+            "type" : "object"
+          } ]
+        },
+        "error" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            } ]
+          }
+        },
+        "expr" : {
+          "type" : "string",
+          "title" : "Expression step (full form)"
+        },
+        "meta" : {
+          "type" : "object"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "title" : "Expression (full form)",
+      "required" : [ "expr" ]
+    },
+    "ThrowStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "throw" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "title" : "Throw step",
+      "required" : [ "throw" ]
+    },
+    "ScriptCall" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "error" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            } ]
+          }
+        },
+        "out" : {
+          "oneOf" : [ {
+            "type" : "string"
+          }, {
+            "type" : "object"
+          } ]
+        },
+        "loop" : {
+          "$ref" : "#/definitions/Loop"
+        },
+        "in" : {
+          "oneOf" : [ {
+            "type" : "string"
+          }, {
+            "type" : "object"
+          } ]
+        },
+        "body" : {
+          "type" : "string"
+        },
+        "script" : {
+          "type" : "string",
+          "title" : "Script Call step"
+        },
+        "retry" : {
+          "$ref" : "#/definitions/Retry"
+        },
+        "meta" : {
+          "type" : "object"
+        }
+      },
+      "title" : "Script call",
+      "required" : [ "script" ]
+    },
+    "LogStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "log" : {
+          "type" : "string",
+          "title" : "Log step"
+        },
+        "meta" : {
+          "type" : "object"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "title" : "Log",
+      "required" : [ "log" ]
+    },
+    "LogYamlStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "logYaml" : {
+          "type" : "string",
+          "title" : "Log yaml step"
+        },
+        "meta" : {
+          "type" : "object"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "title" : "LogYaml",
+      "required" : [ "logYaml" ]
+    },
+    "FlowCallStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "out" : {
+          "oneOf" : [ {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }, {
+            "type" : "object"
+          }, {
+            "type" : "string"
+          } ]
+        },
+        "loop" : {
+          "$ref" : "#/definitions/Loop"
+        },
+        "in" : {
+          "oneOf" : [ {
+            "type" : "string"
+          }, {
+            "type" : "object"
+          } ]
+        },
+        "error" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            } ]
+          }
+        },
+        "call" : {
+          "type" : "string",
+          "title" : "Flow Call step"
+        },
+        "retry" : {
+          "$ref" : "#/definitions/Retry"
+        },
+        "meta" : {
+          "type" : "object"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "title" : "Flow call",
+      "required" : [ "call" ]
+    },
+    "Loop" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "mode" : {
+          "type" : "string",
+          "enum" : [ "SERIAL", "PARALLEL" ]
+        },
+        "parallelism" : {
+          "type" : "integer"
+        },
+        "items" : {
+          "oneOf" : [ {
+            "type" : "string"
+          }, {
+            "type" : "object"
+          }, {
+            "type" : "array"
+          } ]
+        }
+      }
+    },
+    "SetStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "set" : {
+          "type" : "object",
+          "title" : "Set step"
+        },
+        "meta" : {
+          "type" : "object"
+        }
+      },
+      "title" : "Set step",
+      "required" : [ "set" ]
+    },
+    "SuspendStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "suspend" : {
+          "type" : "string",
+          "title" : "Suspend step"
+        },
+        "meta" : {
+          "type" : "object"
+        }
+      },
+      "title" : "Suspend step",
+      "required" : [ "suspend" ]
+    },
+    "ParallelStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "out" : {
+          "oneOf" : [ {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }, {
+            "type" : "object"
+          } ]
+        },
+        "parallel" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            } ]
+          },
+          "title" : "Parallel step"
+        },
+        "meta" : {
+          "type" : "object"
+        }
+      },
+      "title" : "Parallel step",
+      "required" : [ "parallel" ]
+    },
+    "FormCallStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "saveSubmittedBy" : {
+          "type" : "boolean"
+        },
+        "runAs" : {
+          "type" : "object"
+        },
+        "values" : {
+          "type" : "object"
+        },
+        "fields" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object"
+          }
+        },
+        "yield" : {
+          "type" : "boolean",
+          "title" : "yield"
+        },
+        "form" : {
+          "type" : "string",
+          "title" : "Form Call step"
+        }
+      },
+      "title" : "Form call",
+      "required" : [ "form" ]
+    },
+    "IfStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "then" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            } ]
+          }
+        },
+        "else" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            } ]
+          }
+        },
+        "if" : {
+          "type" : "string",
+          "title" : "IF step"
+        },
+        "meta" : {
+          "type" : "object"
+        }
+      },
+      "title" : "IF step",
+      "required" : [ "then", "if" ]
+    },
+    "SwitchStep" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "array",
+        "items" : {
+          "oneOf" : [ {
+            "$ref" : "#/definitions/TaskCall"
+          }, {
+            "$ref" : "#/definitions/ReturnStep"
+          }, {
+            "$ref" : "#/definitions/ExitStep"
+          }, {
+            "$ref" : "#/definitions/CheckpointStep"
+          }, {
+            "$ref" : "#/definitions/ExpressionShortStep"
+          }, {
+            "$ref" : "#/definitions/ExpressionFullStep"
+          }, {
+            "$ref" : "#/definitions/LogStep"
+          }, {
+            "$ref" : "#/definitions/LogYamlStep"
+          }, {
+            "$ref" : "#/definitions/FlowCallStep"
+          }, {
+            "$ref" : "#/definitions/FormCallStep"
+          }, {
+            "$ref" : "#/definitions/IfStep"
+          }, {
+            "$ref" : "#/definitions/ParallelStep"
+          }, {
+            "$ref" : "#/definitions/ScriptCall"
+          }, {
+            "$ref" : "#/definitions/SetStep"
+          }, {
+            "$ref" : "#/definitions/SuspendStep"
+          }, {
+            "$ref" : "#/definitions/SwitchStep"
+          }, {
+            "$ref" : "#/definitions/ThrowStep"
+          }, {
+            "$ref" : "#/definitions/TryStep"
+          }, {
+            "$ref" : "#/definitions/BlockStep"
+          } ]
+        }
+      },
+      "properties" : {
+        "default" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            } ]
+          }
+        },
+        "switch" : {
+          "type" : "string",
+          "title" : "Switch step"
+        },
+        "meta" : {
+          "type" : "object"
+        }
+      },
+      "title" : "Suspend step",
+      "required" : [ "switch" ]
+    },
+    "TryStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "try" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            } ]
+          },
+          "title" : "Try step"
+        },
+        "error" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            } ]
+          }
+        },
+        "out" : {
+          "oneOf" : [ {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }, {
+            "type" : "string"
+          } ]
+        },
+        "loop" : {
+          "$ref" : "#/definitions/Loop"
+        },
+        "meta" : {
+          "type" : "object"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "title" : "Try step",
+      "required" : [ "try" ]
+    },
+    "BlockStep" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "block" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            } ]
+          },
+          "title" : "Block step"
+        },
+        "error" : {
+          "type" : "array",
+          "items" : {
+            "oneOf" : [ {
+              "$ref" : "#/definitions/TaskCall"
+            }, {
+              "$ref" : "#/definitions/ReturnStep"
+            }, {
+              "$ref" : "#/definitions/ExitStep"
+            }, {
+              "$ref" : "#/definitions/CheckpointStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionShortStep"
+            }, {
+              "$ref" : "#/definitions/ExpressionFullStep"
+            }, {
+              "$ref" : "#/definitions/LogStep"
+            }, {
+              "$ref" : "#/definitions/LogYamlStep"
+            }, {
+              "$ref" : "#/definitions/FlowCallStep"
+            }, {
+              "$ref" : "#/definitions/FormCallStep"
+            }, {
+              "$ref" : "#/definitions/IfStep"
+            }, {
+              "$ref" : "#/definitions/ParallelStep"
+            }, {
+              "$ref" : "#/definitions/ScriptCall"
+            }, {
+              "$ref" : "#/definitions/SetStep"
+            }, {
+              "$ref" : "#/definitions/SuspendStep"
+            }, {
+              "$ref" : "#/definitions/SwitchStep"
+            }, {
+              "$ref" : "#/definitions/ThrowStep"
+            }, {
+              "$ref" : "#/definitions/TryStep"
+            }, {
+              "$ref" : "#/definitions/BlockStep"
+            } ]
+          }
+        },
+        "out" : {
+          "oneOf" : [ {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }, {
+            "type" : "string"
+          } ]
+        },
+        "loop" : {
+          "$ref" : "#/definitions/Loop"
+        },
+        "meta" : {
+          "type" : "object"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "title" : "Block step",
+      "required" : [ "block" ]
+    },
+    "Retry" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "delay" : {
+          "type" : "string"
+        },
+        "in" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/Serializable"
+          }
+        },
+        "times" : {
+          "oneOf" : [ {
+            "type" : "string"
+          }, {
+            "type" : "integer"
+          } ]
+        }
+      }
+    },
+    "Serializable" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : { }
+    },
+    "GenericTrigger" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "patternProperties" : {
+        "^(?!(manual|cron|github)$).*$" : {
+          "$ref" : "#/definitions/GenericTriggerParams"
+        }
+      },
+      "properties" : { },
+      "title" : "Generic Trigger"
+    },
+    "GenericTriggerParams" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "conditions" : {
+          "type" : "object"
+        },
+        "version" : {
+          "type" : "integer",
+          "enum" : [ 2 ]
+        },
+        "arguments" : {
+          "type" : "object"
+        },
+        "activeProfiles" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "entryPoint" : {
+          "type" : "string"
+        },
+        "exclusive" : {
+          "$ref" : "#/definitions/ExclusiveMode"
+        }
+      },
+      "required" : [ "version", "entryPoint" ]
+    },
+    "ExclusiveMode" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "group" : {
+          "type" : "string"
+        },
+        "mode" : {
+          "type" : "string",
+          "enum" : [ "cancel", "cancelOld", "wait" ]
+        }
+      },
+      "required" : [ "group" ]
+    },
+    "CronTrigger" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "cron" : {
+          "$ref" : "#/definitions/CronTriggerParams"
+        }
+      },
+      "title" : "Cron Trigger"
+    },
+    "CronTriggerParams" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "runAs" : {
+          "$ref" : "#/definitions/RunAs"
+        },
+        "spec" : {
+          "type" : "string"
+        },
+        "timezone" : {
+          "type" : "string"
+        },
+        "exclusive" : {
+          "$ref" : "#/definitions/ExclusiveMode"
+        },
+        "arguments" : {
+          "type" : "object"
+        },
+        "activeProfiles" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "entryPoint" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "spec", "entryPoint" ]
+    },
+    "RunAs" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "withSecret" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "withSecret" ]
+    },
+    "ManualTrigger" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "manual" : {
+          "$ref" : "#/definitions/ManualTriggerParams"
+        },
+        "exclusive" : {
+          "$ref" : "#/definitions/ExclusiveMode"
+        }
+      },
+      "title" : "Manual Trigger"
+    },
+    "ManualTriggerParams" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "arguments" : {
+          "type" : "object"
+        },
+        "activeProfiles" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "entryPoint" : {
+          "type" : "string"
+        },
+        "exclusive" : {
+          "$ref" : "#/definitions/ExclusiveMode"
+        }
+      },
+      "required" : [ "entryPoint" ]
+    },
+    "GithubTrigger" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "github" : {
+          "$ref" : "#/definitions/GithubTriggerParams"
+        }
+      },
+      "title" : "Github Trigger"
+    },
+    "GithubTriggerParams" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "conditions" : {
+          "$ref" : "#/definitions/GithubTriggerConditions"
+        },
+        "useInitiator" : {
+          "type" : "boolean"
+        },
+        "ignoreEmptyPush" : {
+          "type" : "boolean"
+        },
+        "useEventCommitId" : {
+          "type" : "boolean"
+        },
+        "version" : {
+          "type" : "integer",
+          "enum" : [ 2 ]
+        },
+        "exclusive" : {
+          "$ref" : "#/definitions/ExclusiveMode"
+        },
+        "arguments" : {
+          "type" : "object"
+        },
+        "activeProfiles" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "entryPoint" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "version", "entryPoint" ]
+    },
+    "GithubTriggerConditions" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "githubOrg" : {
+          "oneOf" : [ {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }, {
+            "type" : "string"
+          } ]
+        },
+        "githubRepo" : {
+          "oneOf" : [ {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }, {
+            "type" : "string"
+          } ]
+        },
+        "githubHost" : {
+          "type" : "string"
+        },
+        "sender" : {
+          "oneOf" : [ {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }, {
+            "type" : "string"
+          } ]
+        },
+        "repositoryInfo" : {
+          "type" : "array",
+          "items" : {
+            "type" : "object"
+          }
+        },
+        "payload" : {
+          "type" : "object"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "status" : {
+          "oneOf" : [ {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }, {
+            "type" : "string"
+          } ]
+        },
+        "branch" : {
+          "oneOf" : [ {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }, {
+            "type" : "string"
+          } ]
+        },
+        "queryParams" : {
+          "type" : "object"
+        }
+      },
+      "required" : [ "type" ]
+    },
+    "OneOpsTrigger" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "oneops" : {
+          "type" : "object"
+        }
+      },
+      "title" : "OneOps Trigger"
+    },
+    "Resources" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "concord" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "ProcessDefinitionConfiguration" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "runtime" : {
+          "type" : "string",
+          "enum" : [ "concord-v2" ]
+        },
+        "debug" : {
+          "type" : "boolean"
+        },
+        "entryPoint" : {
+          "type" : "string"
+        },
+        "dependencies" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "arguments" : {
+          "type" : "object"
+        },
+        "meta" : {
+          "type" : "object"
+        },
+        "events" : {
+          "$ref" : "#/definitions/EventConfiguration"
+        },
+        "requirements" : {
+          "type" : "object"
+        },
+        "processTimeout" : {
+          "type" : "string"
+        },
+        "suspendTimeout" : {
+          "type" : "string"
+        },
+        "exclusive" : {
+          "$ref" : "#/definitions/ExclusiveMode"
+        },
+        "out" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "template" : {
+          "type" : "string"
+        },
+        "parallelLoopParallelism" : {
+          "type" : "integer"
+        }
+      }
+    },
+    "EventConfiguration" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "recordEvents" : {
+          "type" : "boolean"
+        },
+        "recordTaskInVars" : {
+          "type" : "boolean"
+        },
+        "truncateInVars" : {
+          "type" : "boolean"
+        },
+        "truncateMaxStringLength" : {
+          "type" : "integer"
+        },
+        "truncateMaxArrayLength" : {
+          "type" : "integer"
+        },
+        "truncateMaxDepth" : {
+          "type" : "integer"
+        },
+        "recordTaskOutVars" : {
+          "type" : "boolean"
+        },
+        "truncateOutVars" : {
+          "type" : "boolean"
+        },
+        "inVarsBlacklist" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "outVarsBlacklist" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "recordTaskMeta" : {
+          "type" : "boolean"
+        },
+        "truncateMeta" : {
+          "type" : "boolean"
+        },
+        "metaBlacklist" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "MvnImport" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "mvn" : {
+          "oneOf" : [ {
+            "$ref" : "#/definitions/ImmutableMvnDefinition"
+          } ]
+        }
+      },
+      "title" : "MVN Import"
+    },
+    "ImmutableMvnDefinition" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "url" : {
+          "type" : "string"
+        },
+        "dest" : {
+          "type" : "string"
+        }
+      },
+      "title" : "mvn",
+      "required" : [ "url" ]
+    },
+    "DirImport" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "dir" : {
+          "oneOf" : [ {
+            "$ref" : "#/definitions/ImmutableDirectoryDefinition"
+          } ]
+        }
+      },
+      "title" : "Dir Import"
+    },
+    "ImmutableDirectoryDefinition" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "src" : {
+          "type" : "string"
+        },
+        "dest" : {
+          "type" : "string"
+        }
+      },
+      "title" : "dir",
+      "required" : [ "src" ]
+    },
+    "GitImport" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "git" : {
+          "oneOf" : [ {
+            "$ref" : "#/definitions/ImmutableGitDefinition"
+          } ]
+        }
+      },
+      "title" : "GIT Import"
+    },
+    "ImmutableGitDefinition" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "url" : {
+          "type" : "string"
+        },
+        "version" : {
+          "type" : "string"
+        },
+        "path" : {
+          "type" : "string"
+        },
+        "dest" : {
+          "type" : "string"
+        },
+        "secret" : {
+          "$ref" : "#/definitions/SecretDefinition"
+        },
+        "exclude" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      },
+      "title" : "git"
+    },
+    "SecretDefinition" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "org" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "password" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "name" ]
+    },
+    "Profile" : {
+      "type" : "object",
+      "additionalProperties" : false,
+      "properties" : {
+        "configuration" : {
+          "$ref" : "#/definitions/ProcessDefinitionConfiguration"
+        },
+        "publicFlows" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "flows" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "array",
+            "items" : {
+              "oneOf" : [ {
+                "$ref" : "#/definitions/TaskCall"
+              }, {
+                "$ref" : "#/definitions/ThrowStep"
+              }, {
+                "$ref" : "#/definitions/ScriptCall"
+              }, {
+                "$ref" : "#/definitions/SetStep"
+              }, {
+                "$ref" : "#/definitions/ReturnStep"
+              }, {
+                "$ref" : "#/definitions/LogStep"
+              }, {
+                "$ref" : "#/definitions/SuspendStep"
+              }, {
+                "$ref" : "#/definitions/ParallelStep"
+              }, {
+                "$ref" : "#/definitions/CheckpointStep"
+              }, {
+                "$ref" : "#/definitions/ExpressionFullStep"
+              }, {
+                "$ref" : "#/definitions/ExitStep"
+              }, {
+                "$ref" : "#/definitions/FormCallStep"
+              }, {
+                "$ref" : "#/definitions/SwitchStep"
+              }, {
+                "$ref" : "#/definitions/IfStep"
+              }, {
+                "$ref" : "#/definitions/LogYamlStep"
+              }, {
+                "$ref" : "#/definitions/FlowCallStep"
+              }, {
+                "$ref" : "#/definitions/BlockStep"
+              }, {
+                "$ref" : "#/definitions/ExpressionShortStep"
+              }, {
+                "$ref" : "#/definitions/TryStep"
+              } ]
+            }
+          }
+        },
+        "forms" : {
+          "type" : "object"
+        }
+      }
+    }
+  }
+}

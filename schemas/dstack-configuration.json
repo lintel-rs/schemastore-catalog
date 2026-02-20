@@ -1,0 +1,3178 @@
+{
+  "title": "DstackConfigurationRequest",
+  "discriminator": {
+    "propertyName": "type",
+    "mapping": {
+      "dev-environment": "#/definitions/DevEnvironmentConfigurationRequest",
+      "task": "#/definitions/TaskConfigurationRequest",
+      "service": "#/definitions/ServiceConfigurationRequest",
+      "fleet": "#/definitions/FleetConfigurationRequest",
+      "gateway": "#/definitions/GatewayConfigurationRequest",
+      "volume": "#/definitions/VolumeConfigurationRequest"
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/definitions/DevEnvironmentConfigurationRequest"
+    },
+    {
+      "$ref": "#/definitions/TaskConfigurationRequest"
+    },
+    {
+      "$ref": "#/definitions/ServiceConfigurationRequest"
+    },
+    {
+      "$ref": "#/definitions/FleetConfigurationRequest"
+    },
+    {
+      "$ref": "#/definitions/GatewayConfigurationRequest"
+    },
+    {
+      "$ref": "#/definitions/VolumeConfigurationRequest"
+    }
+  ],
+  "additionalProperties": true,
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "PortMappingRequest": {
+      "title": "PortMappingRequest",
+      "type": "object",
+      "properties": {
+        "local_port": {
+          "title": "Local Port",
+          "exclusiveMinimum": 0,
+          "maximum": 65536,
+          "type": "integer"
+        },
+        "container_port": {
+          "title": "Container Port",
+          "exclusiveMinimum": 0,
+          "maximum": 65536,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "container_port"
+      ],
+      "additionalProperties": false
+    },
+    "RegistryAuthRequest": {
+      "title": "RegistryAuthRequest",
+      "description": "Credentials for pulling a private Docker image.\n\nAttributes:\n    username (str): The username\n    password (str): The password or access token",
+      "type": "object",
+      "properties": {
+        "username": {
+          "title": "Username",
+          "description": "The username",
+          "type": "string"
+        },
+        "password": {
+          "title": "Password",
+          "description": "The password or access token",
+          "type": "string"
+        }
+      },
+      "required": [
+        "username",
+        "password"
+      ],
+      "additionalProperties": false
+    },
+    "PythonVersion": {
+      "title": "PythonVersion",
+      "description": "An enumeration.",
+      "enum": [
+        "3.9",
+        "3.10",
+        "3.11",
+        "3.12",
+        "3.13"
+      ],
+      "type": "string"
+    },
+    "EnvSentinelRequest": {
+      "title": "EnvSentinelRequest",
+      "type": "object",
+      "properties": {
+        "key": {
+          "title": "Key",
+          "type": "string"
+        }
+      },
+      "required": [
+        "key"
+      ],
+      "additionalProperties": false
+    },
+    "Env": {
+      "title": "Env",
+      "description": "Env represents a mapping of process environment variables, as in environ(7).\nEnvironment values may be omitted, in that case the :class:`EnvSentinel`\nobject is used as a placeholder.\n\nTo create an instance from a `dict[str, str]` or a `list[str]` use pydantic's\n:meth:`BaseModel.parse_obj(dict | list)` method.\n\nNB: this is *NOT* a CoreModel, pydantic-duality, which is used as a base\nfor the CoreModel, doesn't play well with custom root models.",
+      "default": {},
+      "anyOf": [
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "$ref": "#/definitions/EnvSentinelRequest"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "CPUArchitecture": {
+      "title": "CPUArchitecture",
+      "description": "An enumeration.",
+      "enum": [
+        "x86",
+        "arm"
+      ],
+      "type": "string"
+    },
+    "Range_int_": {
+      "title": "Range[int]",
+      "type": "object",
+      "properties": {
+        "min": {
+          "title": "Min",
+          "type": "integer"
+        },
+        "max": {
+          "title": "Max",
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "CPUSpecRequest": {
+      "title": "CPUSpecRequest",
+      "type": "object",
+      "properties": {
+        "arch": {
+          "description": "The CPU architecture, one of: `x86`, `arm`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/CPUArchitecture"
+            }
+          ]
+        },
+        "count": {
+          "title": "Count",
+          "description": "The number of CPU cores",
+          "default": {
+            "min": 2,
+            "max": null
+          },
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Range_int_"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "Range_Memory_": {
+      "title": "Range[Memory]",
+      "type": "object",
+      "properties": {
+        "min": {
+          "title": "Min",
+          "type": "number"
+        },
+        "max": {
+          "title": "Max",
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "AcceleratorVendor": {
+      "title": "AcceleratorVendor",
+      "description": "An enumeration.",
+      "enum": [
+        "nvidia",
+        "amd",
+        "google",
+        "intel",
+        "tenstorrent"
+      ],
+      "type": "string"
+    },
+    "GPUSpecRequest": {
+      "title": "GPUSpecRequest",
+      "type": "object",
+      "properties": {
+        "vendor": {
+          "description": "The vendor of the GPU/accelerator, one of: `nvidia`, `amd`, `google` (alias: `tpu`), `intel`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/AcceleratorVendor"
+            }
+          ]
+        },
+        "name": {
+          "title": "Name",
+          "description": "The name of the GPU (e.g., `A100` or `H100`)",
+          "items": {
+            "type": "string"
+          },
+          "anyOf": [
+            {
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "count": {
+          "title": "Count",
+          "description": "The number of GPUs",
+          "default": {
+            "min": 1,
+            "max": null
+          },
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Range_int_"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "memory": {
+          "title": "Memory",
+          "description": "The RAM size (e.g., `16GB`). Can be set to a range (e.g. `16GB..`, or `16GB..80GB`)",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Range_Memory_"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "total_memory": {
+          "title": "Total Memory",
+          "description": "The total RAM size (e.g., `32GB`). Can be set to a range (e.g. `16GB..`, or `16GB..80GB`)",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Range_Memory_"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "compute_capability": {
+          "title": "Compute Capability",
+          "description": "The minimum compute capability of the GPU (e.g., `7.5`)",
+          "type": "array",
+          "items": {}
+        }
+      },
+      "additionalProperties": false
+    },
+    "DiskSpecRequest": {
+      "title": "DiskSpecRequest",
+      "type": "object",
+      "properties": {
+        "size": {
+          "title": "Size",
+          "description": "Disk size",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Range_Memory_"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "size"
+      ],
+      "additionalProperties": false
+    },
+    "ResourcesSpecRequest": {
+      "title": "ResourcesSpecRequest",
+      "type": "object",
+      "properties": {
+        "cpu": {
+          "title": "Cpu",
+          "description": "The CPU requirements",
+          "default": {
+            "arch": null,
+            "count": {
+              "min": 2,
+              "max": null
+            }
+          },
+          "anyOf": [
+            {
+              "$ref": "#/definitions/CPUSpecRequest"
+            },
+            {
+              "$ref": "#/definitions/Range_int_"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "memory": {
+          "title": "Memory",
+          "description": "The RAM size (e.g., `8GB`)",
+          "default": {
+            "min": 8.0,
+            "max": null
+          },
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Range_Memory_"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "shm_size": {
+          "title": "Shm Size",
+          "description": "The size of shared memory (e.g., `8GB`). If you are using parallel communicating processes (e.g., dataloaders in PyTorch), you may need to configure this",
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "gpu": {
+          "title": "Gpu",
+          "description": "The GPU requirements",
+          "default": {
+            "vendor": null,
+            "name": null,
+            "count": {
+              "min": 0,
+              "max": null
+            },
+            "memory": null,
+            "total_memory": null,
+            "compute_capability": null
+          },
+          "anyOf": [
+            {
+              "$ref": "#/definitions/GPUSpecRequest"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "disk": {
+          "title": "Disk",
+          "description": "The disk resources",
+          "default": {
+            "size": {
+              "min": 100.0,
+              "max": null
+            }
+          },
+          "anyOf": [
+            {
+              "$ref": "#/definitions/DiskSpecRequest"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "VolumeMountPointRequest": {
+      "title": "VolumeMountPointRequest",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "description": "The network volume name or the list of network volume names to mount. If a list is specified, one of the volumes in the list will be mounted. Specify volumes from different backends/regions to increase availability",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          ]
+        },
+        "path": {
+          "title": "Path",
+          "description": "The absolute container path to mount the volume at",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "InstanceMountPointRequest": {
+      "title": "InstanceMountPointRequest",
+      "type": "object",
+      "properties": {
+        "instance_path": {
+          "title": "Instance Path",
+          "description": "The absolute path on the instance (host)",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "description": "The absolute path in the container",
+          "type": "string"
+        },
+        "optional": {
+          "title": "Optional",
+          "description": "Allow running without this volume in backends that do not support instance volumes",
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "instance_path",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "RepoExistsAction": {
+      "title": "RepoExistsAction",
+      "description": "An enumeration.",
+      "enum": [
+        "error",
+        "skip"
+      ],
+      "type": "string"
+    },
+    "RepoSpecRequest": {
+      "title": "RepoSpecRequest",
+      "type": "object",
+      "properties": {
+        "local_path": {
+          "title": "Local Path",
+          "description": "The path to the Git repo on the user's machine. Relative paths are resolved relative to the parent directory of the the configuration file. Mutually exclusive with `url`",
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "description": "The Git repo URL. Mutually exclusive with `local_path`",
+          "type": "string"
+        },
+        "branch": {
+          "title": "Branch",
+          "description": "The repo branch. Defaults to the active branch for local paths and the default branch for URLs",
+          "type": "string"
+        },
+        "hash": {
+          "title": "Hash",
+          "description": "The commit hash",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "description": "The repo path inside the run container. Relative paths are resolved relative to the working directory",
+          "default": ".",
+          "type": "string"
+        },
+        "if_exists": {
+          "description": "The action to be taken if `path` exists and is not empty. One of: `error`, `skip`",
+          "default": "error",
+          "allOf": [
+            {
+              "$ref": "#/definitions/RepoExistsAction"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "FilePathMappingRequest": {
+      "title": "FilePathMappingRequest",
+      "type": "object",
+      "properties": {
+        "local_path": {
+          "title": "Local Path",
+          "description": "The path on the user's machine. Relative paths are resolved relative to the parent directory of the the configuration file",
+          "type": "string"
+        },
+        "path": {
+          "title": "Path",
+          "description": "The path in the container. Relative paths are resolved relative to the working directory",
+          "type": "string"
+        }
+      },
+      "required": [
+        "local_path",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "BackendType": {
+      "title": "BackendType",
+      "description": "Attributes:\n    AMDDEVCLOUD (BackendType): AMD Developer Cloud\n    AWS (BackendType): Amazon Web Services\n    AZURE (BackendType): Microsoft Azure\n    CLOUDRIFT (BackendType): CloudRift\n    CUDO (BackendType): Cudo\n    DATACRUNCH (BackendType): DataCrunch (for backward compatibility)\n    DIGITALOCEAN (BackendType): DigitalOcean\n    DSTACK (BackendType): dstack Sky\n    GCP (BackendType): Google Cloud Platform\n    HOTAISLE (BackendType): Hot Aisle\n    KUBERNETES (BackendType): Kubernetes\n    LAMBDA (BackendType): Lambda Cloud\n    NEBIUS (BackendType): Nebius AI Cloud\n    OCI (BackendType): Oracle Cloud Infrastructure\n    RUNPOD (BackendType): Runpod Cloud\n    TENSORDOCK (BackendType): TensorDock Marketplace\n    VASTAI (BackendType): Vast.ai Marketplace\n    VERDA (BackendType): Verda Cloud\n    VULTR (BackendType): Vultr",
+      "enum": [
+        "amddevcloud",
+        "aws",
+        "azure",
+        "cloudrift",
+        "cudo",
+        "datacrunch",
+        "digitalocean",
+        "dstack",
+        "gcp",
+        "hotaisle",
+        "kubernetes",
+        "lambda",
+        "local",
+        "remote",
+        "nebius",
+        "oci",
+        "runpod",
+        "tensordock",
+        "vastai",
+        "verda",
+        "vultr"
+      ],
+      "type": "string"
+    },
+    "SpotPolicy": {
+      "title": "SpotPolicy",
+      "description": "An enumeration.",
+      "enum": [
+        "spot",
+        "on-demand",
+        "auto"
+      ],
+      "type": "string"
+    },
+    "RetryEvent": {
+      "title": "RetryEvent",
+      "description": "An enumeration.",
+      "enum": [
+        "no-capacity",
+        "interruption",
+        "error"
+      ],
+      "type": "string"
+    },
+    "ProfileRetryRequest": {
+      "title": "ProfileRetryRequest",
+      "type": "object",
+      "properties": {
+        "on_events": {
+          "description": "The list of events that should be handled with retry. Supported events are `no-capacity`, `interruption`, `error`. Omit to retry on all events",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RetryEvent"
+          }
+        },
+        "duration": {
+          "title": "Duration",
+          "description": "The maximum period of retrying the run, e.g., `4h` or `1d`. The period is calculated as a run age for `no-capacity` event and as a time passed since the last `interruption` and `error` for `interruption` and `error` events.",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "CreationPolicy": {
+      "title": "CreationPolicy",
+      "description": "An enumeration.",
+      "enum": [
+        "reuse",
+        "reuse-or-create"
+      ],
+      "type": "string"
+    },
+    "UtilizationPolicyRequest": {
+      "title": "UtilizationPolicyRequest",
+      "type": "object",
+      "properties": {
+        "min_gpu_utilization": {
+          "title": "Min Gpu Utilization",
+          "description": "Minimum required GPU utilization, percent. If any GPU has utilization below specified value during the whole time window, the run is terminated",
+          "minimum": 0,
+          "maximum": 100,
+          "type": "integer"
+        },
+        "time_window": {
+          "title": "Time Window",
+          "description": "The time window of metric samples taking into account to measure utilization (e.g., `30m`, `1h`). Minimum is `5m`",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "min_gpu_utilization",
+        "time_window"
+      ],
+      "additionalProperties": false
+    },
+    "StartupOrder": {
+      "title": "StartupOrder",
+      "description": "An enumeration.",
+      "enum": [
+        "any",
+        "master-first",
+        "workers-first"
+      ],
+      "type": "string"
+    },
+    "StopCriteria": {
+      "title": "StopCriteria",
+      "description": "An enumeration.",
+      "enum": [
+        "all-done",
+        "master-done"
+      ],
+      "type": "string"
+    },
+    "ScheduleRequest": {
+      "title": "ScheduleRequest",
+      "type": "object",
+      "properties": {
+        "cron": {
+          "title": "Cron",
+          "description": "A cron expression or a list of cron expressions specifying the UTC time when the run needs to be started",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "cron"
+      ],
+      "additionalProperties": false
+    },
+    "DevEnvironmentConfigurationRequest": {
+      "title": "DevEnvironmentConfigurationRequest",
+      "type": "object",
+      "properties": {
+        "ide": {
+          "title": "Ide",
+          "description": "The IDE to run. Supported values include `vscode`, `cursor`, and `windsurf`",
+          "anyOf": [
+            {
+              "enum": [
+                "vscode"
+              ],
+              "type": "string"
+            },
+            {
+              "enum": [
+                "cursor"
+              ],
+              "type": "string"
+            },
+            {
+              "enum": [
+                "windsurf"
+              ],
+              "type": "string"
+            }
+          ]
+        },
+        "version": {
+          "title": "Version",
+          "description": "The version of the IDE. For `windsurf`, the version is in the format `version@commit`",
+          "type": "string"
+        },
+        "init": {
+          "title": "Init",
+          "description": "The shell commands to run on startup",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "inactivity_duration": {
+          "title": "Inactivity Duration",
+          "description": "The maximum amount of time the dev environment can be inactive (e.g., `2h`, `1d`, etc). After it elapses, the dev environment is automatically stopped. Inactivity is defined as the absence of SSH connections to the dev environment, including VS Code connections, `ssh <run name>` shells, and attached `dstack apply` or `dstack attach` commands. Use `off` for unlimited duration. Can be updated in-place. Defaults to `off`",
+          "anyOf": [
+            {
+              "enum": [
+                "off"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "ports": {
+          "title": "Ports",
+          "description": "Port numbers/mapping to expose",
+          "default": [],
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 65536
+              },
+              {
+                "type": "string",
+                "pattern": "^(?:[0-9]+|\\*):[0-9]+$"
+              },
+              {
+                "$ref": "#/definitions/PortMappingRequest"
+              }
+            ]
+          }
+        },
+        "type": {
+          "title": "Type",
+          "default": "dev-environment",
+          "enum": [
+            "dev-environment"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "description": "The run name. If not specified, a random name is generated",
+          "type": "string"
+        },
+        "image": {
+          "title": "Image",
+          "description": "The name of the Docker image to run",
+          "type": "string"
+        },
+        "user": {
+          "title": "User",
+          "description": "The user inside the container, `user_name_or_id[:group_name_or_id]` (e.g., `ubuntu`, `1000:1000`). Defaults to the default user from the `image`",
+          "type": "string"
+        },
+        "privileged": {
+          "title": "Privileged",
+          "description": "Run the container in privileged mode",
+          "default": false,
+          "type": "boolean"
+        },
+        "entrypoint": {
+          "title": "Entrypoint",
+          "description": "The Docker entrypoint",
+          "type": "string"
+        },
+        "working_dir": {
+          "title": "Working Dir",
+          "description": "The absolute path to the working directory inside the container. Defaults to the `image`'s default working directory",
+          "type": "string"
+        },
+        "home_dir": {
+          "title": "Home Dir",
+          "default": "/root",
+          "type": "string"
+        },
+        "registry_auth": {
+          "title": "Registry Auth",
+          "description": "Credentials for pulling a private Docker image",
+          "allOf": [
+            {
+              "$ref": "#/definitions/RegistryAuthRequest"
+            }
+          ]
+        },
+        "python": {
+          "description": "The major version of Python. Mutually exclusive with `image` and `docker`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/PythonVersion"
+            }
+          ]
+        },
+        "nvcc": {
+          "title": "Nvcc",
+          "description": "Use image with NVIDIA CUDA Compiler (NVCC) included. Mutually exclusive with `image` and `docker`",
+          "type": "boolean"
+        },
+        "single_branch": {
+          "title": "Single Branch",
+          "description": "Whether to clone and track only the current branch or all remote branches. Relevant only when using remote Git repos. Defaults to `false` for dev environments and to `true` for tasks and services",
+          "type": "boolean"
+        },
+        "env": {
+          "title": "Env",
+          "description": "The mapping or the list of environment variables",
+          "default": {
+            "__root__": {}
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/Env"
+            }
+          ]
+        },
+        "shell": {
+          "title": "Shell",
+          "description": "The shell used to run commands. Allowed values are `sh`, `bash`, or an absolute path, e.g., `/usr/bin/zsh`. Defaults to `/bin/sh` if the `image` is specified, `/bin/bash` otherwise",
+          "type": "string"
+        },
+        "resources": {
+          "title": "Resources",
+          "description": "The resources requirements to run the configuration",
+          "default": {
+            "cpu": {
+              "min": 2,
+              "max": null
+            },
+            "memory": {
+              "min": 8.0,
+              "max": null
+            },
+            "shm_size": null,
+            "gpu": {
+              "vendor": null,
+              "name": null,
+              "count": {
+                "min": 0,
+                "max": null
+              },
+              "memory": null,
+              "total_memory": null,
+              "compute_capability": null
+            },
+            "disk": {
+              "size": {
+                "min": 100.0,
+                "max": null
+              }
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ResourcesSpecRequest"
+            }
+          ]
+        },
+        "priority": {
+          "title": "Priority",
+          "description": "The priority of the run, an integer between `0` and `100`. `dstack` tries to provision runs with higher priority first. Defaults to `0`",
+          "minimum": 0,
+          "maximum": 100,
+          "type": "integer"
+        },
+        "volumes": {
+          "title": "Volumes",
+          "description": "The volumes mount points",
+          "default": [],
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/VolumeMountPointRequest"
+              },
+              {
+                "$ref": "#/definitions/InstanceMountPointRequest"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "docker": {
+          "title": "Docker",
+          "description": "Use Docker inside the container. Mutually exclusive with `image`, `python`, and `nvcc`. Overrides `privileged`",
+          "type": "boolean"
+        },
+        "repos": {
+          "title": "Repos",
+          "description": "The list of Git repos",
+          "default": [],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RepoSpecRequest"
+          }
+        },
+        "files": {
+          "title": "Files",
+          "description": "The local to container file path mappings",
+          "default": [],
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/FilePathMappingRequest"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "setup": {
+          "title": "Setup",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "backends": {
+          "description": "The backends to consider for provisioning (e.g., `[aws, gcp]`)",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BackendType"
+          }
+        },
+        "regions": {
+          "title": "Regions",
+          "description": "The regions to consider for provisioning (e.g., `[eu-west-1, us-west4, westeurope]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "availability_zones": {
+          "title": "Availability Zones",
+          "description": "The availability zones to consider for provisioning (e.g., `[eu-west-1a, us-west4-a]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instance_types": {
+          "title": "Instance Types",
+          "description": "The cloud-specific instance types to consider for provisioning (e.g., `[p3.8xlarge, n1-standard-4]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reservation": {
+          "title": "Reservation",
+          "description": "The existing reservation to use for instance provisioning. Supports AWS Capacity Reservations, AWS Capacity Blocks, and GCP reservations",
+          "type": "string"
+        },
+        "spot_policy": {
+          "description": "The policy for provisioning spot or on-demand instances: `spot`, `on-demand`, `auto`. Defaults to `on-demand`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/SpotPolicy"
+            }
+          ]
+        },
+        "retry": {
+          "title": "Retry",
+          "description": "The policy for resubmitting the run. Defaults to `false`",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ProfileRetryRequest"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "max_duration": {
+          "title": "Max Duration",
+          "description": "The maximum duration of a run (e.g., `2h`, `1d`, etc) in a running state, excluding provisioning and pulling. After it elapses, the run is automatically stopped. Use `off` for unlimited duration. Defaults to `off`",
+          "anyOf": [
+            {
+              "enum": [
+                "off"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "stop_duration": {
+          "title": "Stop Duration",
+          "description": "The maximum duration of a run graceful stopping. After it elapses, the run is automatically forced stopped. This includes force detaching volumes used by the run. Use `off` for unlimited duration. Defaults to `5m`",
+          "anyOf": [
+            {
+              "enum": [
+                "off"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "max_price": {
+          "title": "Max Price",
+          "description": "The maximum instance price per hour, in dollars",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "creation_policy": {
+          "description": "The policy for using instances from fleets: `reuse`, `reuse-or-create`. Defaults to `reuse-or-create`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/CreationPolicy"
+            }
+          ]
+        },
+        "idle_duration": {
+          "title": "Idle Duration",
+          "description": "Time to wait before terminating idle instances. When the run reuses an existing fleet instance, the fleet's `idle_duration` applies. When the run provisions a new instance, the shorter of the fleet's and run's values is used. Defaults to `5m` for runs and `3d` for fleets. Use `off` for unlimited duration. Only applied for VM-based backends",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "utilization_policy": {
+          "title": "Utilization Policy",
+          "description": "Run termination policy based on utilization",
+          "allOf": [
+            {
+              "$ref": "#/definitions/UtilizationPolicyRequest"
+            }
+          ]
+        },
+        "startup_order": {
+          "description": "The order in which master and workers jobs are started: `any`, `master-first`, `workers-first`. Defaults to `any`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/StartupOrder"
+            }
+          ]
+        },
+        "stop_criteria": {
+          "description": "The criteria determining when a multi-node run should be considered finished: `all-done`, `master-done`. Defaults to `all-done`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/StopCriteria"
+            }
+          ]
+        },
+        "schedule": {
+          "title": "Schedule",
+          "description": "The schedule for starting the run at specified time",
+          "allOf": [
+            {
+              "$ref": "#/definitions/ScheduleRequest"
+            }
+          ]
+        },
+        "fleets": {
+          "title": "Fleets",
+          "description": "The fleets considered for reuse",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "title": "Tags",
+          "description": "The custom tags to associate with the resource. The tags are also propagated to the underlying backend resources. If there is a conflict with backend-level tags, does not override them",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "ide"
+      ],
+      "additionalProperties": false
+    },
+    "TaskConfigurationRequest": {
+      "title": "TaskConfigurationRequest",
+      "type": "object",
+      "properties": {
+        "nodes": {
+          "title": "Nodes",
+          "description": "Number of nodes",
+          "default": 1,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "ports": {
+          "title": "Ports",
+          "description": "Port numbers/mapping to expose",
+          "default": [],
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 65536
+              },
+              {
+                "type": "string",
+                "pattern": "^(?:[0-9]+|\\*):[0-9]+$"
+              },
+              {
+                "$ref": "#/definitions/PortMappingRequest"
+              }
+            ]
+          }
+        },
+        "commands": {
+          "title": "Commands",
+          "description": "The shell commands to run",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "title": "Type",
+          "default": "task",
+          "enum": [
+            "task"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "description": "The run name. If not specified, a random name is generated",
+          "type": "string"
+        },
+        "image": {
+          "title": "Image",
+          "description": "The name of the Docker image to run",
+          "type": "string"
+        },
+        "user": {
+          "title": "User",
+          "description": "The user inside the container, `user_name_or_id[:group_name_or_id]` (e.g., `ubuntu`, `1000:1000`). Defaults to the default user from the `image`",
+          "type": "string"
+        },
+        "privileged": {
+          "title": "Privileged",
+          "description": "Run the container in privileged mode",
+          "default": false,
+          "type": "boolean"
+        },
+        "entrypoint": {
+          "title": "Entrypoint",
+          "description": "The Docker entrypoint",
+          "type": "string"
+        },
+        "working_dir": {
+          "title": "Working Dir",
+          "description": "The absolute path to the working directory inside the container. Defaults to the `image`'s default working directory",
+          "type": "string"
+        },
+        "home_dir": {
+          "title": "Home Dir",
+          "default": "/root",
+          "type": "string"
+        },
+        "registry_auth": {
+          "title": "Registry Auth",
+          "description": "Credentials for pulling a private Docker image",
+          "allOf": [
+            {
+              "$ref": "#/definitions/RegistryAuthRequest"
+            }
+          ]
+        },
+        "python": {
+          "description": "The major version of Python. Mutually exclusive with `image` and `docker`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/PythonVersion"
+            }
+          ]
+        },
+        "nvcc": {
+          "title": "Nvcc",
+          "description": "Use image with NVIDIA CUDA Compiler (NVCC) included. Mutually exclusive with `image` and `docker`",
+          "type": "boolean"
+        },
+        "single_branch": {
+          "title": "Single Branch",
+          "description": "Whether to clone and track only the current branch or all remote branches. Relevant only when using remote Git repos. Defaults to `false` for dev environments and to `true` for tasks and services",
+          "type": "boolean"
+        },
+        "env": {
+          "title": "Env",
+          "description": "The mapping or the list of environment variables",
+          "default": {
+            "__root__": {}
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/Env"
+            }
+          ]
+        },
+        "shell": {
+          "title": "Shell",
+          "description": "The shell used to run commands. Allowed values are `sh`, `bash`, or an absolute path, e.g., `/usr/bin/zsh`. Defaults to `/bin/sh` if the `image` is specified, `/bin/bash` otherwise",
+          "type": "string"
+        },
+        "resources": {
+          "title": "Resources",
+          "description": "The resources requirements to run the configuration",
+          "default": {
+            "cpu": {
+              "min": 2,
+              "max": null
+            },
+            "memory": {
+              "min": 8.0,
+              "max": null
+            },
+            "shm_size": null,
+            "gpu": {
+              "vendor": null,
+              "name": null,
+              "count": {
+                "min": 0,
+                "max": null
+              },
+              "memory": null,
+              "total_memory": null,
+              "compute_capability": null
+            },
+            "disk": {
+              "size": {
+                "min": 100.0,
+                "max": null
+              }
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ResourcesSpecRequest"
+            }
+          ]
+        },
+        "priority": {
+          "title": "Priority",
+          "description": "The priority of the run, an integer between `0` and `100`. `dstack` tries to provision runs with higher priority first. Defaults to `0`",
+          "minimum": 0,
+          "maximum": 100,
+          "type": "integer"
+        },
+        "volumes": {
+          "title": "Volumes",
+          "description": "The volumes mount points",
+          "default": [],
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/VolumeMountPointRequest"
+              },
+              {
+                "$ref": "#/definitions/InstanceMountPointRequest"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "docker": {
+          "title": "Docker",
+          "description": "Use Docker inside the container. Mutually exclusive with `image`, `python`, and `nvcc`. Overrides `privileged`",
+          "type": "boolean"
+        },
+        "repos": {
+          "title": "Repos",
+          "description": "The list of Git repos",
+          "default": [],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RepoSpecRequest"
+          }
+        },
+        "files": {
+          "title": "Files",
+          "description": "The local to container file path mappings",
+          "default": [],
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/FilePathMappingRequest"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "setup": {
+          "title": "Setup",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "backends": {
+          "description": "The backends to consider for provisioning (e.g., `[aws, gcp]`)",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BackendType"
+          }
+        },
+        "regions": {
+          "title": "Regions",
+          "description": "The regions to consider for provisioning (e.g., `[eu-west-1, us-west4, westeurope]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "availability_zones": {
+          "title": "Availability Zones",
+          "description": "The availability zones to consider for provisioning (e.g., `[eu-west-1a, us-west4-a]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instance_types": {
+          "title": "Instance Types",
+          "description": "The cloud-specific instance types to consider for provisioning (e.g., `[p3.8xlarge, n1-standard-4]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reservation": {
+          "title": "Reservation",
+          "description": "The existing reservation to use for instance provisioning. Supports AWS Capacity Reservations, AWS Capacity Blocks, and GCP reservations",
+          "type": "string"
+        },
+        "spot_policy": {
+          "description": "The policy for provisioning spot or on-demand instances: `spot`, `on-demand`, `auto`. Defaults to `on-demand`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/SpotPolicy"
+            }
+          ]
+        },
+        "retry": {
+          "title": "Retry",
+          "description": "The policy for resubmitting the run. Defaults to `false`",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ProfileRetryRequest"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "max_duration": {
+          "title": "Max Duration",
+          "description": "The maximum duration of a run (e.g., `2h`, `1d`, etc) in a running state, excluding provisioning and pulling. After it elapses, the run is automatically stopped. Use `off` for unlimited duration. Defaults to `off`",
+          "anyOf": [
+            {
+              "enum": [
+                "off"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "stop_duration": {
+          "title": "Stop Duration",
+          "description": "The maximum duration of a run graceful stopping. After it elapses, the run is automatically forced stopped. This includes force detaching volumes used by the run. Use `off` for unlimited duration. Defaults to `5m`",
+          "anyOf": [
+            {
+              "enum": [
+                "off"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "max_price": {
+          "title": "Max Price",
+          "description": "The maximum instance price per hour, in dollars",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "creation_policy": {
+          "description": "The policy for using instances from fleets: `reuse`, `reuse-or-create`. Defaults to `reuse-or-create`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/CreationPolicy"
+            }
+          ]
+        },
+        "idle_duration": {
+          "title": "Idle Duration",
+          "description": "Time to wait before terminating idle instances. When the run reuses an existing fleet instance, the fleet's `idle_duration` applies. When the run provisions a new instance, the shorter of the fleet's and run's values is used. Defaults to `5m` for runs and `3d` for fleets. Use `off` for unlimited duration. Only applied for VM-based backends",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "utilization_policy": {
+          "title": "Utilization Policy",
+          "description": "Run termination policy based on utilization",
+          "allOf": [
+            {
+              "$ref": "#/definitions/UtilizationPolicyRequest"
+            }
+          ]
+        },
+        "startup_order": {
+          "description": "The order in which master and workers jobs are started: `any`, `master-first`, `workers-first`. Defaults to `any`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/StartupOrder"
+            }
+          ]
+        },
+        "stop_criteria": {
+          "description": "The criteria determining when a multi-node run should be considered finished: `all-done`, `master-done`. Defaults to `all-done`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/StopCriteria"
+            }
+          ]
+        },
+        "schedule": {
+          "title": "Schedule",
+          "description": "The schedule for starting the run at specified time",
+          "allOf": [
+            {
+              "$ref": "#/definitions/ScheduleRequest"
+            }
+          ]
+        },
+        "fleets": {
+          "title": "Fleets",
+          "description": "The fleets considered for reuse",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "title": "Tags",
+          "description": "The custom tags to associate with the resource. The tags are also propagated to the underlying backend resources. If there is a conflict with backend-level tags, does not override them",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "TGIChatModelRequest": {
+      "title": "TGIChatModelRequest",
+      "description": "Mapping of the model for the OpenAI-compatible endpoint.\n\nAttributes:\n    type (str): The type of the model, e.g. \"chat\"\n    name (str): The name of the model. This name will be used both to load model configuration from the HuggingFace Hub and in the OpenAI-compatible endpoint.\n    format (str): The format of the model, e.g. \"tgi\" if the model is served with HuggingFace's Text Generation Inference.\n    chat_template (Optional[str]): The custom prompt template for the model. If not specified, the default prompt template from the HuggingFace Hub configuration will be used.\n    eos_token (Optional[str]): The custom end of sentence token. If not specified, the default end of sentence token from the HuggingFace Hub configuration will be used.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "description": "The type of the model",
+          "default": "chat",
+          "enum": [
+            "chat"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "description": "The name of the model",
+          "type": "string"
+        },
+        "format": {
+          "title": "Format",
+          "description": "The serving format. Must be set to `tgi`",
+          "enum": [
+            "tgi"
+          ],
+          "type": "string"
+        },
+        "chat_template": {
+          "title": "Chat Template",
+          "description": "The custom prompt template for the model. If not specified, the default prompt template from the HuggingFace Hub configuration will be used",
+          "type": "string"
+        },
+        "eos_token": {
+          "title": "Eos Token",
+          "description": "The custom end of sentence token. If not specified, the default end of sentence token from the HuggingFace Hub configuration will be used",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    "OpenAIChatModelRequest": {
+      "title": "OpenAIChatModelRequest",
+      "description": "Mapping of the model for the OpenAI-compatible endpoint.\n\nAttributes:\n    type (str): The type of the model, e.g. \"chat\"\n    name (str): The name of the model. This name will be used both to load model configuration from the HuggingFace Hub and in the OpenAI-compatible endpoint.\n    format (str): The format of the model, i.e. \"openai\".\n    prefix (str): The `base_url` prefix: `http://hostname/{prefix}/chat/completions`. Defaults to `/v1`.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "description": "The type of the model",
+          "default": "chat",
+          "enum": [
+            "chat"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "description": "The name of the model",
+          "type": "string"
+        },
+        "format": {
+          "title": "Format",
+          "description": "The serving format. Must be set to `openai`",
+          "enum": [
+            "openai"
+          ],
+          "type": "string"
+        },
+        "prefix": {
+          "title": "Prefix",
+          "description": "The `base_url` prefix (after hostname)",
+          "default": "/v1",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "format"
+      ],
+      "additionalProperties": false
+    },
+    "ScalingSpecRequest": {
+      "title": "ScalingSpecRequest",
+      "type": "object",
+      "properties": {
+        "metric": {
+          "title": "Metric",
+          "description": "The target metric to track. Currently, the only supported value is `rps` (meaning requests per second)",
+          "enum": [
+            "rps"
+          ],
+          "type": "string"
+        },
+        "target": {
+          "title": "Target",
+          "description": "The target value of the metric. The number of replicas is calculated based on this number and automatically adjusts (scales up or down) as this metric changes",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "scale_up_delay": {
+          "title": "Scale Up Delay",
+          "description": "The delay in seconds before scaling up",
+          "default": 300,
+          "type": "integer"
+        },
+        "scale_down_delay": {
+          "title": "Scale Down Delay",
+          "description": "The delay in seconds before scaling down",
+          "default": 600,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "metric",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "IPAddressPartitioningKeyRequest": {
+      "title": "IPAddressPartitioningKeyRequest",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "description": "Partitioning type",
+          "default": "ip_address",
+          "enum": [
+            "ip_address"
+          ],
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "HeaderPartitioningKeyRequest": {
+      "title": "HeaderPartitioningKeyRequest",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "description": "Partitioning type",
+          "default": "header",
+          "enum": [
+            "header"
+          ],
+          "type": "string"
+        },
+        "header": {
+          "title": "Header",
+          "description": "Name of the header to use for partitioning",
+          "maxLength": 500,
+          "pattern": "^[a-zA-Z0-9-_]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "header"
+      ],
+      "additionalProperties": false
+    },
+    "RateLimitRequest": {
+      "title": "RateLimitRequest",
+      "type": "object",
+      "properties": {
+        "prefix": {
+          "title": "Prefix",
+          "description": "URL path prefix to which this limit is applied. If an incoming request matches several prefixes, the longest prefix is applied",
+          "default": "/",
+          "maxLength": 4094,
+          "pattern": "^/[^\\s\\\\{}]*$",
+          "type": "string"
+        },
+        "key": {
+          "title": "Key",
+          "description": "The partitioning key. Each incoming request belongs to a partition and rate limits are applied per partition. Defaults to partitioning by client IP address",
+          "default": {
+            "type": "ip_address"
+          },
+          "discriminator": {
+            "propertyName": "type",
+            "mapping": {
+              "ip_address": "#/definitions/IPAddressPartitioningKeyRequest",
+              "header": "#/definitions/HeaderPartitioningKeyRequest"
+            }
+          },
+          "oneOf": [
+            {
+              "$ref": "#/definitions/IPAddressPartitioningKeyRequest"
+            },
+            {
+              "$ref": "#/definitions/HeaderPartitioningKeyRequest"
+            }
+          ]
+        },
+        "rps": {
+          "title": "Rps",
+          "description": "Max allowed number of requests per second. Requests are tracked at millisecond granularity. For example, `rps: 10` means at most 1 request per 100ms",
+          "minimum": 0.016666666666666666,
+          "maximum": 153722867280912930,
+          "type": "number"
+        },
+        "burst": {
+          "title": "Burst",
+          "description": "Max number of requests that can be passed to the service ahead of the rate limit",
+          "default": 0,
+          "minimum": 0,
+          "maximum": 9223372036854775807,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "rps"
+      ],
+      "additionalProperties": false
+    },
+    "HTTPHeaderSpecRequest": {
+      "title": "HTTPHeaderSpecRequest",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "description": "The name of the HTTP header",
+          "maxLength": 256,
+          "minLength": 1,
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "description": "The value of the HTTP header",
+          "maxLength": 2048,
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "ProbeConfigRequest": {
+      "title": "ProbeConfigRequest",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "description": "The probe type. Must be `http`",
+          "enum": [
+            "http"
+          ],
+          "type": "string"
+        },
+        "url": {
+          "title": "Url",
+          "description": "The URL to request. Defaults to `/`",
+          "type": "string"
+        },
+        "method": {
+          "title": "Method",
+          "description": "The HTTP method to use for the probe (e.g., `get`, `post`, etc.). Defaults to `get`",
+          "enum": [
+            "get",
+            "post",
+            "put",
+            "delete",
+            "patch",
+            "head"
+          ],
+          "type": "string"
+        },
+        "headers": {
+          "title": "Headers",
+          "description": "A list of HTTP headers to include in the request",
+          "default": [],
+          "maxItems": 16,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/HTTPHeaderSpecRequest"
+          }
+        },
+        "body": {
+          "title": "Body",
+          "description": "The HTTP request body to send with the probe",
+          "maxLength": 2048,
+          "minLength": 1,
+          "type": "string"
+        },
+        "timeout": {
+          "title": "Timeout",
+          "description": "Maximum amount of time the HTTP request is allowed to take. Defaults to `10s`",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "interval": {
+          "title": "Interval",
+          "description": "Minimum amount of time between the end of one probe execution and the start of the next. Defaults to `15s`",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "ready_after": {
+          "title": "Ready After",
+          "description": "The number of consecutive successful probe executions required for the replica to be considered ready. Used during rolling deployments. Defaults to `1`",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "until_ready": {
+          "title": "Until Ready",
+          "description": "If `true`, the probe will stop being executed as soon as it reaches the `ready_after` threshold of successful executions. Defaults to `false`",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "additionalProperties": false
+    },
+    "ReplicaGroupRequest": {
+      "title": "ReplicaGroupRequest",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "description": "The name of the replica group. If not provided, defaults to '0', '1', etc. based on position.",
+          "type": "string"
+        },
+        "count": {
+          "title": "Count",
+          "description": "The number of replicas. Can be a number (e.g. `2`) or a range (`0..4` or `1..8`). If it's a range, the `scaling` property is required",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Range_int_"
+            }
+          ]
+        },
+        "scaling": {
+          "title": "Scaling",
+          "description": "The auto-scaling rules. Required if `count` is set to a range",
+          "allOf": [
+            {
+              "$ref": "#/definitions/ScalingSpecRequest"
+            }
+          ]
+        },
+        "resources": {
+          "title": "Resources",
+          "description": "The resources requirements for replicas in this group",
+          "default": {
+            "cpu": {
+              "min": 2,
+              "max": null
+            },
+            "memory": {
+              "min": 8.0,
+              "max": null
+            },
+            "shm_size": null,
+            "gpu": {
+              "vendor": null,
+              "name": null,
+              "count": {
+                "min": 0,
+                "max": null
+              },
+              "memory": null,
+              "total_memory": null,
+              "compute_capability": null
+            },
+            "disk": {
+              "size": {
+                "min": 100.0,
+                "max": null
+              }
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ResourcesSpecRequest"
+            }
+          ]
+        },
+        "commands": {
+          "title": "Commands",
+          "description": "The shell commands to run for replicas in this group",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "count"
+      ],
+      "additionalProperties": false
+    },
+    "SGLangServiceRouterConfigRequest": {
+      "title": "SGLangServiceRouterConfigRequest",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "description": "The router type",
+          "default": "sglang",
+          "enum": [
+            "sglang"
+          ],
+          "type": "string"
+        },
+        "policy": {
+          "title": "Policy",
+          "description": "The routing policy. Options: `random`, `round_robin`, `cache_aware`, `power_of_two`",
+          "default": "cache_aware",
+          "enum": [
+            "random",
+            "round_robin",
+            "cache_aware",
+            "power_of_two"
+          ],
+          "type": "string"
+        },
+        "pd_disaggregation": {
+          "title": "Pd Disaggregation",
+          "description": "Enable PD disaggregation mode for the SGLang router",
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ServiceConfigurationRequest": {
+      "title": "ServiceConfigurationRequest",
+      "type": "object",
+      "properties": {
+        "port": {
+          "title": "Port",
+          "description": "The port the application listens on",
+          "anyOf": [
+            {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 65536
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9]+:[0-9]+$"
+            },
+            {
+              "$ref": "#/definitions/PortMappingRequest"
+            }
+          ]
+        },
+        "gateway": {
+          "title": "Gateway",
+          "description": "The name of the gateway. Specify boolean `false` to run without a gateway. Specify boolean `true` to run with the default gateway. Omit to run with the default gateway if there is one, or without a gateway otherwise",
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "strip_prefix": {
+          "title": "Strip Prefix",
+          "description": "Strip the `/proxy/services/<project name>/<run name>/` path prefix when forwarding requests to the service. Only takes effect when running the service without a gateway",
+          "default": true,
+          "type": "boolean"
+        },
+        "model": {
+          "title": "Model",
+          "description": "Mapping of the model for the OpenAI-compatible endpoint provided by `dstack`. Can be a full model format definition or just a model name. If it's a name, the service is expected to expose an OpenAI-compatible API at the `/v1` path",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/TGIChatModelRequest"
+            },
+            {
+              "$ref": "#/definitions/OpenAIChatModelRequest"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "https": {
+          "title": "Https",
+          "description": "Enable HTTPS if running with a gateway",
+          "default": true,
+          "type": "boolean"
+        },
+        "auth": {
+          "title": "Auth",
+          "description": "Enable the authorization",
+          "default": true,
+          "type": "boolean"
+        },
+        "scaling": {
+          "title": "Scaling",
+          "description": "The auto-scaling rules. Required if `replicas` is set to a range",
+          "allOf": [
+            {
+              "$ref": "#/definitions/ScalingSpecRequest"
+            }
+          ]
+        },
+        "rate_limits": {
+          "title": "Rate Limits",
+          "description": "Rate limiting rules",
+          "default": [],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RateLimitRequest"
+          }
+        },
+        "probes": {
+          "title": "Probes",
+          "description": "The list of probes to determine service health. If `model` is set, defaults to a `/v1/chat/completions` probe. Set explicitly to override",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProbeConfigRequest"
+          }
+        },
+        "replicas": {
+          "title": "Replicas",
+          "description": "The number of replicas or a list of replica groups. Can be an integer (e.g., `2`), a range (e.g., `0..4`), or a list of replica groups. Each replica group defines replicas with shared configuration (commands, resources, scaling). When `replicas` is a list of replica groups, top-level `scaling`, `commands`, and `resources` are not allowed and must be specified in each replica group instead. ",
+          "anyOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ReplicaGroupRequest"
+              }
+            },
+            {
+              "$ref": "#/definitions/Range_int_"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "router": {
+          "title": "Router",
+          "description": "Router configuration for the service. Requires a gateway with matching router enabled. ",
+          "allOf": [
+            {
+              "$ref": "#/definitions/SGLangServiceRouterConfigRequest"
+            }
+          ]
+        },
+        "commands": {
+          "title": "Commands",
+          "description": "The shell commands to run",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "type": {
+          "title": "Type",
+          "default": "service",
+          "enum": [
+            "service"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "description": "The run name. If not specified, a random name is generated",
+          "type": "string"
+        },
+        "image": {
+          "title": "Image",
+          "description": "The name of the Docker image to run",
+          "type": "string"
+        },
+        "user": {
+          "title": "User",
+          "description": "The user inside the container, `user_name_or_id[:group_name_or_id]` (e.g., `ubuntu`, `1000:1000`). Defaults to the default user from the `image`",
+          "type": "string"
+        },
+        "privileged": {
+          "title": "Privileged",
+          "description": "Run the container in privileged mode",
+          "default": false,
+          "type": "boolean"
+        },
+        "entrypoint": {
+          "title": "Entrypoint",
+          "description": "The Docker entrypoint",
+          "type": "string"
+        },
+        "working_dir": {
+          "title": "Working Dir",
+          "description": "The absolute path to the working directory inside the container. Defaults to the `image`'s default working directory",
+          "type": "string"
+        },
+        "home_dir": {
+          "title": "Home Dir",
+          "default": "/root",
+          "type": "string"
+        },
+        "registry_auth": {
+          "title": "Registry Auth",
+          "description": "Credentials for pulling a private Docker image",
+          "allOf": [
+            {
+              "$ref": "#/definitions/RegistryAuthRequest"
+            }
+          ]
+        },
+        "python": {
+          "description": "The major version of Python. Mutually exclusive with `image` and `docker`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/PythonVersion"
+            }
+          ]
+        },
+        "nvcc": {
+          "title": "Nvcc",
+          "description": "Use image with NVIDIA CUDA Compiler (NVCC) included. Mutually exclusive with `image` and `docker`",
+          "type": "boolean"
+        },
+        "single_branch": {
+          "title": "Single Branch",
+          "description": "Whether to clone and track only the current branch or all remote branches. Relevant only when using remote Git repos. Defaults to `false` for dev environments and to `true` for tasks and services",
+          "type": "boolean"
+        },
+        "env": {
+          "title": "Env",
+          "description": "The mapping or the list of environment variables",
+          "default": {
+            "__root__": {}
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/Env"
+            }
+          ]
+        },
+        "shell": {
+          "title": "Shell",
+          "description": "The shell used to run commands. Allowed values are `sh`, `bash`, or an absolute path, e.g., `/usr/bin/zsh`. Defaults to `/bin/sh` if the `image` is specified, `/bin/bash` otherwise",
+          "type": "string"
+        },
+        "resources": {
+          "title": "Resources",
+          "description": "The resources requirements to run the configuration",
+          "default": {
+            "cpu": {
+              "min": 2,
+              "max": null
+            },
+            "memory": {
+              "min": 8.0,
+              "max": null
+            },
+            "shm_size": null,
+            "gpu": {
+              "vendor": null,
+              "name": null,
+              "count": {
+                "min": 0,
+                "max": null
+              },
+              "memory": null,
+              "total_memory": null,
+              "compute_capability": null
+            },
+            "disk": {
+              "size": {
+                "min": 100.0,
+                "max": null
+              }
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ResourcesSpecRequest"
+            }
+          ]
+        },
+        "priority": {
+          "title": "Priority",
+          "description": "The priority of the run, an integer between `0` and `100`. `dstack` tries to provision runs with higher priority first. Defaults to `0`",
+          "minimum": 0,
+          "maximum": 100,
+          "type": "integer"
+        },
+        "volumes": {
+          "title": "Volumes",
+          "description": "The volumes mount points",
+          "default": [],
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/VolumeMountPointRequest"
+              },
+              {
+                "$ref": "#/definitions/InstanceMountPointRequest"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "docker": {
+          "title": "Docker",
+          "description": "Use Docker inside the container. Mutually exclusive with `image`, `python`, and `nvcc`. Overrides `privileged`",
+          "type": "boolean"
+        },
+        "repos": {
+          "title": "Repos",
+          "description": "The list of Git repos",
+          "default": [],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RepoSpecRequest"
+          }
+        },
+        "files": {
+          "title": "Files",
+          "description": "The local to container file path mappings",
+          "default": [],
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/FilePathMappingRequest"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "setup": {
+          "title": "Setup",
+          "default": [],
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "backends": {
+          "description": "The backends to consider for provisioning (e.g., `[aws, gcp]`)",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BackendType"
+          }
+        },
+        "regions": {
+          "title": "Regions",
+          "description": "The regions to consider for provisioning (e.g., `[eu-west-1, us-west4, westeurope]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "availability_zones": {
+          "title": "Availability Zones",
+          "description": "The availability zones to consider for provisioning (e.g., `[eu-west-1a, us-west4-a]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instance_types": {
+          "title": "Instance Types",
+          "description": "The cloud-specific instance types to consider for provisioning (e.g., `[p3.8xlarge, n1-standard-4]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reservation": {
+          "title": "Reservation",
+          "description": "The existing reservation to use for instance provisioning. Supports AWS Capacity Reservations, AWS Capacity Blocks, and GCP reservations",
+          "type": "string"
+        },
+        "spot_policy": {
+          "description": "The policy for provisioning spot or on-demand instances: `spot`, `on-demand`, `auto`. Defaults to `on-demand`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/SpotPolicy"
+            }
+          ]
+        },
+        "retry": {
+          "title": "Retry",
+          "description": "The policy for resubmitting the run. Defaults to `false`",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ProfileRetryRequest"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "max_duration": {
+          "title": "Max Duration",
+          "description": "The maximum duration of a run (e.g., `2h`, `1d`, etc) in a running state, excluding provisioning and pulling. After it elapses, the run is automatically stopped. Use `off` for unlimited duration. Defaults to `off`",
+          "anyOf": [
+            {
+              "enum": [
+                "off"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "stop_duration": {
+          "title": "Stop Duration",
+          "description": "The maximum duration of a run graceful stopping. After it elapses, the run is automatically forced stopped. This includes force detaching volumes used by the run. Use `off` for unlimited duration. Defaults to `5m`",
+          "anyOf": [
+            {
+              "enum": [
+                "off"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "max_price": {
+          "title": "Max Price",
+          "description": "The maximum instance price per hour, in dollars",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "creation_policy": {
+          "description": "The policy for using instances from fleets: `reuse`, `reuse-or-create`. Defaults to `reuse-or-create`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/CreationPolicy"
+            }
+          ]
+        },
+        "idle_duration": {
+          "title": "Idle Duration",
+          "description": "Time to wait before terminating idle instances. When the run reuses an existing fleet instance, the fleet's `idle_duration` applies. When the run provisions a new instance, the shorter of the fleet's and run's values is used. Defaults to `5m` for runs and `3d` for fleets. Use `off` for unlimited duration. Only applied for VM-based backends",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "utilization_policy": {
+          "title": "Utilization Policy",
+          "description": "Run termination policy based on utilization",
+          "allOf": [
+            {
+              "$ref": "#/definitions/UtilizationPolicyRequest"
+            }
+          ]
+        },
+        "startup_order": {
+          "description": "The order in which master and workers jobs are started: `any`, `master-first`, `workers-first`. Defaults to `any`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/StartupOrder"
+            }
+          ]
+        },
+        "stop_criteria": {
+          "description": "The criteria determining when a multi-node run should be considered finished: `all-done`, `master-done`. Defaults to `all-done`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/StopCriteria"
+            }
+          ]
+        },
+        "schedule": {
+          "title": "Schedule",
+          "description": "The schedule for starting the run at specified time",
+          "allOf": [
+            {
+              "$ref": "#/definitions/ScheduleRequest"
+            }
+          ]
+        },
+        "fleets": {
+          "title": "Fleets",
+          "description": "The fleets considered for reuse",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tags": {
+          "title": "Tags",
+          "description": "The custom tags to associate with the resource. The tags are also propagated to the underlying backend resources. If there is a conflict with backend-level tags, does not override them",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "port"
+      ],
+      "additionalProperties": false
+    },
+    "SSHKeyRequest": {
+      "title": "SSHKeyRequest",
+      "type": "object",
+      "properties": {
+        "public": {
+          "title": "Public",
+          "type": "string"
+        },
+        "private": {
+          "title": "Private",
+          "type": "string"
+        }
+      },
+      "required": [
+        "public"
+      ],
+      "additionalProperties": false
+    },
+    "SSHProxyParamsRequest": {
+      "title": "SSHProxyParamsRequest",
+      "type": "object",
+      "properties": {
+        "hostname": {
+          "title": "Hostname",
+          "description": "The IP address or domain of proxy host",
+          "type": "string"
+        },
+        "port": {
+          "title": "Port",
+          "description": "The SSH port of proxy host",
+          "type": "integer"
+        },
+        "user": {
+          "title": "User",
+          "description": "The user to log in with for proxy host",
+          "type": "string"
+        },
+        "identity_file": {
+          "title": "Identity File",
+          "description": "The private key to use for proxy host",
+          "type": "string"
+        },
+        "ssh_key": {
+          "$ref": "#/definitions/SSHKeyRequest"
+        }
+      },
+      "required": [
+        "hostname",
+        "user",
+        "identity_file"
+      ],
+      "additionalProperties": false
+    },
+    "SSHHostParamsRequest": {
+      "title": "SSHHostParamsRequest",
+      "type": "object",
+      "properties": {
+        "hostname": {
+          "title": "Hostname",
+          "description": "The IP address or domain to connect to",
+          "type": "string"
+        },
+        "port": {
+          "title": "Port",
+          "description": "The SSH port to connect to for this host",
+          "type": "integer"
+        },
+        "user": {
+          "title": "User",
+          "description": "The user to log in with for this host",
+          "type": "string"
+        },
+        "identity_file": {
+          "title": "Identity File",
+          "description": "The private key to use for this host",
+          "type": "string"
+        },
+        "proxy_jump": {
+          "title": "Proxy Jump",
+          "description": "The SSH proxy configuration for this host",
+          "allOf": [
+            {
+              "$ref": "#/definitions/SSHProxyParamsRequest"
+            }
+          ]
+        },
+        "internal_ip": {
+          "title": "Internal Ip",
+          "description": "The internal IP of the host used for communication inside the cluster. If not specified, `dstack` will use the IP address from `network` or from the first found internal network.",
+          "type": "string"
+        },
+        "ssh_key": {
+          "$ref": "#/definitions/SSHKeyRequest"
+        },
+        "blocks": {
+          "title": "Blocks",
+          "description": "The amount of blocks to split the instance into, a number or `auto`. `auto` means as many as possible. The number of GPUs and CPUs must be divisible by the number of blocks. Defaults to `1`, i.e. do not split",
+          "default": 1,
+          "anyOf": [
+            {
+              "enum": [
+                "auto"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
+        }
+      },
+      "required": [
+        "hostname"
+      ],
+      "additionalProperties": false
+    },
+    "SSHParamsRequest": {
+      "title": "SSHParamsRequest",
+      "type": "object",
+      "properties": {
+        "user": {
+          "title": "User",
+          "description": "The user to log in with on all hosts",
+          "type": "string"
+        },
+        "port": {
+          "title": "Port",
+          "description": "The SSH port to connect to",
+          "type": "integer"
+        },
+        "identity_file": {
+          "title": "Identity File",
+          "description": "The private key to use for all hosts",
+          "type": "string"
+        },
+        "ssh_key": {
+          "$ref": "#/definitions/SSHKeyRequest"
+        },
+        "proxy_jump": {
+          "title": "Proxy Jump",
+          "description": "The SSH proxy configuration for all hosts",
+          "allOf": [
+            {
+              "$ref": "#/definitions/SSHProxyParamsRequest"
+            }
+          ]
+        },
+        "hosts": {
+          "title": "Hosts",
+          "description": "The per host connection parameters: a hostname or an object that overrides default ssh parameters",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/SSHHostParamsRequest"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "network": {
+          "title": "Network",
+          "description": "The network address for cluster setup in the format `<ip>/<netmask>`. `dstack` will use IP addresses from this network for communication between hosts. If not specified, `dstack` will use IPs from the first found internal network.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "hosts"
+      ],
+      "additionalProperties": false
+    },
+    "FleetNodesSpecRequest": {
+      "title": "FleetNodesSpecRequest",
+      "type": "object",
+      "properties": {
+        "min": {
+          "title": "Min",
+          "description": "The minimum number of instances to maintain in the fleet",
+          "type": "integer"
+        },
+        "target": {
+          "title": "Target",
+          "description": "The number of instances to provision on fleet apply. `min` <= `target` <= `max` Defaults to `min`",
+          "type": "integer"
+        },
+        "max": {
+          "title": "Max",
+          "description": "The maximum number of instances allowed in the fleet. Unlimited if not specified",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "min",
+        "target"
+      ],
+      "additionalProperties": false
+    },
+    "InstanceGroupPlacement": {
+      "title": "InstanceGroupPlacement",
+      "description": "An enumeration.",
+      "enum": [
+        "any",
+        "cluster"
+      ],
+      "type": "string"
+    },
+    "FleetConfigurationRequest": {
+      "title": "FleetConfigurationRequest",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "default": "fleet",
+          "enum": [
+            "fleet"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "description": "The fleet name",
+          "type": "string"
+        },
+        "env": {
+          "title": "Env",
+          "description": "The mapping or the list of environment variables",
+          "default": {
+            "__root__": {}
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/Env"
+            }
+          ]
+        },
+        "ssh_config": {
+          "title": "Ssh Config",
+          "description": "The parameters for adding instances via SSH",
+          "allOf": [
+            {
+              "$ref": "#/definitions/SSHParamsRequest"
+            }
+          ]
+        },
+        "nodes": {
+          "title": "Nodes",
+          "description": "The number of instances in cloud fleet",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/FleetNodesSpecRequest"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "placement": {
+          "description": "The placement of instances: `any` or `cluster`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/InstanceGroupPlacement"
+            }
+          ]
+        },
+        "reservation": {
+          "title": "Reservation",
+          "description": "The existing reservation to use for instance provisioning. Supports AWS Capacity Reservations, AWS Capacity Blocks, and GCP reservations",
+          "type": "string"
+        },
+        "resources": {
+          "title": "Resources",
+          "description": "The resources requirements",
+          "default": {
+            "cpu": {
+              "min": 2,
+              "max": null
+            },
+            "memory": {
+              "min": 8.0,
+              "max": null
+            },
+            "shm_size": null,
+            "gpu": {
+              "vendor": null,
+              "name": null,
+              "count": {
+                "min": 0,
+                "max": null
+              },
+              "memory": null,
+              "total_memory": null,
+              "compute_capability": null
+            },
+            "disk": {
+              "size": {
+                "min": 100.0,
+                "max": null
+              }
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ResourcesSpecRequest"
+            }
+          ]
+        },
+        "blocks": {
+          "title": "Blocks",
+          "description": "The amount of blocks to split the instance into, a number or `auto`. `auto` means as many as possible. The number of GPUs and CPUs must be divisible by the number of blocks. Defaults to `1`, i.e. do not split",
+          "default": 1,
+          "anyOf": [
+            {
+              "enum": [
+                "auto"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "integer",
+              "minimum": 1
+            }
+          ]
+        },
+        "backends": {
+          "description": "The backends to consider for provisioning (e.g., `[aws, gcp]`)",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BackendType"
+          }
+        },
+        "regions": {
+          "title": "Regions",
+          "description": "The regions to consider for provisioning (e.g., `[eu-west-1, us-west4, westeurope]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "availability_zones": {
+          "title": "Availability Zones",
+          "description": "The availability zones to consider for provisioning (e.g., `[eu-west-1a, us-west4-a]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instance_types": {
+          "title": "Instance Types",
+          "description": "The cloud-specific instance types to consider for provisioning (e.g., `[p3.8xlarge, n1-standard-4]`)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "spot_policy": {
+          "description": "The policy for provisioning spot or on-demand instances: `spot`, `on-demand`, `auto`. Defaults to `on-demand`",
+          "allOf": [
+            {
+              "$ref": "#/definitions/SpotPolicy"
+            }
+          ]
+        },
+        "retry": {
+          "title": "Retry",
+          "description": "The policy for provisioning retry. Defaults to `false`",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ProfileRetryRequest"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "max_price": {
+          "title": "Max Price",
+          "description": "The maximum instance price per hour, in dollars",
+          "exclusiveMinimum": 0.0,
+          "type": "number"
+        },
+        "idle_duration": {
+          "title": "Idle Duration",
+          "description": "Time to wait before terminating idle instances. Instances are not terminated if the fleet is already at `nodes.min`. Defaults to `5m` for runs and `3d` for fleets. Use `off` for unlimited duration",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "tags": {
+          "title": "Tags",
+          "description": "The custom tags to associate with the resource. The tags are also propagated to the underlying backend resources. If there is a conflict with backend-level tags, does not override them",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "SGLangGatewayRouterConfigRequest": {
+      "title": "SGLangGatewayRouterConfigRequest",
+      "description": "Gateway-level router configuration. type and policy only. pd_disaggregation is service-level.",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "description": "The router type enabled on this gateway.",
+          "default": "sglang",
+          "enum": [
+            "sglang"
+          ],
+          "type": "string"
+        },
+        "policy": {
+          "title": "Policy",
+          "description": "The routing policy. Deprecated: prefer setting policy in the service's router config. Options: `random`, `round_robin`, `cache_aware`, `power_of_two`",
+          "default": "cache_aware",
+          "enum": [
+            "random",
+            "round_robin",
+            "cache_aware",
+            "power_of_two"
+          ],
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "LetsEncryptGatewayCertificateRequest": {
+      "title": "LetsEncryptGatewayCertificateRequest",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "description": "Automatic certificates by Let's Encrypt",
+          "default": "lets-encrypt",
+          "enum": [
+            "lets-encrypt"
+          ],
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ACMGatewayCertificateRequest": {
+      "title": "ACMGatewayCertificateRequest",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "description": "Certificates by AWS Certificate Manager (ACM)",
+          "default": "acm",
+          "enum": [
+            "acm"
+          ],
+          "type": "string"
+        },
+        "arn": {
+          "title": "Arn",
+          "description": "The ARN of the wildcard ACM certificate for the domain",
+          "type": "string"
+        }
+      },
+      "required": [
+        "arn"
+      ],
+      "additionalProperties": false
+    },
+    "GatewayConfigurationRequest": {
+      "title": "GatewayConfigurationRequest",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "default": "gateway",
+          "enum": [
+            "gateway"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "description": "The gateway name",
+          "type": "string"
+        },
+        "default": {
+          "title": "Default",
+          "description": "Make the gateway default",
+          "default": false,
+          "type": "boolean"
+        },
+        "backend": {
+          "description": "The gateway backend",
+          "allOf": [
+            {
+              "$ref": "#/definitions/BackendType"
+            }
+          ]
+        },
+        "region": {
+          "title": "Region",
+          "description": "The gateway region",
+          "type": "string"
+        },
+        "instance_type": {
+          "title": "Instance Type",
+          "description": "Backend-specific instance type to use for the gateway instance. Omit to use the backend's default, which is typically a small non-GPU instance",
+          "minLength": 1,
+          "type": "string"
+        },
+        "router": {
+          "title": "Router",
+          "description": "The router configuration for this gateway. E.g. `{ type: sglang, policy: round_robin }`.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/SGLangGatewayRouterConfigRequest"
+            }
+          ]
+        },
+        "domain": {
+          "title": "Domain",
+          "description": "The gateway domain, e.g. `example.com`",
+          "type": "string"
+        },
+        "public_ip": {
+          "title": "Public Ip",
+          "description": "Allocate public IP for the gateway",
+          "default": true,
+          "type": "boolean"
+        },
+        "certificate": {
+          "title": "Certificate",
+          "description": "The SSL certificate configuration. Defaults to `type: lets-encrypt`",
+          "default": {
+            "type": "lets-encrypt"
+          },
+          "anyOf": [
+            {
+              "$ref": "#/definitions/LetsEncryptGatewayCertificateRequest"
+            },
+            {
+              "$ref": "#/definitions/ACMGatewayCertificateRequest"
+            }
+          ]
+        },
+        "tags": {
+          "title": "Tags",
+          "description": "The custom tags to associate with the gateway. The tags are also propagated to the underlying backend resources. If there is a conflict with backend-level tags, does not override them",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "backend",
+        "region"
+      ],
+      "additionalProperties": false
+    },
+    "VolumeConfigurationRequest": {
+      "title": "VolumeConfigurationRequest",
+      "type": "object",
+      "properties": {
+        "type": {
+          "title": "Type",
+          "default": "volume",
+          "enum": [
+            "volume"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "description": "The volume name",
+          "type": "string"
+        },
+        "backend": {
+          "description": "The volume backend",
+          "allOf": [
+            {
+              "$ref": "#/definitions/BackendType"
+            }
+          ]
+        },
+        "region": {
+          "title": "Region",
+          "description": "The volume region",
+          "type": "string"
+        },
+        "availability_zone": {
+          "title": "Availability Zone",
+          "description": "The volume availability zone",
+          "type": "string"
+        },
+        "size": {
+          "title": "Size",
+          "description": "The volume size. Must be specified when creating new volumes",
+          "type": "number"
+        },
+        "volume_id": {
+          "title": "Volume Id",
+          "description": "The volume ID. Must be specified when registering external volumes",
+          "type": "string"
+        },
+        "auto_cleanup_duration": {
+          "title": "Auto Cleanup Duration",
+          "description": "Time to wait after volume is no longer used by any job before deleting it. Defaults to keep the volume indefinitely. Use the value 'off' or -1 to disable auto-cleanup.",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "tags": {
+          "title": "Tags",
+          "description": "The custom tags to associate with the volume. The tags are also propagated to the underlying backend resources. If there is a conflict with backend-level tags, does not override them",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "backend",
+        "region"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

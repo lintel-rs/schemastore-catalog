@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "menu": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "size": {
+          "type": "integer",
+          "minimum": 9,
+          "maximum": 54,
+          "enum": [9, 18, 27, 36, 45, 54]
+        }
+      },
+      "required": ["title", "size"]
+    },
+    "prizes": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z0-9_]+$": {
+          "type": "string",
+          "enum": ["random", "win"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "ticks": {
+      "type": "object",
+      "patternProperties": {
+        "^[0-9]+(-[0-9]+)?$": {
+          "type": "object",
+          "properties": {
+            "actions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "replace_item",
+                      "move_item",
+                      "switch_item",
+                      "donate_case",
+                      "set_title",
+                      "set_click",
+                      "execute_group",
+                      "end"
+                    ]
+                  }
+                },
+                "required": ["type"],
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "type": { "const": "replace_item" }
+                      },
+                      "required": ["type"]
+                    },
+                    "then": {
+                      "properties": {
+                        "slot": {},
+                        "slots": {"type": "array"},
+                        "material": { "type": "string" },
+                        "display_name": {"type": "string"},
+                        "lore": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        },
+                        "enchanted": {
+                          "type": "boolean"
+                        },
+                        "model_data": {
+                          "type": "integer"
+                        },
+                        "rgb": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "type": { "const": "move_item" }
+                      },
+                      "required": ["type"]
+                    },
+                    "then": {
+                      "properties": {
+                        "from": { "type": "integer", "minimum": 0 },
+                        "to": { "type": "integer", "minimum": 0 }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "type": { "const": "donate_case" }
+                      },
+                      "required": ["type"]
+                    },
+                    "then": {
+                      "properties": {
+                        "actions": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        }
+                      },
+                      "required": ["actions"],
+                      "additionalProperties": true
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "type": { "const": "switch_item" }
+                      },
+                      "required": ["type"]
+                    },
+                    "then": {
+                      "properties": {
+                        "base_slot": { "type": "integer", "minimum": 0 },
+                        "count": { "type": "integer", "minimum": 1 },
+                        "slots": { "type": "array"}
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "type": { "const": "set_title" }
+                      },
+                      "required": ["type"]
+                    },
+                    "then": {
+                      "properties": {
+                        "title": { "type": "string" }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  {
+                    "if": {
+                      "properties": {
+                        "type": { "const": "execute_group" }
+                      },
+                      "required": ["type"]
+                    },
+                    "then": {
+                      "properties": {
+                        "group": { "type": "string" }
+                      },
+                      "additionalProperties": true
+                    }
+                  }
+                ],
+                "additionalProperties": true
+              }
+            },
+            "gradual_slowdown": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "scale_factor": { "type": "number", "minimum": 0 }
+              },
+              "required": ["enabled"]
+            },
+            "interval": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": ["actions"]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "required": ["menu", "prizes", "ticks"],
+  "additionalProperties": true
+}

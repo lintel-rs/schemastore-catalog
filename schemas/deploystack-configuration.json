@@ -1,0 +1,117 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DeployStack Configuration Schema",
+  "description": "Configuration schema for DeployStack applications",
+  "type": "object",
+  "properties": {
+    "application": {
+      "type": "object",
+      "description": "Application metadata and settings",
+      "properties": {
+        "logo": {
+          "type": "string",
+          "description": "Path to the application logo. Can be a local file relative to .deploystack directory or an external URL. Supports PNG, WEBP, or JPG formats.",
+          "pattern": "^(https?://.*|.*)\\.(?:png|svg|jpg|jpeg|webp)$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Application name for display in catalogs and deployment interfaces (maximum 40 characters)",
+          "maxLength": 40
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of your application (maximum 500 characters)",
+          "maxLength": 500
+        }
+      }
+    },
+    "deployment": {
+      "type": "object",
+      "description": "Deployment configuration including branch settings",
+      "properties": {
+        "branches": {
+          "type": "object",
+          "description": "Configuration for multiple branch deployment support",
+          "patternProperties": {
+            "^[a-zA-Z0-9._-]+$": {
+              "type": "object",
+              "description": "Branch-specific configuration",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "Display label for the branch in UI elements",
+                  "maxLength": 20
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Detailed description of the branch version",
+                  "maxLength": 100
+                },
+                "active": {
+                  "type": "boolean",
+                  "description": "Whether this branch is active for deployment",
+                  "default": true
+                },
+                "priority": {
+                  "type": "integer",
+                  "description": "Optional priority for ordering in UI (lower numbers appear first)",
+                  "minimum": 1
+                },
+                "exclude_providers": {
+                  "type": "array",
+                  "description": "List of cloud providers to exclude from template generation for this branch",
+                  "items": {
+                    "type": "string",
+                    "enum": ["aws", "rnd", "dop"],
+                    "description": "Provider code to exclude (aws: AWS CloudFormation, rnd: Render.com, dop: DigitalOcean)"
+                  },
+                  "uniqueItems": true
+                },
+                "serviceConnections": {
+                  "type": "object",
+                  "description": "Configuration for service-to-service communication",
+                  "properties": {
+                    "mappings": {
+                      "type": "array",
+                      "description": "Defines relationships between services for connection configuration",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "fromService": {
+                            "type": "string",
+                            "description": "Service that needs to connect to another service"
+                          },
+                          "toService": {
+                            "type": "string",
+                            "description": "Service being connected to"
+                          },
+                          "environmentVariables": {
+                            "type": "array",
+                            "description": "Environment variable names that reference the target service",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "property": {
+                            "type": "string",
+                            "description": "Type of connection property to reference (e.g., 'connectionString', 'hostport')",
+                            "default": "hostport",
+                            "enum": ["connectionString", "hostport", "host", "port"]
+                          }
+                        },
+                        "required": ["fromService", "toService", "environmentVariables"]
+                      }
+                    }
+                  },
+                  "required": ["mappings"]
+                }
+              },
+              "required": ["label"]
+            }
+          },
+          "minProperties": 1
+        }
+      }
+    }
+  }
+}

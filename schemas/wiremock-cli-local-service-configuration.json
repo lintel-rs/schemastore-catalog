@@ -1,0 +1,190 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://wiremock.io/schemas/wiremock.yaml.json",
+  "title": "WireMock Local Services Configuration",
+  "description": "Configuration file for WireMock CLI local services (wiremock.yaml)",
+  "type": "object",
+  "properties": {
+    "global": {
+      "type": "object",
+      "description": "Global configuration settings that apply to all services",
+      "properties": {
+        "https": {
+          "type": "object",
+          "description": "Global HTTPS settings",
+          "properties": {
+            "certificate": {
+              "$ref": "#/$defs/full-certificate"
+            }
+          }
+        }
+      }
+    },
+    "services": {
+      "type": "object",
+      "description": "Map of service names to their configurations",
+      "additionalProperties": {
+        "$ref": "#/$defs/local-service"
+      }
+    }
+  },
+  "required": ["services"],
+  "$defs": {
+    "local-service": {
+      "type": "object",
+      "description": "Configuration for a single local mock service",
+      "required": ["type", "name"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The type of mock API. Case insensitive.",
+          "enum": ["REST", "Unstructured", "gRPC", "GraphQL"]
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name for the service"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional description of the service"
+        },
+        "cloud_id": {
+          "type": "string",
+          "description": "WireMock Cloud mock API ID for syncing with cloud",
+          "pattern": "^[a-z0-9]{4,15}$"
+        },
+        "port": {
+          "$ref": "#/$defs/port",
+          "description": "HTTP port for the service"
+        },
+        "path": {
+          "type": "string",
+          "description": "Path to the directory containing stub mappings, files, and API specifications (relative to wiremock.yaml)"
+        },
+        "open_api": {
+          "$ref": "#/$defs/open-api-config",
+          "description": "OpenAPI-specific configuration"
+        },
+        "https": {
+          "type": "object",
+          "description": "HTTPS configuration for the service",
+          "properties": {
+            "port": {
+              "$ref": "#/$defs/port",
+              "description": "HTTPS port for the service"
+            },
+            "certificate": {
+              "$ref": "#/$defs/partial-certificate",
+              "description": "Certificate configuration for HTTPS"
+            }
+          },
+          "required": ["port"]
+        },
+        "originals": {
+          "type": "object",
+          "description": "Map of original request/response templates",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["port"]
+        },
+        {
+          "required": ["https"]
+        }
+      ]
+    },
+    "open-api-config": {
+      "type": "object",
+      "description": "OpenAPI validation configuration",
+      "properties": {
+        "validation_mode": {
+          "type": "string",
+          "description": "OpenAPI validation mode",
+          "enum": ["none", "soft", "hard"],
+          "default": "none"
+        }
+      },
+      "required": ["validation_mode"]
+    },
+    "full-certificate": {
+      "description": "Full certificate configuration (PEM or keystore)",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/pem-file"
+        },
+        {
+          "$ref": "#/$defs/keystore"
+        }
+      ]
+    },
+    "partial-certificate": {
+      "description": "Partial certificate configuration (can reference global certificate by alias)",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/pem-file"
+        },
+        {
+          "$ref": "#/$defs/keystore"
+        },
+        {
+          "$ref": "#/$defs/only-alias"
+        }
+      ]
+    },
+    "pem-file": {
+      "type": "object",
+      "description": "PEM-encoded certificate and private key",
+      "properties": {
+        "pem": {
+          "type": "string",
+          "description": "Path (absolute or relative to wiremock.yaml) to a file containing a private key and certificate in PEM encoding"
+        }
+      },
+      "required": ["pem"],
+      "additionalProperties": false
+    },
+    "keystore": {
+      "type": "object",
+      "description": "PKCS12 or JKS keystore configuration",
+      "properties": {
+        "keystore": {
+          "type": "string",
+          "description": "Path (absolute or relative to wiremock.yaml) to a PKCS12 or JKS keystore"
+        },
+        "password": {
+          "type": "string",
+          "description": "Password to unlock the keystore"
+        },
+        "alias": {
+          "type": "string",
+          "description": "Optional alias to the certificate and private key to use if the keystore has more than one. If omitted, the first entry in the store will be used."
+        }
+      },
+      "required": ["keystore", "password"],
+      "additionalProperties": false
+    },
+    "only-alias": {
+      "type": "object",
+      "description": "Reference to a certificate in the global keystore by alias",
+      "properties": {
+        "alias": {
+          "type": "string",
+          "description": "Alias to the certificate and private key in the global keystore"
+        }
+      },
+      "required": ["alias"],
+      "additionalProperties": false
+    },
+    "port": {
+      "type": "integer",
+      "description": "TCP port number",
+      "minimum": 1,
+      "maximum": 65535
+    }
+  }
+}
+

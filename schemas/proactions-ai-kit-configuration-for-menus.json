@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ProActions Floating Menu Schema",
+  "type": "object",
+  "description": "Configuration for floating menus",
+  "additionalProperties": {
+    "type": "object",
+    "properties": {
+      "items": {
+        "type": "array",
+        "description": "Menu items to display",
+        "items": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "title",
+                "flowRef"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "button",
+                  "description": "Button element"
+                },
+                "icon": {
+                  "type": "string",
+                  "description": "Icon identifier"
+                },
+                "iconHtml": {
+                  "type": "string",
+                  "description": "Custom HTML for icon"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Button text"
+                },
+                "flowRef": {
+                  "type": "string",
+                  "description": "Flow to execute"
+                },
+                "forContentItem": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "description": "Content types where this appears"
+                },
+                "forElement": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "description": "Elements where this appears"
+                },
+                "forTag": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "description": "Tags where this appears"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "separator",
+                  "description": "Separator element"
+                },
+                "forContentItem": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "description": "Content types where this appears"
+                },
+                "forElement": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "description": "Elements where this appears"
+                },
+                "forTag": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "description": "Tags where this appears"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

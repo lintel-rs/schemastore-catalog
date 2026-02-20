@@ -1,0 +1,3833 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "id": "https://cirrus-ci.org/",
+  "patternProperties": {
+    "^(.*)docker_builder$": {
+      "patternProperties": {
+        "^(.*)artifacts$": {
+          "properties": {
+            "format": {
+              "description": "Content Format.",
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "path": {
+              "description": "Path or pattern of artifacts.",
+              "type": "string"
+            },
+            "paths": {
+              "items": [
+                {
+                  "description": "Path or pattern of artifacts.",
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            },
+            "type": {
+              "description": "Content Type.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "^(.*)background_script$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": [
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          ]
+        },
+        "^(.*)cache$": {
+          "description": "Folder Cache Definition.",
+          "oneOf": [
+            {
+              "required": [
+                "folder"
+              ]
+            },
+            {
+              "required": [
+                "folders"
+              ]
+            }
+          ],
+          "properties": {
+            "fingerprint_key": {
+              "description": "Cache key in it's raw form.",
+              "type": "string"
+            },
+            "fingerprint_script": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ],
+              "description": "Script that is used to calculate cache key."
+            },
+            "folder": {
+              "description": "Path of a folder to cache.",
+              "type": "string"
+            },
+            "folders": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ],
+              "description": "A list of folders to cache."
+            },
+            "name": {
+              "type": "string"
+            },
+            "optimistically_restore_on_miss": {
+              "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+              "type": "string"
+            },
+            "populate_script": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ],
+              "description": "In case of a cache miss this script will be executed."
+            },
+            "reupload_on_changes": {
+              "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "^(.*)file$": {
+          "properties": {
+            "from_contents": {
+              "description": "Provide the file contents directly instead of using an environment variable.",
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "path": {
+              "description": "Destination path.",
+              "type": "string"
+            },
+            "variable_name": {
+              "description": "Environment variable name to get the file contents from.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "type": "object"
+        },
+        "^(.*)script$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": [
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          ]
+        }
+      },
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "allow_failures": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        },
+        "always": {
+          "description": "ALWAYS commands.",
+          "patternProperties": {
+            "^(.*)artifacts$": {
+              "properties": {
+                "format": {
+                  "description": "Content Format.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Path or pattern of artifacts.",
+                  "type": "string"
+                },
+                "paths": {
+                  "items": [
+                    {
+                      "description": "Path or pattern of artifacts.",
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "type": {
+                  "description": "Content Type.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)background_script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            },
+            "^(.*)cache$": {
+              "description": "Folder Cache Definition.",
+              "oneOf": [
+                {
+                  "required": [
+                    "folder"
+                  ]
+                },
+                {
+                  "required": [
+                    "folders"
+                  ]
+                }
+              ],
+              "properties": {
+                "fingerprint_key": {
+                  "description": "Cache key in it's raw form.",
+                  "type": "string"
+                },
+                "fingerprint_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "Script that is used to calculate cache key."
+                },
+                "folder": {
+                  "description": "Path of a folder to cache.",
+                  "type": "string"
+                },
+                "folders": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "A list of folders to cache."
+                },
+                "name": {
+                  "type": "string"
+                },
+                "optimistically_restore_on_miss": {
+                  "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                  "type": "string"
+                },
+                "populate_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "In case of a cache miss this script will be executed."
+                },
+                "reupload_on_changes": {
+                  "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)file$": {
+              "properties": {
+                "from_contents": {
+                  "description": "Provide the file contents directly instead of using an environment variable.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Destination path.",
+                  "type": "string"
+                },
+                "variable_name": {
+                  "description": "Environment variable name to get the file contents from.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "type": "object"
+            },
+            "^(.*)script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            }
+          },
+          "properties": {
+            "upload_caches": {
+              "items": [
+                {
+                  "description": "Cache name to upload.",
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "depends_on": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": [
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          ],
+          "description": "List of task names this task depends on."
+        },
+        "env": {
+          "description": "Map represented as an object.",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "environment": {
+          "description": "Map represented as an object.",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "on_failure": {
+          "description": "ON_FAILURE commands.",
+          "patternProperties": {
+            "^(.*)artifacts$": {
+              "properties": {
+                "format": {
+                  "description": "Content Format.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Path or pattern of artifacts.",
+                  "type": "string"
+                },
+                "paths": {
+                  "items": [
+                    {
+                      "description": "Path or pattern of artifacts.",
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "type": {
+                  "description": "Content Type.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)background_script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            },
+            "^(.*)cache$": {
+              "description": "Folder Cache Definition.",
+              "oneOf": [
+                {
+                  "required": [
+                    "folder"
+                  ]
+                },
+                {
+                  "required": [
+                    "folders"
+                  ]
+                }
+              ],
+              "properties": {
+                "fingerprint_key": {
+                  "description": "Cache key in it's raw form.",
+                  "type": "string"
+                },
+                "fingerprint_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "Script that is used to calculate cache key."
+                },
+                "folder": {
+                  "description": "Path of a folder to cache.",
+                  "type": "string"
+                },
+                "folders": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "A list of folders to cache."
+                },
+                "name": {
+                  "type": "string"
+                },
+                "optimistically_restore_on_miss": {
+                  "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                  "type": "string"
+                },
+                "populate_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "In case of a cache miss this script will be executed."
+                },
+                "reupload_on_changes": {
+                  "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)file$": {
+              "properties": {
+                "from_contents": {
+                  "description": "Provide the file contents directly instead of using an environment variable.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Destination path.",
+                  "type": "string"
+                },
+                "variable_name": {
+                  "description": "Environment variable name to get the file contents from.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "type": "object"
+            },
+            "^(.*)script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            }
+          },
+          "properties": {
+            "upload_caches": {
+              "items": [
+                {
+                  "description": "Cache name to upload.",
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "on_success": {
+          "description": "ON_SUCCESS commands.",
+          "patternProperties": {
+            "^(.*)artifacts$": {
+              "properties": {
+                "format": {
+                  "description": "Content Format.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Path or pattern of artifacts.",
+                  "type": "string"
+                },
+                "paths": {
+                  "items": [
+                    {
+                      "description": "Path or pattern of artifacts.",
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "type": {
+                  "description": "Content Type.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)background_script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            },
+            "^(.*)cache$": {
+              "description": "Folder Cache Definition.",
+              "oneOf": [
+                {
+                  "required": [
+                    "folder"
+                  ]
+                },
+                {
+                  "required": [
+                    "folders"
+                  ]
+                }
+              ],
+              "properties": {
+                "fingerprint_key": {
+                  "description": "Cache key in it's raw form.",
+                  "type": "string"
+                },
+                "fingerprint_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "Script that is used to calculate cache key."
+                },
+                "folder": {
+                  "description": "Path of a folder to cache.",
+                  "type": "string"
+                },
+                "folders": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "A list of folders to cache."
+                },
+                "name": {
+                  "type": "string"
+                },
+                "optimistically_restore_on_miss": {
+                  "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                  "type": "string"
+                },
+                "populate_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "In case of a cache miss this script will be executed."
+                },
+                "reupload_on_changes": {
+                  "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)file$": {
+              "properties": {
+                "from_contents": {
+                  "description": "Provide the file contents directly instead of using an environment variable.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Destination path.",
+                  "type": "string"
+                },
+                "variable_name": {
+                  "description": "Environment variable name to get the file contents from.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "type": "object"
+            },
+            "^(.*)script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            }
+          },
+          "properties": {
+            "upload_caches": {
+              "items": [
+                {
+                  "description": "Cache name to upload.",
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "on_timeout": {
+          "description": "ON_TIMEOUT commands.",
+          "patternProperties": {
+            "^(.*)artifacts$": {
+              "properties": {
+                "format": {
+                  "description": "Content Format.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Path or pattern of artifacts.",
+                  "type": "string"
+                },
+                "paths": {
+                  "items": [
+                    {
+                      "description": "Path or pattern of artifacts.",
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "type": {
+                  "description": "Content Type.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)background_script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            },
+            "^(.*)cache$": {
+              "description": "Folder Cache Definition.",
+              "oneOf": [
+                {
+                  "required": [
+                    "folder"
+                  ]
+                },
+                {
+                  "required": [
+                    "folders"
+                  ]
+                }
+              ],
+              "properties": {
+                "fingerprint_key": {
+                  "description": "Cache key in it's raw form.",
+                  "type": "string"
+                },
+                "fingerprint_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "Script that is used to calculate cache key."
+                },
+                "folder": {
+                  "description": "Path of a folder to cache.",
+                  "type": "string"
+                },
+                "folders": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "A list of folders to cache."
+                },
+                "name": {
+                  "type": "string"
+                },
+                "optimistically_restore_on_miss": {
+                  "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                  "type": "string"
+                },
+                "populate_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "In case of a cache miss this script will be executed."
+                },
+                "reupload_on_changes": {
+                  "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)file$": {
+              "properties": {
+                "from_contents": {
+                  "description": "Provide the file contents directly instead of using an environment variable.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Destination path.",
+                  "type": "string"
+                },
+                "variable_name": {
+                  "description": "Environment variable name to get the file contents from.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "type": "object"
+            },
+            "^(.*)script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            }
+          },
+          "properties": {
+            "upload_caches": {
+              "items": [
+                {
+                  "description": "Cache name to upload.",
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "only_if": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        },
+        "os_version": {
+          "description": "Windows version of container.",
+          "enum": [
+            "2019",
+            "1709",
+            "1803"
+          ]
+        },
+        "platform": {
+          "description": "Container Platform.",
+          "enum": [
+            "linux",
+            "windows"
+          ]
+        },
+        "skip": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        },
+        "timeout_in": {
+          "description": "Task timeout in minutes",
+          "type": "number"
+        },
+        "upload_caches": {
+          "items": [
+            {
+              "description": "Cache name to upload.",
+              "type": "string"
+            }
+          ],
+          "type": "array"
+        },
+        "use_static_ip": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "^(.*)pipe$": {
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "allow_failures": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        },
+        "depends_on": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": [
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          ],
+          "description": "List of task names this task depends on."
+        },
+        "env": {
+          "description": "Map represented as an object.",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "environment": {
+          "description": "Map represented as an object.",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "only_if": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        },
+        "resources": {
+          "description": "Pipe resources",
+          "properties": {
+            "cpu": {
+              "type": "number"
+            },
+            "memory": {
+              "pattern": "\\d+(G|Mb)?",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "skip": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        },
+        "steps": {
+          "items": [
+            {
+              "description": "Pipe step",
+              "patternProperties": {
+                "^(.*)artifacts$": {
+                  "properties": {
+                    "format": {
+                      "description": "Content Format.",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "description": "Path or pattern of artifacts.",
+                      "type": "string"
+                    },
+                    "paths": {
+                      "items": [
+                        {
+                          "description": "Path or pattern of artifacts.",
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    },
+                    "type": {
+                      "description": "Content Type.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "^(.*)cache$": {
+                  "description": "Folder Cache Definition.",
+                  "oneOf": [
+                    {
+                      "required": [
+                        "folder"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "folders"
+                      ]
+                    }
+                  ],
+                  "properties": {
+                    "fingerprint_key": {
+                      "description": "Cache key in it's raw form.",
+                      "type": "string"
+                    },
+                    "fingerprint_script": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ],
+                      "description": "Script that is used to calculate cache key."
+                    },
+                    "folder": {
+                      "description": "Path of a folder to cache.",
+                      "type": "string"
+                    },
+                    "folders": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ],
+                      "description": "A list of folders to cache."
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "optimistically_restore_on_miss": {
+                      "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                      "type": "string"
+                    },
+                    "populate_script": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ],
+                      "description": "In case of a cache miss this script will be executed."
+                    },
+                    "reupload_on_changes": {
+                      "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "^(.*)file$": {
+                  "properties": {
+                    "from_contents": {
+                      "description": "Provide the file contents directly instead of using an environment variable.",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "description": "Destination path.",
+                      "type": "string"
+                    },
+                    "variable_name": {
+                      "description": "Environment variable name to get the file contents from.",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "path"
+                  ],
+                  "type": "object"
+                },
+                "^(.*)script$": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ]
+                }
+              },
+              "properties": {
+                "always": {
+                  "description": "ALWAYS commands.",
+                  "patternProperties": {
+                    "^(.*)artifacts$": {
+                      "properties": {
+                        "format": {
+                          "description": "Content Format.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "description": "Path or pattern of artifacts.",
+                          "type": "string"
+                        },
+                        "paths": {
+                          "items": [
+                            {
+                              "description": "Path or pattern of artifacts.",
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        },
+                        "type": {
+                          "description": "Content Type.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "^(.*)background_script$": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ]
+                    },
+                    "^(.*)cache$": {
+                      "description": "Folder Cache Definition.",
+                      "oneOf": [
+                        {
+                          "required": [
+                            "folder"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "folders"
+                          ]
+                        }
+                      ],
+                      "properties": {
+                        "fingerprint_key": {
+                          "description": "Cache key in it's raw form.",
+                          "type": "string"
+                        },
+                        "fingerprint_script": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "Script that is used to calculate cache key."
+                        },
+                        "folder": {
+                          "description": "Path of a folder to cache.",
+                          "type": "string"
+                        },
+                        "folders": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "A list of folders to cache."
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "optimistically_restore_on_miss": {
+                          "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                          "type": "string"
+                        },
+                        "populate_script": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "In case of a cache miss this script will be executed."
+                        },
+                        "reupload_on_changes": {
+                          "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "^(.*)file$": {
+                      "properties": {
+                        "from_contents": {
+                          "description": "Provide the file contents directly instead of using an environment variable.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "description": "Destination path.",
+                          "type": "string"
+                        },
+                        "variable_name": {
+                          "description": "Environment variable name to get the file contents from.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path"
+                      ],
+                      "type": "object"
+                    },
+                    "^(.*)script$": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ]
+                    }
+                  },
+                  "properties": {
+                    "upload_caches": {
+                      "items": [
+                        {
+                          "description": "Cache name to upload.",
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                },
+                "image": {
+                  "description": "Docker Image to use.",
+                  "type": "string"
+                },
+                "on_failure": {
+                  "description": "ON_FAILURE commands.",
+                  "patternProperties": {
+                    "^(.*)artifacts$": {
+                      "properties": {
+                        "format": {
+                          "description": "Content Format.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "description": "Path or pattern of artifacts.",
+                          "type": "string"
+                        },
+                        "paths": {
+                          "items": [
+                            {
+                              "description": "Path or pattern of artifacts.",
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        },
+                        "type": {
+                          "description": "Content Type.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "^(.*)background_script$": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ]
+                    },
+                    "^(.*)cache$": {
+                      "description": "Folder Cache Definition.",
+                      "oneOf": [
+                        {
+                          "required": [
+                            "folder"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "folders"
+                          ]
+                        }
+                      ],
+                      "properties": {
+                        "fingerprint_key": {
+                          "description": "Cache key in it's raw form.",
+                          "type": "string"
+                        },
+                        "fingerprint_script": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "Script that is used to calculate cache key."
+                        },
+                        "folder": {
+                          "description": "Path of a folder to cache.",
+                          "type": "string"
+                        },
+                        "folders": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "A list of folders to cache."
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "optimistically_restore_on_miss": {
+                          "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                          "type": "string"
+                        },
+                        "populate_script": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "In case of a cache miss this script will be executed."
+                        },
+                        "reupload_on_changes": {
+                          "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "^(.*)file$": {
+                      "properties": {
+                        "from_contents": {
+                          "description": "Provide the file contents directly instead of using an environment variable.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "description": "Destination path.",
+                          "type": "string"
+                        },
+                        "variable_name": {
+                          "description": "Environment variable name to get the file contents from.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path"
+                      ],
+                      "type": "object"
+                    },
+                    "^(.*)script$": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ]
+                    }
+                  },
+                  "properties": {
+                    "upload_caches": {
+                      "items": [
+                        {
+                          "description": "Cache name to upload.",
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                },
+                "on_success": {
+                  "description": "ON_SUCCESS commands.",
+                  "patternProperties": {
+                    "^(.*)artifacts$": {
+                      "properties": {
+                        "format": {
+                          "description": "Content Format.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "description": "Path or pattern of artifacts.",
+                          "type": "string"
+                        },
+                        "paths": {
+                          "items": [
+                            {
+                              "description": "Path or pattern of artifacts.",
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        },
+                        "type": {
+                          "description": "Content Type.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "^(.*)background_script$": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ]
+                    },
+                    "^(.*)cache$": {
+                      "description": "Folder Cache Definition.",
+                      "oneOf": [
+                        {
+                          "required": [
+                            "folder"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "folders"
+                          ]
+                        }
+                      ],
+                      "properties": {
+                        "fingerprint_key": {
+                          "description": "Cache key in it's raw form.",
+                          "type": "string"
+                        },
+                        "fingerprint_script": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "Script that is used to calculate cache key."
+                        },
+                        "folder": {
+                          "description": "Path of a folder to cache.",
+                          "type": "string"
+                        },
+                        "folders": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "A list of folders to cache."
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "optimistically_restore_on_miss": {
+                          "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                          "type": "string"
+                        },
+                        "populate_script": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "In case of a cache miss this script will be executed."
+                        },
+                        "reupload_on_changes": {
+                          "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "^(.*)file$": {
+                      "properties": {
+                        "from_contents": {
+                          "description": "Provide the file contents directly instead of using an environment variable.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "description": "Destination path.",
+                          "type": "string"
+                        },
+                        "variable_name": {
+                          "description": "Environment variable name to get the file contents from.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path"
+                      ],
+                      "type": "object"
+                    },
+                    "^(.*)script$": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ]
+                    }
+                  },
+                  "properties": {
+                    "upload_caches": {
+                      "items": [
+                        {
+                          "description": "Cache name to upload.",
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                },
+                "on_timeout": {
+                  "description": "ON_TIMEOUT commands.",
+                  "patternProperties": {
+                    "^(.*)artifacts$": {
+                      "properties": {
+                        "format": {
+                          "description": "Content Format.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "description": "Path or pattern of artifacts.",
+                          "type": "string"
+                        },
+                        "paths": {
+                          "items": [
+                            {
+                              "description": "Path or pattern of artifacts.",
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        },
+                        "type": {
+                          "description": "Content Type.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "^(.*)background_script$": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ]
+                    },
+                    "^(.*)cache$": {
+                      "description": "Folder Cache Definition.",
+                      "oneOf": [
+                        {
+                          "required": [
+                            "folder"
+                          ]
+                        },
+                        {
+                          "required": [
+                            "folders"
+                          ]
+                        }
+                      ],
+                      "properties": {
+                        "fingerprint_key": {
+                          "description": "Cache key in it's raw form.",
+                          "type": "string"
+                        },
+                        "fingerprint_script": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "Script that is used to calculate cache key."
+                        },
+                        "folder": {
+                          "description": "Path of a folder to cache.",
+                          "type": "string"
+                        },
+                        "folders": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "A list of folders to cache."
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "optimistically_restore_on_miss": {
+                          "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                          "type": "string"
+                        },
+                        "populate_script": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "items": [
+                                {
+                                  "type": "string"
+                                }
+                              ],
+                              "type": "array"
+                            }
+                          ],
+                          "description": "In case of a cache miss this script will be executed."
+                        },
+                        "reupload_on_changes": {
+                          "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "^(.*)file$": {
+                      "properties": {
+                        "from_contents": {
+                          "description": "Provide the file contents directly instead of using an environment variable.",
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "path": {
+                          "description": "Destination path.",
+                          "type": "string"
+                        },
+                        "variable_name": {
+                          "description": "Environment variable name to get the file contents from.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "path"
+                      ],
+                      "type": "object"
+                    },
+                    "^(.*)script$": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ]
+                    }
+                  },
+                  "properties": {
+                    "upload_caches": {
+                      "items": [
+                        {
+                          "description": "Cache name to upload.",
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                },
+                "upload_caches": {
+                  "items": [
+                    {
+                      "description": "Cache name to upload.",
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              },
+              "required": [
+                "image"
+              ],
+              "type": "object"
+            }
+          ],
+          "type": "array"
+        },
+        "timeout_in": {
+          "description": "Task timeout in minutes",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "^(.*)task$": {
+      "description": "Cirrus CI task definition.",
+      "patternProperties": {
+        "^(.*)artifacts$": {
+          "properties": {
+            "format": {
+              "description": "Content Format.",
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "path": {
+              "description": "Path or pattern of artifacts.",
+              "type": "string"
+            },
+            "paths": {
+              "items": [
+                {
+                  "description": "Path or pattern of artifacts.",
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            },
+            "type": {
+              "description": "Content Type.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "^(.*)background_script$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": [
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          ]
+        },
+        "^(.*)cache$": {
+          "description": "Folder Cache Definition.",
+          "oneOf": [
+            {
+              "required": [
+                "folder"
+              ]
+            },
+            {
+              "required": [
+                "folders"
+              ]
+            }
+          ],
+          "properties": {
+            "fingerprint_key": {
+              "description": "Cache key in it's raw form.",
+              "type": "string"
+            },
+            "fingerprint_script": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ],
+              "description": "Script that is used to calculate cache key."
+            },
+            "folder": {
+              "description": "Path of a folder to cache.",
+              "type": "string"
+            },
+            "folders": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ],
+              "description": "A list of folders to cache."
+            },
+            "name": {
+              "type": "string"
+            },
+            "optimistically_restore_on_miss": {
+              "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+              "type": "string"
+            },
+            "populate_script": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ],
+              "description": "In case of a cache miss this script will be executed."
+            },
+            "reupload_on_changes": {
+              "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "^(.*)file$": {
+          "properties": {
+            "from_contents": {
+              "description": "Provide the file contents directly instead of using an environment variable.",
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "path": {
+              "description": "Destination path.",
+              "type": "string"
+            },
+            "variable_name": {
+              "description": "Environment variable name to get the file contents from.",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path"
+          ],
+          "type": "object"
+        },
+        "^(.*)script$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": [
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          ]
+        }
+      },
+      "properties": {
+        "alias": {
+          "type": "string"
+        },
+        "allow_failures": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        },
+        "always": {
+          "description": "ALWAYS commands.",
+          "patternProperties": {
+            "^(.*)artifacts$": {
+              "properties": {
+                "format": {
+                  "description": "Content Format.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Path or pattern of artifacts.",
+                  "type": "string"
+                },
+                "paths": {
+                  "items": [
+                    {
+                      "description": "Path or pattern of artifacts.",
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "type": {
+                  "description": "Content Type.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)background_script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            },
+            "^(.*)cache$": {
+              "description": "Folder Cache Definition.",
+              "oneOf": [
+                {
+                  "required": [
+                    "folder"
+                  ]
+                },
+                {
+                  "required": [
+                    "folders"
+                  ]
+                }
+              ],
+              "properties": {
+                "fingerprint_key": {
+                  "description": "Cache key in it's raw form.",
+                  "type": "string"
+                },
+                "fingerprint_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "Script that is used to calculate cache key."
+                },
+                "folder": {
+                  "description": "Path of a folder to cache.",
+                  "type": "string"
+                },
+                "folders": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "A list of folders to cache."
+                },
+                "name": {
+                  "type": "string"
+                },
+                "optimistically_restore_on_miss": {
+                  "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                  "type": "string"
+                },
+                "populate_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "In case of a cache miss this script will be executed."
+                },
+                "reupload_on_changes": {
+                  "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)file$": {
+              "properties": {
+                "from_contents": {
+                  "description": "Provide the file contents directly instead of using an environment variable.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Destination path.",
+                  "type": "string"
+                },
+                "variable_name": {
+                  "description": "Environment variable name to get the file contents from.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "type": "object"
+            },
+            "^(.*)script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            }
+          },
+          "properties": {
+            "upload_caches": {
+              "items": [
+                {
+                  "description": "Cache name to upload.",
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "container": {
+          "description": "Container definition for Community Cluster.",
+          "properties": {
+            "additional_containers": {
+              "items": [
+                {
+                  "description": "Additional Container definition.",
+                  "properties": {
+                    "command": {
+                      "description": "Container CMD to override.",
+                      "type": "string"
+                    },
+                    "cpu": {
+                      "type": "number"
+                    },
+                    "env": {
+                      "description": "Map represented as an object.",
+                      "patternProperties": {
+                        ".*": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "environment": {
+                      "description": "Map represented as an object.",
+                      "patternProperties": {
+                        ".*": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "image": {
+                      "description": "Docker Image.",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "pattern": "\\d+(G|Mb)?",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "port": {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "description": "Port exposed by the container."
+                    },
+                    "ports": {
+                      "description": "Ports exposed by the container.",
+                      "items": [
+                        {
+                          "anyOf": [
+                            {
+                              "type": "number"
+                            },
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "description": "Port exposed by the container."
+                        }
+                      ],
+                      "type": "array"
+                    },
+                    "privileged": {
+                      "description": "Boolean expression that can use environment variables.",
+                      "type": "string"
+                    },
+                    "readiness_command": {
+                      "anyOf": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "items": [
+                            {
+                              "type": "string"
+                            }
+                          ],
+                          "type": "array"
+                        }
+                      ],
+                      "description": "Container readiness probe command."
+                    }
+                  },
+                  "required": [
+                    "image"
+                  ],
+                  "type": "object"
+                }
+              ],
+              "type": "array"
+            },
+            "cpu": {
+              "type": "number"
+            },
+            "docker_arguments": {
+              "description": "Arguments for Docker build",
+              "patternProperties": {
+                ".*": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dockerfile": {
+              "description": "Relative path to Dockerfile to build container from.",
+              "type": "string"
+            },
+            "image": {
+              "description": "Docker Image to use.",
+              "type": "string"
+            },
+            "kvm": {
+              "description": "Boolean expression that can use environment variables.",
+              "type": "string"
+            },
+            "memory": {
+              "pattern": "\\d+(G|Mb)?",
+              "type": "string"
+            },
+            "registry_config": {
+              "type": "string"
+            },
+            "use_in_memory_disk": {
+              "description": "Boolean expression that can use environment variables.",
+              "type": "string"
+            },
+            "use_static_ip": {
+              "description": "Boolean expression that can use environment variables.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "depends_on": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": [
+                {
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          ],
+          "description": "List of task names this task depends on."
+        },
+        "env": {
+          "description": "Map represented as an object.",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "environment": {
+          "description": "Map represented as an object.",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "macos_instance": {
+          "description": "MacOS VM definition.",
+          "properties": {
+            "cpu": {
+              "type": "number"
+            },
+            "image": {
+              "description": "Tart Image to use.",
+              "type": "string"
+            },
+            "memory": {
+              "pattern": "\\d+(G|Mb)?",
+              "type": "string"
+            },
+            "password": {
+              "description": "password for SSH connection.",
+              "type": "string"
+            },
+            "user": {
+              "description": "username for SSH connection.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "on_failure": {
+          "description": "ON_FAILURE commands.",
+          "patternProperties": {
+            "^(.*)artifacts$": {
+              "properties": {
+                "format": {
+                  "description": "Content Format.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Path or pattern of artifacts.",
+                  "type": "string"
+                },
+                "paths": {
+                  "items": [
+                    {
+                      "description": "Path or pattern of artifacts.",
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "type": {
+                  "description": "Content Type.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)background_script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            },
+            "^(.*)cache$": {
+              "description": "Folder Cache Definition.",
+              "oneOf": [
+                {
+                  "required": [
+                    "folder"
+                  ]
+                },
+                {
+                  "required": [
+                    "folders"
+                  ]
+                }
+              ],
+              "properties": {
+                "fingerprint_key": {
+                  "description": "Cache key in it's raw form.",
+                  "type": "string"
+                },
+                "fingerprint_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "Script that is used to calculate cache key."
+                },
+                "folder": {
+                  "description": "Path of a folder to cache.",
+                  "type": "string"
+                },
+                "folders": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "A list of folders to cache."
+                },
+                "name": {
+                  "type": "string"
+                },
+                "optimistically_restore_on_miss": {
+                  "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                  "type": "string"
+                },
+                "populate_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "In case of a cache miss this script will be executed."
+                },
+                "reupload_on_changes": {
+                  "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)file$": {
+              "properties": {
+                "from_contents": {
+                  "description": "Provide the file contents directly instead of using an environment variable.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Destination path.",
+                  "type": "string"
+                },
+                "variable_name": {
+                  "description": "Environment variable name to get the file contents from.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "type": "object"
+            },
+            "^(.*)script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            }
+          },
+          "properties": {
+            "upload_caches": {
+              "items": [
+                {
+                  "description": "Cache name to upload.",
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "on_success": {
+          "description": "ON_SUCCESS commands.",
+          "patternProperties": {
+            "^(.*)artifacts$": {
+              "properties": {
+                "format": {
+                  "description": "Content Format.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Path or pattern of artifacts.",
+                  "type": "string"
+                },
+                "paths": {
+                  "items": [
+                    {
+                      "description": "Path or pattern of artifacts.",
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "type": {
+                  "description": "Content Type.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)background_script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            },
+            "^(.*)cache$": {
+              "description": "Folder Cache Definition.",
+              "oneOf": [
+                {
+                  "required": [
+                    "folder"
+                  ]
+                },
+                {
+                  "required": [
+                    "folders"
+                  ]
+                }
+              ],
+              "properties": {
+                "fingerprint_key": {
+                  "description": "Cache key in it's raw form.",
+                  "type": "string"
+                },
+                "fingerprint_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "Script that is used to calculate cache key."
+                },
+                "folder": {
+                  "description": "Path of a folder to cache.",
+                  "type": "string"
+                },
+                "folders": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "A list of folders to cache."
+                },
+                "name": {
+                  "type": "string"
+                },
+                "optimistically_restore_on_miss": {
+                  "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                  "type": "string"
+                },
+                "populate_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "In case of a cache miss this script will be executed."
+                },
+                "reupload_on_changes": {
+                  "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)file$": {
+              "properties": {
+                "from_contents": {
+                  "description": "Provide the file contents directly instead of using an environment variable.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Destination path.",
+                  "type": "string"
+                },
+                "variable_name": {
+                  "description": "Environment variable name to get the file contents from.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "type": "object"
+            },
+            "^(.*)script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            }
+          },
+          "properties": {
+            "upload_caches": {
+              "items": [
+                {
+                  "description": "Cache name to upload.",
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "on_timeout": {
+          "description": "ON_TIMEOUT commands.",
+          "patternProperties": {
+            "^(.*)artifacts$": {
+              "properties": {
+                "format": {
+                  "description": "Content Format.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Path or pattern of artifacts.",
+                  "type": "string"
+                },
+                "paths": {
+                  "items": [
+                    {
+                      "description": "Path or pattern of artifacts.",
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "type": {
+                  "description": "Content Type.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)background_script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            },
+            "^(.*)cache$": {
+              "description": "Folder Cache Definition.",
+              "oneOf": [
+                {
+                  "required": [
+                    "folder"
+                  ]
+                },
+                {
+                  "required": [
+                    "folders"
+                  ]
+                }
+              ],
+              "properties": {
+                "fingerprint_key": {
+                  "description": "Cache key in it's raw form.",
+                  "type": "string"
+                },
+                "fingerprint_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "Script that is used to calculate cache key."
+                },
+                "folder": {
+                  "description": "Path of a folder to cache.",
+                  "type": "string"
+                },
+                "folders": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "A list of folders to cache."
+                },
+                "name": {
+                  "type": "string"
+                },
+                "optimistically_restore_on_miss": {
+                  "description": "Boolean expression. A flag to enable optimistic cache restoration on miss by finding the latest available key.",
+                  "type": "string"
+                },
+                "populate_script": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "In case of a cache miss this script will be executed."
+                },
+                "reupload_on_changes": {
+                  "description": "Boolean expression. A flag to check if contents of folder has changed after a cache hit.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "^(.*)file$": {
+              "properties": {
+                "from_contents": {
+                  "description": "Provide the file contents directly instead of using an environment variable.",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "path": {
+                  "description": "Destination path.",
+                  "type": "string"
+                },
+                "variable_name": {
+                  "description": "Environment variable name to get the file contents from.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path"
+              ],
+              "type": "object"
+            },
+            "^(.*)script$": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "items": [
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              ]
+            }
+          },
+          "properties": {
+            "upload_caches": {
+              "items": [
+                {
+                  "description": "Cache name to upload.",
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          },
+          "type": "object"
+        },
+        "only_if": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        },
+        "persistent_worker": {
+          "description": "Persistent Worker definition.",
+          "properties": {
+            "isolation": {
+              "description": "Persistent Worker isolation.",
+              "properties": {
+                "container": {
+                  "description": "Container engine isolation.",
+                  "properties": {
+                    "cpu": {
+                      "description": "CPU units for the container to use.",
+                      "type": "number"
+                    },
+                    "docker_arguments": {
+                      "description": "Arguments for Docker build.",
+                      "patternProperties": {
+                        ".*": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "dockerfile": {
+                      "description": "Relative path to Dockerfile to build container from.",
+                      "type": "string"
+                    },
+                    "image": {
+                      "description": "Container image to use.",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "description": "Memory in megabytes for the container to use.",
+                      "pattern": "\\d+(G|Mb)?",
+                      "type": "string"
+                    },
+                    "platform": {
+                      "description": "Image Platform.",
+                      "enum": [
+                        "darwin",
+                        "linux",
+                        "windows"
+                      ]
+                    },
+                    "volumes": {
+                      "description": "A list of volumes mounted inside of the container.",
+                      "items": [
+                        {
+                          "description": "A volume in the format of source:target[:ro].",
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                },
+                "parallels": {
+                  "description": "Parallels VM isolation.",
+                  "properties": {
+                    "image": {
+                      "description": "Image name.",
+                      "type": "string"
+                    },
+                    "password": {
+                      "description": "SSH password",
+                      "type": "string"
+                    },
+                    "platform": {
+                      "description": "Image Platform.",
+                      "enum": [
+                        "darwin",
+                        "linux",
+                        "windows"
+                      ]
+                    },
+                    "user": {
+                      "description": "SSH username",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "tart": {
+                  "description": "Tart VM isolation.",
+                  "properties": {
+                    "cpu": {
+                      "description": "Number of VM CPUs.",
+                      "type": "number"
+                    },
+                    "display": {
+                      "description": "Virtual display configuration.",
+                      "type": "string"
+                    },
+                    "image": {
+                      "description": "Source VM image (or name) to clone the new VM from.",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "description": "VM memory size in megabytes.",
+                      "pattern": "\\d+(G|Mb)?",
+                      "type": "string"
+                    },
+                    "password": {
+                      "default": "admin",
+                      "description": "SSH password.",
+                      "type": "string"
+                    },
+                    "port": {
+                      "description": "SSH port.",
+                      "type": "integer"
+                    },
+                    "softnet": {
+                      "description": "Enable or disable the Softnet networking.",
+                      "type": "boolean"
+                    },
+                    "user": {
+                      "default": "admin",
+                      "description": "SSH username.",
+                      "type": "string"
+                    },
+                    "volumes": {
+                      "items": [
+                        {
+                          "description": "Tart volume definition.",
+                          "properties": {
+                            "name": {
+                              "description": "Volume name that will be mounted into /Volumes/My Shared Files/\u003cname\u003e.",
+                              "type": "string"
+                            },
+                            "readonly": {
+                              "description": "Whether this volume should be mounted in readonly mode.",
+                              "type": "string"
+                            },
+                            "source": {
+                              "description": "Volume source, a path to a directory on the host.",
+                              "type": "string"
+                            },
+                            "target": {
+                              "description": "Volume target, a path to a directory in the guest.",
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "source"
+                          ],
+                          "type": "object"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  },
+                  "type": "object"
+                },
+                "vetu": {
+                  "description": "Vetu VM isolation.",
+                  "properties": {
+                    "cpu": {
+                      "description": "Number of VM CPUs.",
+                      "type": "number"
+                    },
+                    "disk_size": {
+                      "description": "Disk size to use in gigabytes.",
+                      "type": "integer"
+                    },
+                    "image": {
+                      "description": "Source VM image (or name) to clone the new VM from.",
+                      "type": "string"
+                    },
+                    "memory": {
+                      "description": "VM memory size in megabytes.",
+                      "pattern": "\\d+(G|Mb)?",
+                      "type": "string"
+                    },
+                    "password": {
+                      "default": "admin",
+                      "description": "SSH password.",
+                      "type": "string"
+                    },
+                    "port": {
+                      "description": "SSH port.",
+                      "type": "integer"
+                    },
+                    "user": {
+                      "default": "admin",
+                      "description": "SSH username.",
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            },
+            "labels": {
+              "description": "Labels for selection.",
+              "type": "string"
+            },
+            "resources": {
+              "description": "Resources to acquire on the Persistent Worker.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "skip": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        },
+        "timeout_in": {
+          "description": "Task timeout in minutes",
+          "type": "number"
+        },
+        "upload_caches": {
+          "items": [
+            {
+              "description": "Cache name to upload.",
+              "type": "string"
+            }
+          ],
+          "type": "array"
+        },
+        "windows_container": {
+          "description": "Windows Container definition for Community Cluster.",
+          "properties": {
+            "cpu": {
+              "type": "number"
+            },
+            "docker_arguments": {
+              "description": "Arguments for Docker build",
+              "patternProperties": {
+                ".*": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "dockerfile": {
+              "description": "Relative path to Dockerfile to build container from.",
+              "type": "string"
+            },
+            "image": {
+              "description": "Docker Image to use.",
+              "type": "string"
+            },
+            "memory": {
+              "pattern": "\\d+(G|Mb)?",
+              "type": "string"
+            },
+            "os_version": {
+              "description": "Windows version of container.",
+              "enum": [
+                "2019",
+                "1709",
+                "1803"
+              ]
+            },
+            "use_static_ip": {
+              "description": "Boolean expression that can use environment variables.",
+              "type": "string"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "properties": {
+    "allow_failures": {
+      "description": "Boolean expression that can use environment variables.",
+      "type": "string"
+    },
+    "container": {
+      "description": "Container definition for Community Cluster.",
+      "properties": {
+        "additional_containers": {
+          "items": [
+            {
+              "description": "Additional Container definition.",
+              "properties": {
+                "command": {
+                  "description": "Container CMD to override.",
+                  "type": "string"
+                },
+                "cpu": {
+                  "type": "number"
+                },
+                "env": {
+                  "description": "Map represented as an object.",
+                  "patternProperties": {
+                    ".*": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "environment": {
+                  "description": "Map represented as an object.",
+                  "patternProperties": {
+                    ".*": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "image": {
+                  "description": "Docker Image.",
+                  "type": "string"
+                },
+                "memory": {
+                  "pattern": "\\d+(G|Mb)?",
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "port": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ],
+                  "description": "Port exposed by the container."
+                },
+                "ports": {
+                  "description": "Ports exposed by the container.",
+                  "items": [
+                    {
+                      "anyOf": [
+                        {
+                          "type": "number"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "description": "Port exposed by the container."
+                    }
+                  ],
+                  "type": "array"
+                },
+                "privileged": {
+                  "description": "Boolean expression that can use environment variables.",
+                  "type": "string"
+                },
+                "readiness_command": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "items": [
+                        {
+                          "type": "string"
+                        }
+                      ],
+                      "type": "array"
+                    }
+                  ],
+                  "description": "Container readiness probe command."
+                }
+              },
+              "required": [
+                "image"
+              ],
+              "type": "object"
+            }
+          ],
+          "type": "array"
+        },
+        "cpu": {
+          "type": "number"
+        },
+        "docker_arguments": {
+          "description": "Arguments for Docker build",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dockerfile": {
+          "description": "Relative path to Dockerfile to build container from.",
+          "type": "string"
+        },
+        "image": {
+          "description": "Docker Image to use.",
+          "type": "string"
+        },
+        "kvm": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        },
+        "memory": {
+          "pattern": "\\d+(G|Mb)?",
+          "type": "string"
+        },
+        "registry_config": {
+          "type": "string"
+        },
+        "use_in_memory_disk": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        },
+        "use_static_ip": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "env": {
+      "description": "Map represented as an object.",
+      "patternProperties": {
+        ".*": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "environment": {
+      "description": "Map represented as an object.",
+      "patternProperties": {
+        ".*": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "macos_instance": {
+      "description": "MacOS VM definition.",
+      "properties": {
+        "cpu": {
+          "type": "number"
+        },
+        "image": {
+          "description": "Tart Image to use.",
+          "type": "string"
+        },
+        "memory": {
+          "pattern": "\\d+(G|Mb)?",
+          "type": "string"
+        },
+        "password": {
+          "description": "password for SSH connection.",
+          "type": "string"
+        },
+        "user": {
+          "description": "username for SSH connection.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "only_if": {
+      "description": "Boolean expression that can use environment variables.",
+      "type": "string"
+    },
+    "persistent_worker": {
+      "description": "Persistent Worker definition.",
+      "properties": {
+        "isolation": {
+          "description": "Persistent Worker isolation.",
+          "properties": {
+            "container": {
+              "description": "Container engine isolation.",
+              "properties": {
+                "cpu": {
+                  "description": "CPU units for the container to use.",
+                  "type": "number"
+                },
+                "docker_arguments": {
+                  "description": "Arguments for Docker build.",
+                  "patternProperties": {
+                    ".*": {
+                      "type": "string"
+                    }
+                  },
+                  "type": "object"
+                },
+                "dockerfile": {
+                  "description": "Relative path to Dockerfile to build container from.",
+                  "type": "string"
+                },
+                "image": {
+                  "description": "Container image to use.",
+                  "type": "string"
+                },
+                "memory": {
+                  "description": "Memory in megabytes for the container to use.",
+                  "pattern": "\\d+(G|Mb)?",
+                  "type": "string"
+                },
+                "platform": {
+                  "description": "Image Platform.",
+                  "enum": [
+                    "darwin",
+                    "linux",
+                    "windows"
+                  ]
+                },
+                "volumes": {
+                  "description": "A list of volumes mounted inside of the container.",
+                  "items": [
+                    {
+                      "description": "A volume in the format of source:target[:ro].",
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "parallels": {
+              "description": "Parallels VM isolation.",
+              "properties": {
+                "image": {
+                  "description": "Image name.",
+                  "type": "string"
+                },
+                "password": {
+                  "description": "SSH password",
+                  "type": "string"
+                },
+                "platform": {
+                  "description": "Image Platform.",
+                  "enum": [
+                    "darwin",
+                    "linux",
+                    "windows"
+                  ]
+                },
+                "user": {
+                  "description": "SSH username",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "tart": {
+              "description": "Tart VM isolation.",
+              "properties": {
+                "cpu": {
+                  "description": "Number of VM CPUs.",
+                  "type": "number"
+                },
+                "display": {
+                  "description": "Virtual display configuration.",
+                  "type": "string"
+                },
+                "image": {
+                  "description": "Source VM image (or name) to clone the new VM from.",
+                  "type": "string"
+                },
+                "memory": {
+                  "description": "VM memory size in megabytes.",
+                  "pattern": "\\d+(G|Mb)?",
+                  "type": "string"
+                },
+                "password": {
+                  "default": "admin",
+                  "description": "SSH password.",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "SSH port.",
+                  "type": "integer"
+                },
+                "softnet": {
+                  "description": "Enable or disable the Softnet networking.",
+                  "type": "boolean"
+                },
+                "user": {
+                  "default": "admin",
+                  "description": "SSH username.",
+                  "type": "string"
+                },
+                "volumes": {
+                  "items": [
+                    {
+                      "description": "Tart volume definition.",
+                      "properties": {
+                        "name": {
+                          "description": "Volume name that will be mounted into /Volumes/My Shared Files/\u003cname\u003e.",
+                          "type": "string"
+                        },
+                        "readonly": {
+                          "description": "Whether this volume should be mounted in readonly mode.",
+                          "type": "string"
+                        },
+                        "source": {
+                          "description": "Volume source, a path to a directory on the host.",
+                          "type": "string"
+                        },
+                        "target": {
+                          "description": "Volume target, a path to a directory in the guest.",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "source"
+                      ],
+                      "type": "object"
+                    }
+                  ],
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "vetu": {
+              "description": "Vetu VM isolation.",
+              "properties": {
+                "cpu": {
+                  "description": "Number of VM CPUs.",
+                  "type": "number"
+                },
+                "disk_size": {
+                  "description": "Disk size to use in gigabytes.",
+                  "type": "integer"
+                },
+                "image": {
+                  "description": "Source VM image (or name) to clone the new VM from.",
+                  "type": "string"
+                },
+                "memory": {
+                  "description": "VM memory size in megabytes.",
+                  "pattern": "\\d+(G|Mb)?",
+                  "type": "string"
+                },
+                "password": {
+                  "default": "admin",
+                  "description": "SSH password.",
+                  "type": "string"
+                },
+                "port": {
+                  "description": "SSH port.",
+                  "type": "integer"
+                },
+                "user": {
+                  "default": "admin",
+                  "description": "SSH username.",
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "labels": {
+          "description": "Labels for selection.",
+          "type": "string"
+        },
+        "resources": {
+          "description": "Resources to acquire on the Persistent Worker.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "skip": {
+      "description": "Boolean expression that can use environment variables.",
+      "type": "string"
+    },
+    "timeout_in": {
+      "description": "Task timeout in minutes",
+      "type": "number"
+    },
+    "windows_container": {
+      "description": "Windows Container definition for Community Cluster.",
+      "properties": {
+        "cpu": {
+          "type": "number"
+        },
+        "docker_arguments": {
+          "description": "Arguments for Docker build",
+          "patternProperties": {
+            ".*": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "dockerfile": {
+          "description": "Relative path to Dockerfile to build container from.",
+          "type": "string"
+        },
+        "image": {
+          "description": "Docker Image to use.",
+          "type": "string"
+        },
+        "memory": {
+          "pattern": "\\d+(G|Mb)?",
+          "type": "string"
+        },
+        "os_version": {
+          "description": "Windows version of container.",
+          "enum": [
+            "2019",
+            "1709",
+            "1803"
+          ]
+        },
+        "use_static_ip": {
+          "description": "Boolean expression that can use environment variables.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "title": "JSON schema for Cirrus CI configuration files",
+  "type": "object"
+}

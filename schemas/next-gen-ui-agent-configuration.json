@@ -1,0 +1,669 @@
+{
+  "$defs": {
+    "AgentConfigComponent": {
+      "description": "Agent Configuration - one component config for data type.",
+      "properties": {
+        "component": {
+          "description": "Component name. Can be name of existing dynamic component supported by the UI Agent, or name for hand-build component.",
+          "type": "string"
+        },
+        "configuration": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AgentConfigDynamicComponentConfiguration"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional pre-configuration of the dynamic component to be used."
+        },
+        "llm_configure": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": true,
+          "description": "If True, LLM generates configuration. If False, pre-defined configuration must be provided and will be used. Only applicable to dynamic components, not hand-build components."
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AgentConfigPromptComponent"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional prompt customization for this component. Overrides global `prompt.components` configuration for this component in this data_type context. Has the same fields as `prompt.components`. For HBCs in multi-component scenarios, at least 'description' field is required."
+        }
+      },
+      "required": [
+        "component"
+      ],
+      "title": "AgentConfigComponent",
+      "type": "object"
+    },
+    "AgentConfigDataType": {
+      "description": "Agent Configuration for the Data Type.",
+      "properties": {
+        "data_transformer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "const": "json",
+              "type": "string"
+            },
+            {
+              "const": "yaml",
+              "type": "string"
+            },
+            {
+              "const": "csv-comma",
+              "type": "string"
+            },
+            {
+              "const": "csv-semicolon",
+              "type": "string"
+            },
+            {
+              "const": "csv-tab",
+              "type": "string"
+            },
+            {
+              "const": "fwctable",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Transformer to use to transform the input data of this type. Available transformers: `json`, `yaml`, `csv-comma`, `csv-semicolon`, `csv-tab`. Other transformers can be installed, see docs."
+        },
+        "generate_all_fields": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "If `True`, the agent will generate all possible view Fields for the UI component into its output configuration `UIBlockComponentMetadata.fields_all`, if `False` then all fields aren't generated, if `None` then agent's default setting is used. Supported only for `table` and `set-of-cards` components."
+        },
+        "components": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/AgentConfigComponent"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "List of components to select from for the input data of this type."
+        },
+        "prompt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AgentConfigPromptBase"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional prompt configuration for this data type. Overrides global prompt settings from `AgentConfig.prompt`. All fields from `AgentConfigPromptBase` are available (system prompts, examples, chart instructions). Takes precedence over global configuration."
+        }
+      },
+      "title": "AgentConfigDataType",
+      "type": "object"
+    },
+    "AgentConfigDynamicComponentConfiguration": {
+      "description": "Agent Configuration - pre-configuration of the one dynamic component for data type.",
+      "properties": {
+        "title": {
+          "description": "Title of the dynamic component to be shown in the UI",
+          "type": "string"
+        },
+        "fields": {
+          "description": "Fields of the dynamic component to be shown in the UI",
+          "items": {
+            "$ref": "#/$defs/DataField"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "title",
+        "fields"
+      ],
+      "title": "AgentConfigDynamicComponentConfiguration",
+      "type": "object"
+    },
+    "AgentConfigPrompt": {
+      "description": "Global prompt configuration for LLM interactions.\n\nInherits all base prompt fields and adds component-specific metadata overrides.",
+      "properties": {
+        "system_prompt_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the initial system prompt section for one-step strategy. Available components list and other dynamically generated parts are added after this section. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "twostep_step1select_system_prompt_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the initial system prompt section for two-step strategy step1 (component selection). Available components list and other dynamically generated parts are added after this section. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "twostep_step2configure_system_prompt_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the initial system prompt section for two-step strategy step2 (field configuration). MUST contain `{component}` placeholder which is replaced with the selected component name from step1. Other dynamically generated component parts are added after this section. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "chart_instructions_template": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the chart instructions template used in both strategies. Supports placeholders: {charts_description}, {charts_fields_spec}, {charts_rules}, {charts_inline_examples} which will be replaced with dynamically generated component-specific content. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "examples_normalcomponents": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override normal component examples (table, cards, image) for one-step strategy. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "examples_charts": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override chart component examples for one-step strategy. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "twostep_step1select_examples_normalcomponents": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override normal component examples (table, cards, image) for two-step strategy step1. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "twostep_step1select_examples_charts": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override chart component examples for two-step strategy step1. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "components": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/AgentConfigPromptComponent"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Component related prompt overrides. Keys are component names (e.g., 'table', 'chart-bar'), values are objects with prompt overrides for that component. Component names must match those in CONFIG_OPTIONS_ALL_COMPONETS."
+        }
+      },
+      "title": "AgentConfigPrompt",
+      "type": "object"
+    },
+    "AgentConfigPromptBase": {
+      "description": "Base prompt configuration (all prompt fields except components).\n\nUsed for data-type level prompt customization. Contains all prompt-related\nfields that can override global settings on a per-data-type basis.",
+      "properties": {
+        "system_prompt_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the initial system prompt section for one-step strategy. Available components list and other dynamically generated parts are added after this section. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "twostep_step1select_system_prompt_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the initial system prompt section for two-step strategy step1 (component selection). Available components list and other dynamically generated parts are added after this section. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "twostep_step2configure_system_prompt_start": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the initial system prompt section for two-step strategy step2 (field configuration). MUST contain `{component}` placeholder which is replaced with the selected component name from step1. Other dynamically generated component parts are added after this section. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "chart_instructions_template": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override the chart instructions template used in both strategies. Supports placeholders: {charts_description}, {charts_fields_spec}, {charts_rules}, {charts_inline_examples} which will be replaced with dynamically generated component-specific content. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "examples_normalcomponents": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override normal component examples (table, cards, image) for one-step strategy. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "examples_charts": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override chart component examples for one-step strategy. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "twostep_step1select_examples_normalcomponents": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override normal component examples (table, cards, image) for two-step strategy step1. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        },
+        "twostep_step1select_examples_charts": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override chart component examples for two-step strategy step1. Precedence order is 'per data_type' > 'global' > 'hardcoded default'."
+        }
+      },
+      "title": "AgentConfigPromptBase",
+      "type": "object"
+    },
+    "AgentConfigPromptComponent": {
+      "description": "Component metadata overrides for LLM prompts.\n\nAllows overriding any field from COMPONENT_METADATA for a specific component.\nAvailable fields depend on component type:\n- All components: description, twostep_step2configure_example, twostep_step2configure_rules\n- Chart components: chart_description, chart_fields_spec, chart_rules, chart_inline_examples",
+      "properties": {
+        "description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override component description used in LLM prompts"
+        },
+        "twostep_step2configure_example": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override example for two-step strategy field selection (step2configure)"
+        },
+        "twostep_step2configure_rules": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override rules for two-step strategy field selection (step2configure)"
+        },
+        "chart_description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override chart type description (chart components only)"
+        },
+        "chart_fields_spec": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override chart fields specification (chart components only)"
+        },
+        "chart_rules": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override chart-specific rules (chart components only)"
+        },
+        "chart_inline_examples": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Override inline chart examples (chart components only)"
+        }
+      },
+      "title": "AgentConfigPromptComponent",
+      "type": "object"
+    },
+    "DataField": {
+      "description": "UI Component Field Metadata.",
+      "properties": {
+        "id": {
+          "description": "Unique field ID. Can be used in CSS selectors to target the field, eg. to set its style, or during live refresh of the shown data from the backend.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Field name to be shown in the UI",
+          "type": "string"
+        },
+        "data_path": {
+          "description": "JSON Path pointing to the input data structure (after input data transformation and JSON wrapping, if applied). It is used to pickup values to be shown in the UI.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "data_path"
+      ],
+      "title": "DataField",
+      "type": "object"
+    }
+  },
+  "description": "Next Gen UI Agent Configuration.",
+  "properties": {
+    "component_system": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "json",
+      "description": "Component system to use to render the UI component. Default is `json`. UI renderers have to be installed to use other systems."
+    },
+    "data_transformer": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "const": "json",
+          "type": "string"
+        },
+        {
+          "const": "yaml",
+          "type": "string"
+        },
+        {
+          "const": "csv-comma",
+          "type": "string"
+        },
+        {
+          "const": "csv-semicolon",
+          "type": "string"
+        },
+        {
+          "const": "csv-tab",
+          "type": "string"
+        },
+        {
+          "const": "fwctable",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "json",
+      "description": "Transformer used to parse the input data (can be overriden on 'data type' level). Default `json`, available transformers: `yaml`, `csv-comma`, `csv-semicolon`, `csv-tab`. Other transformers can be installed, see docs."
+    },
+    "selectable_components": {
+      "anyOf": [
+        {
+          "items": {
+            "anyOf": [
+              {
+                "const": "one-card",
+                "type": "string"
+              },
+              {
+                "const": "image",
+                "type": "string"
+              },
+              {
+                "const": "video-player",
+                "type": "string"
+              },
+              {
+                "const": "table",
+                "type": "string"
+              },
+              {
+                "const": "set-of-cards",
+                "type": "string"
+              },
+              {
+                "const": "chart-bar",
+                "type": "string"
+              },
+              {
+                "const": "chart-line",
+                "type": "string"
+              },
+              {
+                "const": "chart-pie",
+                "type": "string"
+              },
+              {
+                "const": "chart-donut",
+                "type": "string"
+              },
+              {
+                "const": "chart-mirrored-bar",
+                "type": "string"
+              }
+            ]
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "List of components that can be selected by the agent's LLM for data visualization. If not set, all components are selectable."
+    },
+    "component_selection_strategy": {
+      "anyOf": [
+        {
+          "enum": [
+            "one_llm_call",
+            "two_llm_calls"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": "one_llm_call",
+      "description": "Strategy for LLM powered component selection and configuration step. Possible values: `one_llm_call` (default) - uses one LLM call, `two_llm_calls` - use two LLM calls - experimental!"
+    },
+    "data_types": {
+      "anyOf": [
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/AgentConfigDataType"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Mapping from `InputData.type` to UI component - currently only one dynamic component with pre-configuration, or hand-build component (aka HBC) can be defined here. Will be extended in the future."
+    },
+    "input_data_json_wrapping": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": true,
+      "description": "If `True` (default), the agent will wrap the JSON input data into data type field if necessary due to its structure. If `False`, the agent will never wrap the JSON input data into data type field."
+    },
+    "generate_all_fields": {
+      "default": false,
+      "description": "If `True`, the agent will generate all possible view Fields for the UI component into its output configuration `UIBlockComponentMetadata.fields_all`, if `False` then all fields aren't generated. Can be overriden for individual `data_types`. Supported only for `table` and `set-of-cards` components.",
+      "type": "boolean"
+    },
+    "prompt": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/AgentConfigPrompt"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Prompt-related configuration for LLM interactions. Allows customizing component descriptions, rules, and examples used in agent prompts."
+    },
+    "enable_input_data_type_detection": {
+      "default": true,
+      "description": "If `True` (default), the agent will attempt to auto-detect the appropriate input data transformer based on data structure when no transformer is explicitly configured for a data type. If `False`, auto-detection is disabled and the default transformer is always used.",
+      "type": "boolean"
+    }
+  },
+  "title": "AgentConfig",
+  "type": "object"
+}

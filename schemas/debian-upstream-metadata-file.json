@@ -1,0 +1,182 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://salsa.debian.org/debian/debian-json-schemas/-/raw/main/schemas/debian-upstream-metadata/debian-upstream-metadata-latest.json",
+  "title": "JSON Schema for the debian/upstream/metadata file format",
+  "type": "object",
+  "properties": {
+    "Archive": {
+      "type": "string",
+      "title": "Archive",
+      "description": "The name of the large archive that the upstream work is part of, like CPAN, GitHub, or GitLab."
+    },
+    "ASCL-Id": {
+      "type": "string",
+      "title": "ASCL Identifier",
+      "description": "Identification code in the http://ascl.net (if known)"
+    },
+    "Bug-Database": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "title": "Bug database or tracker for the project",
+      "description": "A URL to the list of known bugs for the project."
+    },
+    "Bug-Submit": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^(https?://|mailto:)",
+      "title": "Bug submission URL for the project",
+      "description": "A URL that is the place where new bug reports should be sent."
+    },
+    "Changelog": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "title": "Changelog URL",
+      "description": "URL to the upstream changelog."
+    },
+    "Cite-As": {
+      "type": "string",
+      "title": "How to cite this project",
+      "description": "The way the authors want their software be cited in publications.\n\nThe value is a string which might contain a link in valid HTML syntax."
+    },
+    "Contact": {
+      "type": "string",
+      "title": "Contact point for the project",
+      "description": "Contact point for the upstream point.\n\nDeprecated when using the machine readable format. The Upstream-Contact field in debian/copyright is the direct replacement in that case."
+    },
+    "CPE": {
+      "type": "string",
+      "title": "MITRE CPE values",
+      "description": "One or more space separated http://cpe.mitre.org/ values useful to look up relevant CVEs\nin the https://nvd.nist.gov/home.cfm and other CVE sources.\n\nSee `CPEtagPackagesDep` for information on how this information can be used.\n**Example**: `cpe:/a:ethereal_group:ethereal`"
+    },
+    "Documentation": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "title": "Online documentation URL",
+      "description": "A URL to the online documentation for the upstream project"
+    },
+    "Donation": {
+      "type": "string",
+      "title": "Donation URL or instructions",
+      "description": "A URL for donating to the upstream project or free-text prose of instructions of how to do so"
+    },
+    "FAQ": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "title": "URL to the projects FAQ",
+      "description": "A URL to the FAQ if upstream provides one"
+    },
+    "Funding": {
+      "oneOf": [
+        {
+          "type": "string",
+          "title": "Sources of funding",
+          "description": "Can be either an URL or one or more funding tags like `NIH U24EB029240`"
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "Sources of funding",
+          "description": "Can be either an URL or one or more funding tags like `NIH U24EB029240`"
+        }
+      ]
+    },
+    "Gallery": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "title": "URL to the projects Gallery",
+      "description": "A URL to a gallery of pictures made with the program (not screenshots)."
+    },
+    "Name": {
+      "type": "string",
+      "title": "Name of the upstream project.",
+      "description": "Contact point for the upstream point.\n\nDeprecated when using the machine readable format. The Upstream-Name field in debian/copyright is the direct replacement in that case."
+    },
+    "Other-References": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "title": "Link to more references",
+      "description": "A URL to a upstream page containing more references."
+    },
+    "Registration": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "title": "Link to the upstream registration form",
+      "description": "A URL to a registration form (or instructions). This could be registration of bug reporting accounts, registration for counting/contacting users etc."
+    },
+    "Registry": {
+      "type": "array",
+      "title": "Link to the upstream registration form",
+      "description": "This field shall point to external catalogs/registries of software.\n\nThe field features an array of \"Name (of registry) - Entry (ID of software in that catalog)\" pairs.\nThe names and entries shall only be names, not complete URIs, to avoid any bias on mirrors etc.\n",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "string"
+          },
+          "Entry": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Reference": {
+      "title": "URL to upstream repository (clone URL)",
+      "description": "One or more bibliographic references. The key names map to the BibTeX entries."
+    },
+    "Repository": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^[^/\\s]+://",
+      "title": "URL to upstream repository (clone URL)",
+      "description": "URL to a repository containing the upstream sources."
+    },
+    "Repository-Browser": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "title": "URL to browsable view of upstream repository",
+      "description": "A URL to browse the repository containing the upstream sources."
+    },
+    "Screenshots": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https?://",
+          "title": "URL(s) to upstream packages containing screenshots",
+          "description": "One or more URLs to upstream pages containing screenshots (not <https://screenshots.debian.net>),\n represented by a scalar or a sequence of scalars."
+        },
+        {
+          "type": "array",
+          "items": {
+            "format": "uri",
+            "pattern": "^https?://"
+          },
+          "title": "URL(s) to upstream packages containing screenshots",
+          "description": "One or more URLs to upstream pages containing screenshots (not <https://screenshots.debian.net>),\n represented by a scalar or a sequence of scalars."
+        }
+      ]
+    },
+    "Security-Contact": {
+      "type": "string",
+      "title": "How to approach upstream on security related messages",
+      "description": "Which person, mailing list, forum, etc. to send security-related messages in the first place."
+    },
+    "Webservice": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https?://",
+      "title": "URL to service where the package program can be used",
+      "description": "URL to a web page where the packaged program can also be used."
+    }
+  }
+}

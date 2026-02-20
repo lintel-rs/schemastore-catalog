@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ProActions AI-Kit Services Schema",
+  "description": "Schema for service definitions in AI-Kit",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": {
+    "type": "object",
+    "description": "Definition for external service integrations",
+    "properties": {
+      "target": {
+        "type": "string",
+        "description": "Service target identifier"
+      },
+      "endpoint": {
+        "type": "string",
+        "format": "uri",
+        "description": "Service endpoint URL"
+      },
+      "apiKey": {
+        "type": "string",
+        "description": "API key for service authentication"
+      },
+      "defaultBehavior": {
+        "type": "string",
+        "description": "Default behavior (system prompt) for actions"
+      },
+      "model": {
+        "type": "string",
+        "description": "Model identifier for AI services"
+      },
+      "deploymentId": {
+        "type": "string",
+        "description": "Deployment ID for Azure OpenAI services"
+      },
+      "apiVersion": {
+        "type": "string",
+        "description": "API version for Azure services"
+      },
+      "authKey": {
+        "type": "string",
+        "description": "Authentication key for services like DeepL"
+      },
+      "options": {
+        "type": "object",
+        "description": "Additional service-specific options",
+        "properties": {
+          "temperature": {
+            "type": "number",
+            "description": "Temperature parameter for text generation",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "top_p": {
+            "type": "number",
+            "description": "Top-p parameter for text generation",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "max_tokens": {
+            "type": "integer",
+            "description": "Maximum number of tokens to generate"
+          },
+          "model": {
+            "type": "string",
+            "description": "Alternative model specification"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "additionalProperties": true
+  }
+}

@@ -1,0 +1,1218 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "landofile-spec.json",
+  "title": "Landofile",
+  "type": "object",
+  "description": "The configuration file for a Lando app.",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the Lando app. This is used as the project name in Docker Compose and should be unique across all Lando apps on your system.",
+      "minLength": 1,
+      "pattern": "^[a-z0-9][a-z0-9_-]*$",
+      "$comment": "Must start with a lowercase letter or number and can only contain lowercase letters, numbers, hyphens and underscores.",
+      "examples": [
+        "mysite",
+        "example-web-app",
+        "867-5309"
+      ]
+    },
+    "recipe": {
+      "type": "string",
+      "description": "The recipe type used for the app. Recipes are pre-configured combinations of services and tooling that provide a complete development environment for common use cases. For example, the 'lamp' recipe provides Apache, MySQL and PHP, while 'drupal10' provides everything needed for Drupal 10 development including Drush.",
+      "examples": [
+        "lamp",
+        "drupal10",
+        "wordpress",
+        "mean",
+        "pantheon",
+        "laravel"
+      ]
+    },
+    "config": {
+      "type": "object",
+      "description": "Configuration options for specified recipe.",
+      "properties": {
+        "via": {
+          "type": "string",
+          "description": "The web server type and version for serving the application. Can be apache, nginx, or cli. Optionally specify a version number after a colon (e.g. nginx:1.25). Apache is the default if not specified. The cli option runs PHP directly without a web server.",
+          "default": "apache:2.4",
+          "oneOf": [
+            {
+              "const": "cli"
+            },
+            {
+              "pattern": "^(apache|nginx)(:[0-9]+(?:\\.[0-9]+)*)?$",
+              "$comment": "Must be either apache or nginx and optionally specify a version number."
+            }
+          ],
+          "examples": [
+            "apache:2.4",
+            "nginx:1.25",
+            "cli"
+          ]
+        },
+        "webroot": {
+          "type": "string",
+          "description": "The directory containing the web-accessible files, relative to the app root. This is where your index.php or other entry point files should be located. For Drupal sites this is often 'web' or 'docroot', for WordPress it's typically '.', and for other frameworks it varies. The path can include subdirectories using forward slashes. All web requests will be served from this directory.",
+          "default": ".",
+          "examples": [
+            "web",
+            "docroot",
+            "drupal/web"
+          ]
+        },
+        "php": {
+          "type": "string",
+          "description": "The PHP version for the app. This should be specified as a major.minor version number (e.g. '7.4' or '8.2'). For LAMP/LEMP based recipes, this determines the PHP version installed in the appserver container.",
+          "examples": [
+            "7.3",
+            "8.2"
+          ]
+        },
+        "database": {
+          "type": "string",
+          "description": "The database type and version for the app. Specify as type:version where type is the database type such as 'mysql' or 'mariadb'.",
+          "examples": [
+            "mariadb:10.2",
+            "mysql:8.0"
+          ]
+        },
+        "composer": {
+          "$ref": "#/$defs/plugins/php/config/composer"
+        },
+        "composer_version": {
+          "$ref": "#/$defs/plugins/php/config/composer_version"
+        },
+        "xdebug": {
+          "$ref": "#/$defs/plugins/php/config/xdebug"
+        }
+      },
+      "additionalProperties": true
+    },
+    "env_file": {
+      "type": "array",
+      "description": "List of .env files to load into all services.",
+      "items": {
+        "type": "string",
+        "pattern": "^(?!\\.\\.)[^/].*[^/]$"
+      },
+      "examples": [
+        [
+          ".env"
+        ],
+        [
+          ".lando/mysql_vars.env",
+          ".lando/drupal_vars.env"
+        ],
+        [
+          "drupal/.env",
+          "frontend/.env"
+        ]
+      ]
+    },
+    "excludes": {
+      "type": "array",
+      "description": "List of directories to exclude from syncing to the Lando services. This is a performance optimization feature that prevents large directories like vendor and node_modules from being synced between host and container filesystems, which can significantly improve startup time and reduce disk I/O. Use ! prefix to negate an exclusion pattern.",
+      "items": {
+        "type": "string"
+      },
+      "examples": [
+        [
+          "vendor",
+          "web/modules/contrib",
+          "!web/modules/contrib/webform"
+        ],
+        [
+          "node_modules"
+        ]
+      ]
+    },
+    "services": {
+      "type": "object",
+      "description": "Define custom services for your Lando app. Each service runs in its own container and can be configured with specific options like type, build commands, ports, and more. Service names must be unique and can contain letters, numbers, dots, and hyphens. Common services include web servers, databases, caching layers, and build tools.",
+      "patternProperties": {
+        "^[a-zA-Z0-9._-]+$": {
+          "$ref": "#/$defs/lando/service"
+        }
+      },
+      "examples": [
+        {
+          "appserver": {
+            "type": "php:8.2",
+            "build": [
+              "composer install"
+            ]
+          },
+          "node": {
+            "type": "node:20",
+            "build": [
+              "npm install"
+            ],
+            "command": "vite --host 0.0.0.0",
+            "port": "5173",
+            "ssl": true
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "proxy": {
+      "$ref": "#/$defs/proxy"
+    },
+    "tooling": {
+      "type": "object",
+      "description": "Define custom CLI commands that can be run via 'lando <command>'. Each command can run in one or more services and can execute shell commands, scripts, or other tools. Commands can be configured with options like service target, description, and user context. Common uses include running package managers (composer, npm), build tools (webpack, gulp), testing frameworks (phpunit, jest), and database operations (mysql, drush). Commands can be chained together and run in parallel or sequence.",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "description": "The command name that will be added to the Lando CLI. This becomes available as 'lando <command>'.",
+          "oneOf": [
+            {
+              "type": "string",
+              "description": "Set to 'disabled' to prevent this command from being loaded. Useful for temporarily disabling commands or overriding recipe defaults.",
+              "enum": [
+                "disabled"
+              ],
+              "default": "disabled"
+            },
+            {
+              "$ref": "#/$defs/lando/tool"
+            }
+          ]
+        }
+      },
+      "examples": [
+        {
+          "install": {
+            "description": "Install dependencies for the project across multiple services.",
+            "cmd": [
+              {
+                "appserver": "composer install"
+              },
+              {
+                "node": "npm install"
+              }
+            ]
+          },
+          "build": {
+            "description": "Build the project using a single service.",
+            "service": "appserver",
+            "cmd": [
+              "composer install",
+              "scripts/build.sh"
+            ]
+          },
+          "push": "disabled"
+        }
+      ],
+      "additionalProperties": false
+    },
+    "events": {
+      "type": "object",
+      "description": "Attach commands to Lando events hooks.",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "type": "array",
+          "description": "List of commands to run on the event.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "compose": {
+      "type": "array",
+      "description": "List of docker-compose files to include.",
+      "items": {
+        "type": "string"
+      },
+      "examples": [
+        [
+          "compose.yml"
+        ]
+      ]
+    },
+    "plugins": {
+      "type": "object",
+      "description": "Lando plugins to load.",
+      "patternProperties": {
+        "^(@[a-z0-9_-]+/)?[a-z0-9_-]+$": {
+          "type": "string",
+          "description": "Path to the plugin.",
+          "examples": [
+            "../..",
+            "../../plugins/scanner"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "dependencies": {
+    "config": {
+      "$comment": "config requires a recipe",
+      "required": [
+        "recipe"
+      ]
+    }
+  },
+  "$defs": {
+    "lando": {
+      "service": {
+        "type": "object",
+        "description": "Configuration for a Lando service. Services are the core building blocks of a Lando app, representing containers that provide functionality like web servers, databases, caching, etc. Each service can be customized with build steps, runtime configuration, port mapping, and plugin-specific settings.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "The Lando service type to use for this service.",
+            "anyOf": [
+              {
+                "const": "lando"
+              },
+              {
+                "const": "compose",
+                "deprecated": "Please use the `lando` service type instead."
+              },
+              {
+                "pattern": "^(?!.*:)(?!^(lando|compose)$)[a-zA-Z0-9_-]+$",
+                "$comment": "Service type without version (e.g., `node`, `php`)",
+                "deprecated": "Specifying a service type without a version is deprecated. Please include the version in the format `name:version`."
+              },
+              {
+                "pattern": "^[a-zA-Z0-9_-]+:[0-9]+(\\.[0-9]+)*$",
+                "$comment": "Service type with version (e.g., `node:20`, `php:8.2`)"
+              }
+            ],
+            "examples": [
+              "node:22",
+              "php:8.4",
+              "nginx:1.27",
+              "apache:2.4",
+              "mysql:8.0",
+              "lando"
+            ]
+          },
+          "api": {
+            "type": "number",
+            "description": "The Lando service API version used to define the service.",
+            "default": 3,
+            "enum": [
+              3,
+              4
+            ]
+          },
+          "build": {
+            "type": "array",
+            "description": "Commands to run while the service is being built.",
+            "items": {
+              "type": "string"
+            },
+            "examples": [
+              [
+                "npm install"
+              ]
+            ]
+          },
+          "build_as_root": {
+            "type": "array",
+            "description": "Commands to run as the root user while the service is being built.",
+            "items": {
+              "type": "string"
+            },
+            "examples": [
+              [
+                "apt-get update",
+                "apt-get install -y curl"
+              ]
+            ]
+          },
+          "run": {
+            "type": "array",
+            "description": "Commands to run after the service is started.",
+            "items": {
+              "type": "string"
+            },
+            "examples": [
+              [
+                "drush config:import -y",
+                "drush cache:rebuild"
+              ]
+            ]
+          },
+          "run_as_root": {
+            "type": "array",
+            "description": "Commands to run as the root user after the service is started.",
+            "items": {
+              "type": "string"
+            },
+            "examples": [
+              [
+                "echo '127.0.0.1 mysite.lndo.site' >> /etc/hosts"
+              ]
+            ]
+          },
+          "ports": {
+            "type": "array",
+            "description": "Deprecated. Define ports under `overrides` or `services` instead.",
+            "deprecated": true,
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                }
+              ]
+            }
+          },
+          "ssl": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "description": "SSL configuration for the service.",
+            "examples": [
+              3000,
+              false
+            ]
+          },
+          "sslExpose": {
+            "type": "boolean",
+            "description": "Expose SSL for the service."
+          },
+          "portforward": {
+            "description": "Forwards a port to the host OS. Use `true` to allow Docker to manage ports (recommended). You may also specify a port number, but there is risk of conflicting with other services or applications.",
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "examples": [
+              true,
+              3000
+            ]
+          },
+          "scanner": {
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "object",
+                "description": "Scanner configuration for the service.",
+                "properties": {
+                  "timeout": {
+                    "type": "number",
+                    "description": "Scanner timeout in milliseconds."
+                  },
+                  "retry": {
+                    "type": "number",
+                    "description": "Number of retries for the scanner."
+                  },
+                  "path": {
+                    "type": "string",
+                    "description": "Path to check for the scanner."
+                  },
+                  "okCodes": {
+                    "type": "array",
+                    "description": "HTTP codes to consider as OK.",
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "maxRedirects": {
+                    "type": "number",
+                    "description": "Maximum number of redirects to follow."
+                  }
+                },
+                "additionalProperties": false
+              }
+            ],
+            "description": "Scanner configuration for the service."
+          },
+          "services": {
+            "$ref": "#/$defs/compose/service"
+          },
+          "overrides": {
+            "$ref": "#/$defs/compose/service"
+          },
+          "hogfrom": {
+            "$ref": "#/$defs/plugins/mailhog/config/hogfrom"
+          },
+          "composer": {
+            "$ref": "#/$defs/plugins/php/config/composer"
+          },
+          "composer_version": {
+            "$ref": "#/$defs/plugins/php/config/composer_version"
+          },
+          "xdebug": {
+            "$ref": "#/$defs/plugins/php/config/xdebug"
+          },
+          "command": {
+            "type": "string",
+            "description": "Command to run when starting the service."
+          },
+          "port": {
+            "description": "Port to expose for the service. Set to false to disable port mapping. Values less than 1024 will cause the service to run as root.",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ],
+            "examples": [
+              "3000",
+              80,
+              false
+            ]
+          },
+          "creds": {
+            "type": "object",
+            "description": "Database credentials configuration for MySQL and MariaDB services. Allows customizing the database user, password, and database name.",
+            "properties": {
+              "user": {
+                "type": "string",
+                "description": "The database username to create and use for connections.",
+                "minLength": 1,
+                "examples": [
+                  "drupal11",
+                  "steve",
+                  "myapp"
+                ]
+              },
+              "password": {
+                "type": "string",
+                "description": "The password for the database user.",
+                "minLength": 1,
+                "examples": [
+                  "drupal11",
+                  "doggie123",
+                  "secure_password"
+                ]
+              },
+              "database": {
+                "type": "string",
+                "description": "The name of the database to create.",
+                "minLength": 1,
+                "examples": [
+                  "drupal11",
+                  "myapp",
+                  "wordpress"
+                ]
+              }
+            },
+            "required": [
+              "user",
+              "password",
+              "database"
+            ],
+            "additionalProperties": false,
+            "examples": [
+              {
+                "user": "drupal11",
+                "password": "drupal11",
+                "database": "drupal11"
+              },
+              {
+                "user": "steve",
+                "password": "doggie123",
+                "database": "drupal11"
+              }
+            ]
+          },
+          "app_mount": {
+            "description": "Controls how the application codebase is mounted in the container. Lando automatically mounts your codebase at /app using the :cached performance optimization flag by default. Set to false or 'disabled' to prevent mounting, or specify a different Docker bind mount flag like 'ro' (read-only) or 'delegated'.",
+            "oneOf": [
+              {
+                "type": "boolean",
+                "enum": [
+                  false
+                ],
+                "description": "Disable application code mounting entirely."
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "disabled"
+                ],
+                "description": "Disable application code mounting entirely."
+              },
+              {
+                "type": "string",
+                "pattern": "^(ro|rw|delegated|cached|consistent)$",
+                "description": "Docker bind mount flag to use for the application mount."
+              }
+            ],
+            "examples": [
+              false,
+              "disabled",
+              "ro",
+              "delegated"
+            ]
+          },
+          "environment": {
+            "$ref": "#/$defs/compose/service/properties/environment"
+          },
+          "volumes": {
+            "$ref": "#/$defs/compose/service/properties/volumes"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "anyOf": [
+                {
+                  "required": [
+                    "command"
+                  ]
+                },
+                {
+                  "required": [
+                    "port"
+                  ]
+                }
+              ]
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "pattern": "^node(:[a-zA-Z0-9._-]+)?$"
+                }
+              },
+              "required": [
+                "type"
+              ]
+            }
+          },
+          {
+            "if": {
+              "anyOf": [
+                {
+                  "required": [
+                    "xdebug"
+                  ]
+                },
+                {
+                  "required": [
+                    "composer"
+                  ]
+                },
+                {
+                  "required": [
+                    "composer_version"
+                  ]
+                }
+              ]
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "pattern": "^php(:[a-zA-Z0-9._-]+)?$"
+                }
+              },
+              "required": [
+                "type"
+              ]
+            }
+          },
+          {
+            "if": {
+              "required": [
+                "hogfrom"
+              ]
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "pattern": "^mailhog(:[a-zA-Z0-9._-]+)?$"
+                }
+              },
+              "required": [
+                "type"
+              ]
+            }
+          },
+          {
+            "if": {
+              "required": [
+                "creds"
+              ]
+            },
+            "then": {
+              "anyOf": [
+                {
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "pattern": "^(mysql|mariadb)(:[a-zA-Z0-9._-]+)?$"
+                    }
+                  }
+                },
+                {
+                  "not": {
+                    "required": [
+                      "type"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "additionalProperties": false
+      },
+      "tool": {
+        "type": "object",
+        "properties": {
+          "service": {
+            "type": "string",
+            "description": "The service to run the tool in. Required for single-service tooling.",
+            "default": "appserver",
+            "examples": [
+              "appserver",
+              "database"
+            ]
+          },
+          "cmd": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Command to run in the specified service."
+              },
+              {
+                "type": "array",
+                "description": "Commands to run for the tool. Can be an array of commands or an array of objects with service names as keys.",
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "description": "Command string when service is specified."
+                    },
+                    {
+                      "type": "object",
+                      "description": "Service-specific command object with service name as key and command as value.",
+                      "patternProperties": {
+                        "^[a-zA-Z0-9._-]+$": {
+                          "type": "string",
+                          "description": "Command to run in the specified service."
+                        }
+                      },
+                      "additionalProperties": false,
+                      "minProperties": 1,
+                      "maxProperties": 1
+                    }
+                  ]
+                }
+              }
+            ],
+            "description": "The command(s) to run for the tool. When service is not specified, cmd must be an array of objects with service names as keys.",
+            "examples": [
+              "npm install",
+              [
+                "npm install",
+                "npm run build"
+              ],
+              [
+                {
+                  "database": "mysqldump > dbdump.sql"
+                },
+                {
+                  "appserver": "mycommand dbdump.sql"
+                }
+              ]
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "Description to help users understand the function of your tooling command."
+          },
+          "dir": {
+            "type": "string",
+            "description": "The working directory to execute the command in.",
+            "examples": [
+              "docroot",
+              "/app"
+            ]
+          },
+          "user": {
+            "type": "string",
+            "description": "The user to run the tool as.",
+            "default": "www-data",
+            "examples": [
+              "root"
+            ]
+          },
+          "env": {
+            "type": "object",
+            "description": "Environment variables to set before running the command.",
+            "patternProperties": {
+              "^[a-zA-Z0-9_-]+$": {
+                "type": "string"
+              }
+            },
+            "examples": [
+              {
+                "COLUMNS": "80"
+              }
+            ]
+          },
+          "level": {
+            "type": "string",
+            "description": "Set to `app` to enable interactive options for the command.",
+            "enum": [
+              "app"
+            ]
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "environment": {
+                "type": "object",
+                "properties": {
+                  "passthrough": {
+                    "type": "boolean",
+                    "description": "TODO",
+                    "default": true
+                  },
+                  "alias": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "describe": {
+                    "type": "string",
+                    "description": "Description of the environment option."
+                  },
+                  "interactive": {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "choices": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "not": {
+                "required": [
+                  "service"
+                ]
+              }
+            },
+            "then": {
+              "properties": {
+                "cmd": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "patternProperties": {
+                      "^[a-zA-Z0-9._-]+$": {
+                        "type": "string"
+                      }
+                    },
+                    "additionalProperties": false,
+                    "minProperties": 1,
+                    "maxProperties": 1
+                  }
+                }
+              },
+              "required": [
+                "cmd"
+              ]
+            }
+          },
+          {
+            "if": {
+              "required": [
+                "service"
+              ]
+            },
+            "then": {
+              "properties": {
+                "cmd": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "dependencies": {
+          "options": {
+            "required": [
+              "level"
+            ]
+          }
+        }
+      }
+    },
+    "proxy": {
+      "type": "object",
+      "description": "Proxy configuration for Lando services",
+      "patternProperties": {
+        "^[a-zA-Z0-9_-]+$": {
+          "type": "array",
+          "description": "List of proxy targets.",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string",
+                "description": "Hostname for the proxy target with optional port and pathname specifications.",
+                "pattern": "^((\\*\\.|([a-zA-Z0-9-]+\\.)*)([a-zA-Z0-9-]+)(:[0-9]+)?(/[a-zA-Z0-9_/-]*)?)$",
+                "examples": [
+                  "myapp.lndo.site",
+                  "myapp.lndo.site:8888",
+                  "*.mysite.lndo.site",
+                  "name.lndo.site/api",
+                  "*.lndo.site:8080/everything/for-real"
+                ]
+              },
+              {
+                "type": "object",
+                "description": "Advanced proxy configuration utilizing Traefik middlewares.",
+                "properties": {
+                  "hostname": {
+                    "type": "string",
+                    "pattern": "^(([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}|(\\*\\.)?([a-zA-Z0-9-]+\\.)*[a-zA-Z0-9-]+)$",
+                    "examples": [
+                      "object-format.lndo.site"
+                    ]
+                  },
+                  "port": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65535,
+                    "examples": [
+                      80
+                    ]
+                  },
+                  "pathname": {
+                    "type": "string",
+                    "examples": [
+                      "/"
+                    ]
+                  },
+                  "middlewares": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "examples": [
+                            "test",
+                            "test-secured"
+                          ]
+                        },
+                        "key": {
+                          "type": "string",
+                          "examples": [
+                            "headers.customrequestheaders.X-Lando-Test"
+                          ]
+                        },
+                        "value": {
+                          "type": "string",
+                          "examples": [
+                            "on"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "key",
+                        "value"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "hostname",
+                  "port",
+                  "pathname"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "examples": [
+        {
+          "appserver": "myapp.lndo.site"
+        },
+        {
+          "node": "myapp.lndo.site:5173"
+        }
+      ]
+    },
+    "compose": {
+      "service": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "string",
+            "description": "Docker image for the service.",
+            "examples": [
+              "php:8.2-apache",
+              "bitnami/mariadb:10.2",
+              "node:14",
+              "google/cloud-sdk:latest"
+            ]
+          },
+          "command": {
+            "$comment": "",
+            "type": "string",
+            "description": "Overrides the default command declared by the container image.",
+            "examples": [
+              "docker-entrypoint.sh mysqld",
+              "docker-entrypoint.sh sleep infinity",
+              "docker-php-entrypoint apache2-foreground"
+            ]
+          },
+          "environment": {
+            "description": "Environment variables for the service.",
+            "oneOf": [
+              {
+                "type": "object",
+                "patternProperties": {
+                  ".+": {
+                    "oneOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "number"
+                      },
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "examples": [
+              [
+                "DB_STORAGE_TYPE=mongo",
+                "CONNECTION_STRING=mongodb://database:27017/mean"
+              ],
+              {
+                "GO_VERSION": "1.16.15",
+                "GOPATH": "/go"
+              }
+            ]
+          },
+          "volumes": {
+            "type": "array",
+            "description": "Volumes for the service.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "description": "Type of volume."
+                    },
+                    "source": {
+                      "type": "string",
+                      "description": "Source of the volume."
+                    },
+                    "target": {
+                      "type": "string",
+                      "description": "Target of the volume."
+                    }
+                  }
+                }
+              ]
+            },
+            "examples": [
+              [
+                "type: volume",
+                "source: go_path",
+                "target: /go"
+              ],
+              [
+                "./:/app",
+                "./default.conf.template:/etc/nginx/templates/default.conf.template"
+              ]
+            ]
+          },
+          "ports": {
+            "type": "array",
+            "description": "Ports for the service.",
+            "items": {
+              "type": "string"
+            },
+            "examples": [
+              [
+                "80",
+                "9222:9222"
+              ],
+              [
+                "8080",
+                "2345:2345"
+              ]
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "plugins": {
+      "mailhog": {
+        "config": {
+          "hogfrom": {
+            "type": "array",
+            "description": "List of service names to capture mail from. The mhsendmail binary will be installed in each listed service.",
+            "items": {
+              "type": "string"
+            },
+            "examples": [
+              [
+                "appserver"
+              ]
+            ]
+          }
+        }
+      },
+      "php": {
+        "config": {
+          "composer": {
+            "type": "object",
+            "description": "Global composer dependencies to install. This follows composer.json syntax but in YAML format.",
+            "patternProperties": {
+              "^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$": {
+                "type": "string",
+                "description": "Version constraint for the package.",
+                "examples": [
+                  "^6.5",
+                  "~2.0"
+                ]
+              }
+            },
+            "examples": [
+              {
+                "phpunit/phpunit": "^6.5"
+              }
+            ],
+            "additionalProperties": false
+          },
+          "composer_version": {
+            "description": "The version of Composer to install. Can be a specific version number or release channel alias.",
+            "oneOf": [
+              {
+                "type": "string",
+                "examples": [
+                  "2.6.5",
+                  "1",
+                  "1-latest",
+                  "2",
+                  "2-latest",
+                  "2.2",
+                  "2.2-latest",
+                  "preview",
+                  "snapshot"
+                ]
+              },
+              {
+                "type": "number",
+                "examples": [
+                  1,
+                  2
+                ]
+              },
+              {
+                "type": "boolean",
+                "enum": [
+                  false
+                ],
+                "description": "Disable Composer installation"
+              }
+            ]
+          },
+          "xdebug": {
+            "description": "Xdebug configuration for the app. This can be a boolean or a string of modes to enable.",
+            "type": [
+              "boolean",
+              "string"
+            ],
+            "oneOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "default": false,
+            "examples": [
+              "true",
+              "debug,develop"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

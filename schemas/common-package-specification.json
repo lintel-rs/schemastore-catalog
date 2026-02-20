@@ -1,0 +1,604 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://cps-org.github.io/cps/cps.schema.json",
+  "title": "Common Package Specification v0.14",
+  "definitions": {
+    "types": {
+      "string": {
+        "type": "string"
+      },
+      "null": {
+        "type": "null"
+      },
+      "string|null": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/types/string"
+          },
+          {
+            "$ref": "#/definitions/types/null"
+          }
+        ]
+      },
+      "list(string)": {
+        "type": "array",
+        "items": {
+          "$ref": "#/definitions/types/string"
+        }
+      },
+      "list(string)|null": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/types/list(string)"
+          },
+          {
+            "$ref": "#/definitions/types/null"
+          }
+        ]
+      },
+      "map(list(string))": {
+        "type": "object",
+        "patternProperties": {
+          "": {
+            "$ref": "#/definitions/types/list(string)"
+          }
+        }
+      },
+      "list(string)|map(list(string))|null": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/types/list(string)"
+          },
+          {
+            "$ref": "#/definitions/types/map(list(string))"
+          },
+          {
+            "$ref": "#/definitions/types/null"
+          }
+        ]
+      },
+      "map(component)": {
+        "type": "object",
+        "patternProperties": {
+          "": {
+            "$ref": "#/definitions/types/component"
+          }
+        }
+      },
+      "map(configuration)": {
+        "type": "object",
+        "patternProperties": {
+          "": {
+            "$ref": "#/definitions/types/configuration"
+          }
+        }
+      },
+      "map(configuration)|null": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/types/map(configuration)"
+          },
+          {
+            "$ref": "#/definitions/types/null"
+          }
+        ]
+      },
+      "map(string|null)": {
+        "type": "object",
+        "patternProperties": {
+          "": {
+            "$ref": "#/definitions/types/string|null"
+          }
+        }
+      },
+      "map(map(string|null))": {
+        "type": "object",
+        "patternProperties": {
+          "": {
+            "$ref": "#/definitions/types/map(string|null)"
+          }
+        }
+      },
+      "map(map(string|null))|null": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/types/map(map(string|null))"
+          },
+          {
+            "$ref": "#/definitions/types/null"
+          }
+        ]
+      },
+      "platform|null": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/types/platform"
+          },
+          {
+            "$ref": "#/definitions/types/null"
+          }
+        ]
+      },
+      "map(requirement)": {
+        "type": "object",
+        "patternProperties": {
+          "": {
+            "$ref": "#/definitions/types/requirement"
+          }
+        }
+      },
+      "map(requirement)|null": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/types/map(requirement)"
+          },
+          {
+            "$ref": "#/definitions/types/null"
+          }
+        ]
+      },
+      "package": {
+        "type": "object",
+        "description": "The root of a CPS document is a package object. A package object describes a single package.",
+        "properties": {
+          "compat_version": {
+            "$ref": "#/definitions/attributes/compat_version@0"
+          },
+          "components": {
+            "$ref": "#/definitions/attributes/components@0"
+          },
+          "configuration": {
+            "$ref": "#/definitions/attributes/configuration@0"
+          },
+          "configurations": {
+            "$ref": "#/definitions/attributes/configurations@0"
+          },
+          "cps_path": {
+            "$ref": "#/definitions/attributes/cps_path@0"
+          },
+          "cps_version": {
+            "$ref": "#/definitions/attributes/cps_version@0"
+          },
+          "default_components": {
+            "$ref": "#/definitions/attributes/default_components@0"
+          },
+          "name": {
+            "$ref": "#/definitions/attributes/name@0"
+          },
+          "platform": {
+            "$ref": "#/definitions/attributes/platform@0"
+          },
+          "prefix": {
+            "$ref": "#/definitions/attributes/prefix@0"
+          },
+          "requires": {
+            "$ref": "#/definitions/attributes/requires@1"
+          },
+          "version": {
+            "$ref": "#/definitions/attributes/version@0"
+          },
+          "version_schema": {
+            "$ref": "#/definitions/attributes/version_schema@0"
+          },
+          "default_license": {
+            "$ref": "#/definitions/attributes/default_license@0"
+          },
+          "description": {
+            "$ref": "#/definitions/attributes/description@0"
+          },
+          "display_name": {
+            "$ref": "#/definitions/attributes/display_name@0"
+          },
+          "license": {
+            "$ref": "#/definitions/attributes/license@0"
+          },
+          "meta_comment": {
+            "$ref": "#/definitions/attributes/meta_comment@0"
+          },
+          "meta_schema": {
+            "$ref": "#/definitions/attributes/meta_schema@0"
+          },
+          "website": {
+            "$ref": "#/definitions/attributes/website@0"
+          }
+        },
+        "required": [
+          "components",
+          "cps_version",
+          "name"
+        ],
+        "additionalProperties": true
+      },
+      "platform": {
+        "type": "object",
+        "description": "A platform describes the platform on which a package's components may run.",
+        "properties": {
+          "c_runtime_vendor": {
+            "$ref": "#/definitions/attributes/c_runtime_vendor@0"
+          },
+          "c_runtime_version": {
+            "$ref": "#/definitions/attributes/c_runtime_version@0"
+          },
+          "clr_vendor": {
+            "$ref": "#/definitions/attributes/clr_vendor@0"
+          },
+          "clr_version": {
+            "$ref": "#/definitions/attributes/clr_version@0"
+          },
+          "cpp_runtime_vendor": {
+            "$ref": "#/definitions/attributes/cpp_runtime_vendor@0"
+          },
+          "cpp_runtime_version": {
+            "$ref": "#/definitions/attributes/cpp_runtime_version@0"
+          },
+          "isa": {
+            "$ref": "#/definitions/attributes/isa@0"
+          },
+          "jvm_vendor": {
+            "$ref": "#/definitions/attributes/jvm_vendor@0"
+          },
+          "jvm_version": {
+            "$ref": "#/definitions/attributes/jvm_version@0"
+          },
+          "kernel": {
+            "$ref": "#/definitions/attributes/kernel@0"
+          },
+          "kernel_version": {
+            "$ref": "#/definitions/attributes/kernel_version@0"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "requirement": {
+        "type": "object",
+        "description": "A requirement describes the specifics of a package dependency.",
+        "properties": {
+          "components": {
+            "$ref": "#/definitions/attributes/components@1"
+          },
+          "hints": {
+            "$ref": "#/definitions/attributes/hints@0"
+          },
+          "version": {
+            "$ref": "#/definitions/attributes/version@1"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      },
+      "component": {
+        "type": "object",
+        "description": "A component is a consumable part of a package. Typical components include libraries and executables.",
+        "properties": {
+          "compile_features": {
+            "$ref": "#/definitions/attributes/compile_features@0"
+          },
+          "compile_flags": {
+            "$ref": "#/definitions/attributes/compile_flags@0"
+          },
+          "compile_requires": {
+            "$ref": "#/definitions/attributes/compile_requires@0"
+          },
+          "configurations": {
+            "$ref": "#/definitions/attributes/configurations@1"
+          },
+          "cpp_module_metadata": {
+            "$ref": "#/definitions/attributes/cpp_module_metadata@0"
+          },
+          "definitions": {
+            "$ref": "#/definitions/attributes/definitions@0"
+          },
+          "dyld_requires": {
+            "$ref": "#/definitions/attributes/dyld_requires@0"
+          },
+          "includes": {
+            "$ref": "#/definitions/attributes/includes@0"
+          },
+          "link_features": {
+            "$ref": "#/definitions/attributes/link_features@0"
+          },
+          "link_flags": {
+            "$ref": "#/definitions/attributes/link_flags@0"
+          },
+          "link_languages": {
+            "$ref": "#/definitions/attributes/link_languages@0"
+          },
+          "link_libraries": {
+            "$ref": "#/definitions/attributes/link_libraries@0"
+          },
+          "link_location": {
+            "$ref": "#/definitions/attributes/link_location@0"
+          },
+          "link_requires": {
+            "$ref": "#/definitions/attributes/link_requires@0"
+          },
+          "location": {
+            "$ref": "#/definitions/attributes/location@0"
+          },
+          "requires": {
+            "$ref": "#/definitions/attributes/requires@0"
+          },
+          "type": {
+            "$ref": "#/definitions/attributes/type@0"
+          },
+          "description": {
+            "$ref": "#/definitions/attributes/description@0"
+          },
+          "license": {
+            "$ref": "#/definitions/attributes/license@0"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": true
+      },
+      "configuration": {
+        "type": "object",
+        "description": "A configuration holds attributes that are specific to a particular configuration of a component.",
+        "properties": {
+          "compile_features": {
+            "$ref": "#/definitions/attributes/compile_features@0"
+          },
+          "compile_flags": {
+            "$ref": "#/definitions/attributes/compile_flags@0"
+          },
+          "compile_requires": {
+            "$ref": "#/definitions/attributes/compile_requires@0"
+          },
+          "cpp_module_metadata": {
+            "$ref": "#/definitions/attributes/cpp_module_metadata@0"
+          },
+          "definitions": {
+            "$ref": "#/definitions/attributes/definitions@0"
+          },
+          "dyld_requires": {
+            "$ref": "#/definitions/attributes/dyld_requires@0"
+          },
+          "includes": {
+            "$ref": "#/definitions/attributes/includes@0"
+          },
+          "link_features": {
+            "$ref": "#/definitions/attributes/link_features@0"
+          },
+          "link_flags": {
+            "$ref": "#/definitions/attributes/link_flags@0"
+          },
+          "link_languages": {
+            "$ref": "#/definitions/attributes/link_languages@0"
+          },
+          "link_libraries": {
+            "$ref": "#/definitions/attributes/link_libraries@0"
+          },
+          "link_location": {
+            "$ref": "#/definitions/attributes/link_location@0"
+          },
+          "link_requires": {
+            "$ref": "#/definitions/attributes/link_requires@0"
+          },
+          "location": {
+            "$ref": "#/definitions/attributes/location@0"
+          },
+          "requires": {
+            "$ref": "#/definitions/attributes/requires@0"
+          }
+        },
+        "required": [],
+        "additionalProperties": true
+      }
+    },
+    "attributes": {
+      "c_runtime_vendor@0": {
+        "description": "Specifies that the package's CABI components require the specified C standard/runtime library. Typical (case-insensitive) values include \"bsd\" (libc), \"gnu\" (glibc), \"mingw\" and \"microsoft\".",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "c_runtime_version@0": {
+        "description": "Specifies the minimum C standard/runtime library version required by the package's CABI components.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "clr_vendor@0": {
+        "description": "Specifies that the package's CLR (.NET) components require the specified Common Language Runtime vendor. Typical (case-insensitive) values include \"microsoft\" and \"mono\".",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "clr_version@0": {
+        "description": "Specifies the minimum Common Language Runtime version required to use the package's CLR (.NET) components.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "compat_version@0": {
+        "description": "Specifies the oldest version of the package with which this version is compatible. This information is used when a consumer requests a specific version. If the version requested is equal to or newer than the compat_version, the package may be used.\n\nIf not specified, the package is not compatible with previous versions (i.e. compat_version is implicitly equal to version).",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "compile_features@0": {
+        "description": "Specifies a list of Compiler Features that must be enabled or disabled when compiling code that consumes the component.",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "compile_flags@0": {
+        "description": "Specifies a list of additional flags that must be supplied to the compiler when compiling code that consumes the component. Note that compiler flags may not be portable; use of this attribute is discouraged.\n\nA map may be used instead to give different values depending on the language of the consuming source file. Handling of such shall be the same as for definitions.",
+        "$ref": "#/definitions/types/list(string)|map(list(string))|null"
+      },
+      "compile_requires@0": {
+        "description": "Specifies additional components required by a component which are needed only at the compile stage. Unlike requires (component), only the required components' compilation-related attributes should be applied transitively; link requirements of the required component(s) should be ignored.\n\nThis is especially useful for libraries whose interfaces rely on the data types of a dependency but do not expose linkable symbols of that dependency, or which dynamically load the dependency at run-time.",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "components@0": {
+        "description": "Specifies the components which the package provides. Keys are the component names.",
+        "$ref": "#/definitions/types/map(component)"
+      },
+      "components@1": {
+        "description": "Specifies a list of components which must be present in the required package in order for the requirement to be satisfied. Although the build tool will generally produce an error if a consumer uses a component which in turn requires a component that was not found, early specification via this attribute may help build tools to diagnose such issues earlier and/or produce better diagnostics.\n\nThis may also be used to specify dependencies that are not expressed in component level dependencies, such as a package's requirement that a dependency includes a certain symbolic component, or if a dependency is only expressed at run-time.",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "configuration@0": {
+        "description": "Specifies the name of the configuration described by a configuration-specific .cps (see Configuration Merging). This attribute is required in a configuration-specific .cps, and shall be ignored otherwise.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "configurations@0": {
+        "description": "Specifies the configurations that are preferred. See Package Configurations for a description of how configurations are used.",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "configurations@1": {
+        "description": "Specifies a set of configuration-specific attributes for a component. Keys are the configuration names.",
+        "$ref": "#/definitions/types/map(configuration)|null"
+      },
+      "cpp_runtime_vendor@0": {
+        "description": "Specifies that the package's CABI components require the specified C++ standard/runtime library. Typical (case-insensitive) values include \"gnu\" (libstdc++), \"llvm\" (libc++) and \"microsoft\".",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "cpp_runtime_version@0": {
+        "description": "Specifies the minimum C++ standard/runtime library version required by the package's CABI components.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "cpp_module_metadata@0": {
+        "description": "Specifies the path to a C++ module metadata file (also known as a \"P3286\" file) necessary for consuming C++ interface units for pre-built libraries.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "cps_path@0": {
+        "description": "Specifies the directory portion location of the .cps file. This shall be an \"absolute\" path which starts with @prefix@. This provides a mechanism by which the tool may deduce the prefix of a relocatable package from the absolute location of the .cps file (which will be known by the tool). See also Prefix Determination for details.\n\nExactly one of cps_path or prefix is required.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "cps_version@0": {
+        "description": "Specifies the version of the CPS to which this .cps file conforms. This may be used by tools to provide backwards compatibility in case of compatibility-breaking changes in the CPS.\n\nCPS version numbering follows semver. That is, tools that support CPS version <X>.<Y> are expected to be able to read files with cps_version <X>.<Z>, even for Z > Y (with the understanding that, in such cases, the tool may miss non-critical information that the CPS provided).",
+        "$ref": "#/definitions/types/string"
+      },
+      "default_components@0": {
+        "description": "Specifies a list of components that should be inferred if a consumer specifies a dependency on a package, but not a specific component.",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "definitions@0": {
+        "description": "Specifies a collection of compile definitions that must be defined when compiling code that consumes the component. Each key in the inner map(s) is the name of a compile definition, such that e.g. -Dkey=value is passed to the compiler. A value may be null, indicating a definition with no value (e.g. -Dkey is passed to the compiler). Note that an empty string indicates -Dkey=, which may have a different effect than -Dkey.\n\nThe outer map is used to describe language-specific definitions. The build tool shall include only those definitions whose language matches (case-sensitive) that of the (lower case) language of the source file being compiled. Recognized languages shall include \"c\", \"cpp\", and \"fortran\". Additionally, the value \"*\" indicates that the corresponding definitions apply to all languages.\n\nIf a definition name is repeated in both \"*\" and a specific language, the latter, when applicable to the source being compiled, shall have precedence.",
+        "$ref": "#/definitions/types/map(map(string|null))|null"
+      },
+      "dyld_requires@0": {
+        "description": "Specifies additional components required by a component which are needed only by the dynamic library loader. Unlike requires (component) or link_requires, these are not used to resolve symbol references of the consumer, but represent \"private\" implementation requirements of the component on which this attribute appears.\n\nTypically, such requirements represent a need to ensure that the required component can be found at run time. This is usually accomplished in one of three ways:\n\nEnsuring that the component resides in a default / \"system\" search path.\n\nEncoding the component path in the binary in a way that influences the dynamic library loader (e.g. \"RPATH\").\n\nProviding the component path in an environment variable which influences the dynamic library loader's search paths.\n\nThe last case requires external information to be provided; this attribute facilitates tools generating that information. In some instances, this external library search information may also be required to successfully link components, if the linker demands that all library references can be resolved.",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "hints@0": {
+        "description": "Specifies a list of paths where a required dependency might be located. When given, this will usually provide the location of the dependency as it was consumed by the package when the package was built, so that consumers can easily find (correct) dependencies if they are in a location that is not searched by default.",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "includes@0": {
+        "description": "Specifies a list of directories which should be added to the include search path when compiling code that consumes the component. If a path starts with @prefix@, the package's prefix is substituted (see Package Searching). This is recommended, as it allows packages to be relocatable.\n\nA map may be used instead to give different values depending on the language of the consuming source file. Handling of such shall be the same as for definitions.",
+        "$ref": "#/definitions/types/list(string)|map(list(string))|null"
+      },
+      "isa@0": {
+        "description": "Specifies that the package's CABI components require the specified Instruction Set Architecture. The value is case insensitive and should follow the output of uname -m.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "jvm_vendor@0": {
+        "description": "Specifies that the package's Java components require the specified Java vendor. Typical (case-insensitive) values include \"oracle\" and \"openjdk\".",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "jvm_version@0": {
+        "description": "Specifies the minimum Java Virtual Machine version required to use the package's Java components.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "kernel@0": {
+        "description": "Specifies the name of the operating system kernel required by the package's components. The value is case insensitive and should follow the output of uname -s. Typical values include \"windows\", \"cygwin\", \"linux\" and \"darwin\".",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "kernel_version@0": {
+        "description": "Specifies the minimum operating system kernel version required by the package's components.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "link_features@0": {
+        "description": "Specifies a list of Linker Features that must be enabled or disabled when linking code that consumes the component.",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "link_flags@0": {
+        "description": "Specifies a list of additional flags that must be supplied to the linker when linking code that consumes the component. Note that linker flags may not be portable; use of this attribute is discouraged.",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "link_languages@0": {
+        "description": "Specifies the ABI language or languages of a static library (type \"archive\"). Officially supported (case-insensitive) values are \"c\" (no special handling required) and \"cpp\" (consuming the static library also requires linking against the C++ standard runtime).",
+        "$ref": "#/definitions/types/list(string)|null",
+        "default": [
+          "c"
+        ]
+      },
+      "link_libraries@0": {
+        "description": "Specifies a list of additional libraries (as paths, not components) that must be linked against when linking code that consumes the component. (Note that packages should avoid using this attribute if at all possible. Use requires (component) instead whenever possible.)",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "link_location@0": {
+        "description": "Specifies an alternate location of the component that should be used when linking against the component. This attribute typically applies only to \"dylib\" components on platforms where the library is separated into multiple file components. For example, on Windows, this attribute shall give the location of the .lib, while location shall give the location of the .dll.\n\nIf the path starts with @prefix@, the package's prefix is substituted (see Package Searching). This is recommended, as it allows packages to be relocatable.\n\nThis attribute is typically required for components of \"dylib\" type which have separate link-time and run-time artifacts.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "link_requires@0": {
+        "description": "Specifies additional components required by a component which are needed only at the link stage. Unlike requires (component), only the required components' link dependencies should be applied transitively; additional properties such as compile and include attributes of the required component(s) should be ignored.",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "location@0": {
+        "description": "Specifies the location of the component. The exact meaning of this attribute depends on the component type, but typically it provides the path to the component's primary artifact, such as a .so or .jar. (For Windows DLL components, this should be the location of the .dll. See also link_location.)\n\nIf the path starts with @prefix@, the package's prefix is substituted (see Package Searching). This is recommended, as it allows packages to be relocatable.\n\nThis attribute is required for components that are not of \"interface\" type.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "name@0": {
+        "description": "Specifies the canonical name of the package. In order for searching to succeed, the name of the CPS file without the .cps suffix must exactly match (including case) either name as-is, or name converted to lower case.",
+        "$ref": "#/definitions/types/string"
+      },
+      "platform@0": {
+        "description": "Specifies the platform on which a package's components may run. This allows tools to ignore packages which target a different platform than the platform that the consumer targets (see Package Searching). Any platform attribute not specified implies that the package's components are agnostic to that platform attribute. If this attribute is not specified, the package is implied to be platform agnostic. (This might be the case for a \"library\" which consists entirely of C/C++ headers. Note that JVM/CLR versions are platform attributes, so packages consisting entirely of Java and/or CLR components will still typically use this attribute.)",
+        "$ref": "#/definitions/types/platform|null"
+      },
+      "prefix@0": {
+        "description": "Specifies the package's prefix for non-relocatable package. See also Prefix Determination.\n\nExactly one of cps_path or prefix is required.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "requires@0": {
+        "description": "Specifies additional components required by a component. This is used, for example, to indicate transitive dependencies. Relative component names are interpreted relative to the current package. Absolute component names must refer to a package required by this package (see requires (package)). Compile and link attributes should be applied transitively, as if the consuming component also directly consumed the components required by the component being consumed.\n\nSee also link_requires.",
+        "$ref": "#/definitions/types/list(string)|null"
+      },
+      "requires@1": {
+        "description": "Specifies additional packages that are required by this package. Keys are the name of another required package. Values are a valid requirement object or null (equivalent to an empty requirement object) describing the package required.",
+        "$ref": "#/definitions/types/map(requirement)|null"
+      },
+      "type@0": {
+        "description": "Specifies the type of a component. The component type affects how the component may be used. Officially supported values are \"executable\" (any artifact which the target platform can directly execute), \"archive\" (CABI static library), \"dylib\" (CABI shared library), \"module\" (CABI plugin library), \"jar\" (Java Archive), \"interface\" and \"symbolic\". If the type is not recognized by the parser, the component shall be ignored. (Parsers are permitted to support additional types as a conforming extension.)\n\nA \"dylib\" is meant to be linked at compile time; the location specifies the artifact required for such linking (i.e. the import library on PE platforms). A \"module\" is meant to be loaded at run time with dlopen or similar; again, the location specifies the appropriate artifact.\n\nAn \"interface\" component is a special case; it may have the usual attributes of a component, but does not have a location. This can be used to create \"virtual\" components that do not have an associated artifact.\n\nA \"symbolic\" component is even more special, as it has no (required) attributes at all, and the meaning of any attributes or configurations assigned to such a component is unspecified. A \"symbolic\" component is intended to be used as a form of feature testing; a package that has a feature that is meaningful to users but does not otherwise map directly to a component may use a symbolic component to indicate availability of the feature to users.",
+        "$ref": "#/definitions/types/string"
+      },
+      "version@0": {
+        "description": "Specifies the version of the package. The format of this string is determined by version_schema.\n\nIf not provided, the CPS will not satisfy any request for a specific version of the package.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "version@1": {
+        "description": "Specifies the required version of a package. If omitted, any version of the required package is acceptable. Semantics are the same as for the version attribute of a package.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "version_schema@0": {
+        "description": "Specifies the structure to which the package's version numbering conforms. Tools may use this to determine how to perform version comparisons. Officially supported (case-insensitive) values are \"simple\" and \"custom\" (\"rpm\" or \"dpkg\" should be used where applicable, but may not be supported by all tools). If a package uses \"custom\", version numbers may be compared, but version ordering is not possible.\n\nNeedless to say, changing a package's version scheme between releases is very strongly discouraged.\n\nNote that this attribute determines only how version numbers are ordered. It does not imply anything about the compatibility or incompatibility of various versions of a package. See also compat_version.\n\nsimple\n\nThe package's version number shall match the regular expression [0-9]+([.][0-9]+)*([-+].*)?.\n\nThe portion of the version which precedes the optional - or + may be interpreted as a tuple of integers, in which leading zeros are ignored. Version numbers are compared according to numerical order, starting from the first (left-most) number of the tuples. If two version numbers have different tuple sizes, the shorter tuple shall be implicitly filled with zeros.\n\nDeprecated since version 0.9.0: \"semver\" is a deprecated alias for \"simple\".",
+        "$ref": "#/definitions/types/string|null",
+        "default": "simple"
+      },
+      "default_license@0": {
+        "description": "Specifies the license that is assumed to apply to a component, if none is otherwise specified. This is convenient for packages that wish their license to reflect portions of the package that are not reflected by a component (such as data files) when most or all of the compiled artifacts use the same license.\n\nThe value shall be a well formed SPDX License Expression .",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "description@0": {
+        "description": "Provides a human readable description of the function which the package or component provides.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "display_name@0": {
+        "description": "Provides a human readable name of the package. If provided, tools may use this in informational messages instead of, or in addition to, the canonical package name.",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "license@0": {
+        "description": "Specifies the license or licenses under which the package is distributed. The value shall be a well formed SPDX License Expression .\n\nIf parts of a package use different licenses, this attribute may also be specified on a component if doing so helps to clarifying the licensing. (See also default_license.)",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "meta_comment@0": {
+        "description": "Provides a description of the file contents, for readers that may not be familiar with CPS files. The typical value is \"Common Package Specification for <package name>\".",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "meta_schema@0": {
+        "description": "Provides a URI link to a document describing the format of the CPS file. The typical value is \"https://cps-org.github.io/cps/\" (i.e. the top level page of this site).",
+        "$ref": "#/definitions/types/string|null"
+      },
+      "website@0": {
+        "description": "Specifies the URI at which the package's website may be found.",
+        "$ref": "#/definitions/types/string|null",
+        "format": "uri"
+      }
+    }
+  },
+  "$ref": "#/definitions/types/package"
+}

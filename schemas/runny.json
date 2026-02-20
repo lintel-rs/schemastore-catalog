@@ -1,0 +1,73 @@
+{
+    "$defs": {
+        "CommandDef": {
+            "additionalProperties": false,
+            "properties": {
+                "argnames": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "env": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "if": {
+                    "type": "string"
+                },
+                "internal": {
+                    "type": "boolean"
+                },
+                "needs": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "run": {
+                    "type": "string"
+                },
+                "shell": {
+                    "type": "string"
+                },
+                "then": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                }
+            },
+            "type": "object"
+        },
+        "Config": {
+            "additionalProperties": false,
+            "properties": {
+                "commands": {
+                    "additionalProperties": {
+                        "$ref": "#/$defs/CommandDef"
+                    },
+                    "type": "object"
+                },
+                "env": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "type": "array"
+                },
+                "shell": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "commands"
+            ],
+            "type": "object"
+        }
+    },
+    "$id": "https://github.com/simonwhitaker/runny/runny/config",
+    "$ref": "#/$defs/Config",
+    "$schema": "https://json-schema.org/draft/2020-12/schema"
+}

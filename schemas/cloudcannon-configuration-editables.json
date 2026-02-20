@@ -1,0 +1,918 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Editables",
+  "description": "Configuration for editable regions in the Visual Editor, including content, block, link, image, and text editing options.",
+  "$id": "https://github.com/cloudcannon/configuration-types/releases/latest/download/cloudcannon-editables.schema.json",
+  "allOf": [
+    {
+      "$ref": "#/definitions/type._editables"
+    }
+  ],
+  "definitions": {
+    "type._editables": {
+      "title": "Editables",
+      "description": "This key defines which Rich Text editors have custom configuration for the associated WYSIWYG toolbar.\n\nFor more information, please read our documentation on [Rich Text editors](https://cloudcannon.com/documentation/articles/what-are-rich-text-editors/).\n\n## Examples\n\nIn this example, we have configured the Snippet tool for WYSIWYG toolbars in the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    _editables:\n      content:\n        snippet: true\n```",
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/ContentEditable"
+        },
+        "block": {
+          "$ref": "#/definitions/BlockEditable"
+        },
+        "link": {
+          "$ref": "#/definitions/LinkEditable"
+        },
+        "image": {
+          "$ref": "#/definitions/ImageEditable"
+        },
+        "text": {
+          "$ref": "#/definitions/TextEditable"
+        }
+      },
+      "additionalProperties": false,
+      "documented": true,
+      "markdownDescription": "This key defines which Rich Text editors have custom configuration for the associated WYSIWYG toolbar.\n\nFor more information, please read our documentation on [Rich Text editors](https://cloudcannon.com/documentation/articles/what-are-rich-text-editors/).\n\n## Examples\n\nIn this example, we have configured the Snippet tool for WYSIWYG toolbars in the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    _editables:\n      content:\n        snippet: true\n```"
+    },
+    "ContentEditable": {
+      "title": "Content Editable",
+      "description": "This key defines input options for the Content Editor.",
+      "type": "object",
+      "properties": {
+        "mime_type": {
+          "$ref": "#/definitions/type._inputs.*.options.mime_type"
+        },
+        "resize_style": {
+          "$ref": "#/definitions/type._inputs.*.options.resize_style"
+        },
+        "width": {
+          "$ref": "#/definitions/type._inputs.*.options.width"
+        },
+        "height": {
+          "$ref": "#/definitions/type._inputs.*.options.height"
+        },
+        "expandable": {
+          "$ref": "#/definitions/type._inputs.*.options.expandable"
+        },
+        "image_size_attributes": {
+          "$ref": "#/definitions/type._inputs.*.options.image_size_attributes"
+        },
+        "allowed_sources": {
+          "$ref": "#/definitions/type._inputs.*.options.allowed_sources"
+        },
+        "prevent_resize_existing_files": {
+          "$ref": "#/definitions/type._inputs.*.options.prevent_resize_existing_files"
+        },
+        "sizes": {
+          "$ref": "#/definitions/type._inputs.*.options.sizes"
+        },
+        "paths": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/type.paths"
+            }
+          ],
+          "documented": false,
+          "title": "paths"
+        },
+        "bold": {
+          "$ref": "#/definitions/type._editables.*.bold"
+        },
+        "copyformatting": {
+          "$ref": "#/definitions/type._editables.*.copyformatting"
+        },
+        "italic": {
+          "$ref": "#/definitions/type._editables.*.italic"
+        },
+        "link": {
+          "$ref": "#/definitions/type._editables.*.link"
+        },
+        "redo": {
+          "$ref": "#/definitions/type._editables.*.redo"
+        },
+        "removeformat": {
+          "$ref": "#/definitions/type._editables.*.removeformat"
+        },
+        "strike": {
+          "$ref": "#/definitions/type._editables.*.strike"
+        },
+        "subscript": {
+          "$ref": "#/definitions/type._editables.*.subscript"
+        },
+        "superscript": {
+          "$ref": "#/definitions/type._editables.*.superscript"
+        },
+        "underline": {
+          "$ref": "#/definitions/type._editables.*.underline"
+        },
+        "undo": {
+          "$ref": "#/definitions/type._editables.*.undo"
+        },
+        "remove_custom_markup": {
+          "$ref": "#/definitions/type._editables.*.remove_custom_markup"
+        },
+        "allow_custom_markup": {
+          "$ref": "#/definitions/type._editables.*.allow_custom_markup"
+        },
+        "blockquote": {
+          "$ref": "#/definitions/type._editables.*.blockquote"
+        },
+        "bulletedlist": {
+          "$ref": "#/definitions/type._editables.*.bulletedlist"
+        },
+        "center": {
+          "$ref": "#/definitions/type._editables.*.center"
+        },
+        "code_inline": {
+          "$ref": "#/definitions/type._editables.*.code_inline"
+        },
+        "code_block": {
+          "$ref": "#/definitions/type._editables.*.code_block"
+        },
+        "code": {
+          "$ref": "#/definitions/type._editables.*.code"
+        },
+        "embed": {
+          "$ref": "#/definitions/type._editables.*.embed"
+        },
+        "format": {
+          "$ref": "#/definitions/type._editables.*.format"
+        },
+        "horizontalrule": {
+          "$ref": "#/definitions/type._editables.*.horizontalrule"
+        },
+        "image": {
+          "$ref": "#/definitions/type._editables.*.image"
+        },
+        "indent": {
+          "$ref": "#/definitions/type._editables.*.indent"
+        },
+        "justify": {
+          "$ref": "#/definitions/type._editables.*.justify"
+        },
+        "left": {
+          "$ref": "#/definitions/type._editables.*.left"
+        },
+        "numberedlist": {
+          "$ref": "#/definitions/type._editables.*.numberedlist"
+        },
+        "outdent": {
+          "$ref": "#/definitions/type._editables.*.outdent"
+        },
+        "right": {
+          "$ref": "#/definitions/type._editables.*.right"
+        },
+        "snippet": {
+          "$ref": "#/definitions/type._editables.*.snippet"
+        },
+        "styles": {
+          "$ref": "#/definitions/type._editables.*.styles"
+        },
+        "table": {
+          "$ref": "#/definitions/type._editables.*.table"
+        },
+        "join_above": {
+          "$ref": "#/definitions/type._editables.*.join_above"
+        },
+        "join_below": {
+          "$ref": "#/definitions/type._editables.*.join_below"
+        }
+      },
+      "additionalProperties": false,
+      "documented": true,
+      "markdownDescription": "This key defines input options for the Content Editor."
+    },
+    "type._inputs.*.options.mime_type": {
+      "title": "Mime Type",
+      "description": "This key defines what format an image is converted to prior to upload.\n\n## Examples\n\nIn this example, we have configured an *Image Input* to convert images to WebP format prior to upload.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      mime_type: image/webp\n```",
+      "type": "string",
+      "enum": [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ],
+      "documented": true,
+      "markdownDescription": "This key defines what format an image is converted to prior to upload.\n\n## Examples\n\nIn this example, we have configured an *Image Input* to convert images to WebP format prior to upload.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      mime_type: image/webp\n```"
+    },
+    "type._inputs.*.options.resize_style": {
+      "title": "Resize Style",
+      "description": "This key defines how image files are resized prior to upload, using a bounding box defined by `width` and `height` options.\n\nValid values are `cover`, `contain`, `crop`, or `stretch`:\n\n* `cover` keeps aspect ratio and ensures the image covers the bounding box\n* `contain` keeps aspect ratio and ensures the image fits inside the bounding box\n* `crop` prompts the user with and interface to select an aspect-ratio-respecting area\n* `stretch` ignores aspect ratio and resizes the image to the bounding box\n\nThis key does not apply to existing images, and does not work if `width` and `height` options are not defined.\n\n## Examples\n\nIn this example, we have configured an *Image Input* to resize images using the `cover` style to ensure images cover the bounding box while maintaining aspect ratio.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      width: 1200\n      height: 600\n      resize_style: cover\n```",
+      "default": "contain",
+      "type": "string",
+      "enum": [
+        "cover",
+        "contain",
+        "stretch",
+        "crop"
+      ],
+      "documented": true,
+      "markdownDescription": "This key defines how image files are resized prior to upload, using a bounding box defined by `width` and `height` options.\n\nValid values are `cover`, `contain`, `crop`, or `stretch`:\n\n* `cover` keeps aspect ratio and ensures the image covers the bounding box\n* `contain` keeps aspect ratio and ensures the image fits inside the bounding box\n* `crop` prompts the user with and interface to select an aspect-ratio-respecting area\n* `stretch` ignores aspect ratio and resizes the image to the bounding box\n\nThis key does not apply to existing images, and does not work if `width` and `height` options are not defined.\n\n## Examples\n\nIn this example, we have configured an *Image Input* to resize images using the `cover` style to ensure images cover the bounding box while maintaining aspect ratio.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      width: 1200\n      height: 600\n      resize_style: cover\n```"
+    },
+    "type._inputs.*.options.width": {
+      "title": "Width",
+      "description": "This key defines the width of the bounding box used in the resizing method defined by `resize_style`.",
+      "type": "number",
+      "documented": true,
+      "markdownDescription": "This key defines the width of the bounding box used in the resizing method defined by `resize_style`."
+    },
+    "type._inputs.*.options.height": {
+      "title": "Height",
+      "description": "This key defines the height of the bounding box used in the resizing method defined by `resize_style`.\n\n## Examples\n\nIn this example, we have configured the height of the bounding box for an *Image Input*.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      width: 1200\n      height: 600\n      resize_style: cover\n```",
+      "type": "number",
+      "documented": true,
+      "markdownDescription": "This key defines the height of the bounding box used in the resizing method defined by `resize_style`.\n\n## Examples\n\nIn this example, we have configured the height of the bounding box for an *Image Input*.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      width: 1200\n      height: 600\n      resize_style: cover\n```"
+    },
+    "type._inputs.*.options.expandable": {
+      "title": "Expandable",
+      "description": "This key defines whether you can upscale an image to fit the bounding box while resizing an image prior to upload.\n\nHas no effect if files are not resized.\n\n## Examples\n\nIn this example, we have configured an *Image Input* to allow upscaling images to fit the bounding box while resizing.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      width: 1200\n      height: 600\n      resize_style: cover\n      expandable: true\n```",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "markdownDescription": "This key defines whether you can upscale an image to fit the bounding box while resizing an image prior to upload.\n\nHas no effect if files are not resized.\n\n## Examples\n\nIn this example, we have configured an *Image Input* to allow upscaling images to fit the bounding box while resizing.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      width: 1200\n      height: 600\n      resize_style: cover\n      expandable: true\n```"
+    },
+    "type._inputs.*.options.image_size_attributes": {
+      "title": "Image Size Attributes",
+      "description": "This key toggles whether CloudCannon will instruct a rich text editor to save `width` and `height` attributes on image elements.\n\nSetting this key to `true` will instruct the rich text editor to save `width` and `height` attributes on image elements. This can prevent pop-in as a page loads.\n\nBy default, this key is `false` (i.e., width and height attributes are not saved on image elements). This defaults to `true` if the [Image Size Attributes site flag](https://cloudcannon.com/documentation/articles/legacy-option-flags/#image-size-attributes-default-behaviour) is enabled (this is enabled for sites created before June 23 2023, in order to keep those sites working).\n\n## Examples\n\nIn this example, CloudCannon will save width and height attributes on image elements in a *Rich Text Input*.\n\n```yaml\n_inputs:\n  content:\n    type: markdown\n    options:\n      image_size_attributes: true\n```",
+      "default": true,
+      "type": "boolean",
+      "documented": true,
+      "markdownDescription": "This key toggles whether CloudCannon will instruct a rich text editor to save `width` and `height` attributes on image elements.\n\nSetting this key to `true` will instruct the rich text editor to save `width` and `height` attributes on image elements. This can prevent pop-in as a page loads.\n\nBy default, this key is `false` (i.e., width and height attributes are not saved on image elements). This defaults to `true` if the [Image Size Attributes site flag](https://cloudcannon.com/documentation/articles/legacy-option-flags/#image-size-attributes-default-behaviour) is enabled (this is enabled for sites created before June 23 2023, in order to keep those sites working).\n\n## Examples\n\nIn this example, CloudCannon will save width and height attributes on image elements in a *Rich Text Input*.\n\n```yaml\n_inputs:\n  content:\n    type: markdown\n    options:\n      image_size_attributes: true\n```"
+    },
+    "type._inputs.*.options.allowed_sources": {
+      "title": "Allowed Sources",
+      "description": "This key defines which sources and DAMs you are allowed to upload to and browse.\n\nThe value can be an array of strings. Valid values include `site-files` and the reference key for any DAM connected to your site.\n\nIf `site-files` is omitted from the array, site files will not be available as an asset source for this input.\n\n## Examples\n\nIn this example, we have configured allowed sources for an *Image Input*.\n\n```yaml\n_inputs:\n  image:\n    type: image\n    options:\n      allowed_sources:\n        - site-files\n        - my-cloudinary-dam\n```",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "documented": true,
+        "title": "allowed_sources[*]",
+        "description": "This key defines which sources and DAMs you are allowed to upload to and browse.\n\nThe value can be an array of strings. Valid values include `site-files` and the reference key for any DAM connected to your site.\n\nIf `site-files` is omitted from the array, site files will not be available as an asset source for this input.\n\n## Examples\n\nIn this example, we have configured allowed sources for an *Image Input*.\n\n```yaml\n_inputs:\n  image:\n    type: image\n    options:\n      allowed_sources:\n        - site-files\n        - my-cloudinary-dam\n```",
+        "markdownDescription": "This key defines which sources and DAMs you are allowed to upload to and browse.\n\nThe value can be an array of strings. Valid values include `site-files` and the reference key for any DAM connected to your site.\n\nIf `site-files` is omitted from the array, site files will not be available as an asset source for this input.\n\n## Examples\n\nIn this example, we have configured allowed sources for an *Image Input*.\n\n```yaml\n_inputs:\n  image:\n    type: image\n    options:\n      allowed_sources:\n        - site-files\n        - my-cloudinary-dam\n```"
+      },
+      "documented": true,
+      "markdownDescription": "This key defines which sources and DAMs you are allowed to upload to and browse.\n\nThe value can be an array of strings. Valid values include `site-files` and the reference key for any DAM connected to your site.\n\nIf `site-files` is omitted from the array, site files will not be available as an asset source for this input.\n\n## Examples\n\nIn this example, we have configured allowed sources for an *Image Input*.\n\n```yaml\n_inputs:\n  image:\n    type: image\n    options:\n      allowed_sources:\n        - site-files\n        - my-cloudinary-dam\n```"
+    },
+    "type._inputs.*.options.prevent_resize_existing_files": {
+      "title": "Prevent Resize Existing Files",
+      "description": "This key toggles whether CloudCannon will skip the image resizing process configured for this input when selecting existing images.\n\nSetting this key to `true` will skip the image resizing process when selecting existing images.\n\n## Examples\n\nIn this example, CloudCannon will skip the image resizing process when selecting existing images for an *Image Input*.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      width: 1200\n      height: 600\n      resize_style: cover\n      prevent_resize_existing_files: true\n```",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "markdownDescription": "This key toggles whether CloudCannon will skip the image resizing process configured for this input when selecting existing images.\n\nSetting this key to `true` will skip the image resizing process when selecting existing images.\n\n## Examples\n\nIn this example, CloudCannon will skip the image resizing process when selecting existing images for an *Image Input*.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      width: 1200\n      height: 600\n      resize_style: cover\n      prevent_resize_existing_files: true\n```"
+    },
+    "type._inputs.*.options.sizes": {
+      "title": "Sizes",
+      "description": "This key defines definitions for creating additional images of different sizes when uploading or selecting existing files.\n\n## Examples\n\nIn this example, we have configured an *Image Input* to create additional images of different sizes when uploading or selecting files.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      sizes:\n        - size: 2x\n        - size: 3x\n```",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "description": "This key defines a number suffixed with \"x\" (relative size) or \"w\" (fixed width) for setting the dimensions of the image (e.g. 2x, 3x, 100w, 360w).\n\n## Examples\n\nIn this example, we have configured a size definition for an *Image Input* to create a 2x relative size image.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      sizes:\n        - size: 2x\n```",
+            "type": "string",
+            "documented": true,
+            "title": "size",
+            "markdownDescription": "This key defines a number suffixed with \"x\" (relative size) or \"w\" (fixed width) for setting the dimensions of the image (e.g. 2x, 3x, 100w, 360w).\n\n## Examples\n\nIn this example, we have configured a size definition for an *Image Input* to create a 2x relative size image.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      sizes:\n        - size: 2x\n```"
+          },
+          "target": {
+            "description": "This key defines a reference to another input that is given the path to this additional image file.",
+            "type": "string",
+            "documented": true,
+            "title": "target",
+            "markdownDescription": "This key defines a reference to another input that is given the path to this additional image file."
+          }
+        },
+        "required": [
+          "size"
+        ],
+        "additionalProperties": false,
+        "documented": true,
+        "title": "sizes[*]",
+        "description": "This key represents an individual size definition in the `options.sizes` array for *Image Inputs*.\n\nThe value is an object that can contain `size` and `target` properties.\n\n## Examples\n\nIn this example, we have configured a size definition for an *Image Input*.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      sizes:\n        - size: 2x\n          target: hero_image_2x\n```",
+        "markdownDescription": "This key represents an individual size definition in the `options.sizes` array for *Image Inputs*.\n\nThe value is an object that can contain `size` and `target` properties.\n\n## Examples\n\nIn this example, we have configured a size definition for an *Image Input*.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      sizes:\n        - size: 2x\n          target: hero_image_2x\n```"
+      },
+      "documented": true,
+      "markdownDescription": "This key defines definitions for creating additional images of different sizes when uploading or selecting existing files.\n\n## Examples\n\nIn this example, we have configured an *Image Input* to create additional images of different sizes when uploading or selecting files.\n\n```yaml\n_inputs:\n  hero_image:\n    type: image\n    options:\n      sizes:\n        - size: 2x\n        - size: 3x\n```"
+    },
+    "type.paths": {
+      "title": "Paths",
+      "type": "object",
+      "properties": {
+        "static": {
+          "$ref": "#/definitions/paths.static"
+        },
+        "uploads": {
+          "$ref": "#/definitions/paths.uploads"
+        },
+        "uploads_filename": {
+          "$ref": "#/definitions/paths.uploads_filename"
+        },
+        "dam_uploads": {
+          "$ref": "#/definitions/paths.dam_uploads"
+        },
+        "dam_uploads_filename": {
+          "$ref": "#/definitions/paths.dam_uploads_filename"
+        },
+        "dam_static": {
+          "$ref": "#/definitions/paths.dam_static"
+        },
+        "uploads_use_relative_path": {
+          "$ref": "#/definitions/paths.uploads_use_relative_path"
+        }
+      },
+      "additionalProperties": false,
+      "documented": true,
+      "description": "This key defines paths for your Rich Text editors or File inputs.\n\nIf undefined at higher levels of the [configuration cascade](https://cloudcannon.com/documentation/articles/using-the-configuration-cascade/), `paths` will default to any\nvalues configured in the [CloudCannon configuration file](https://cloudcannon.com/documentation/articles/what-is-the-cloudcannon-configuration-file/).\n\n## Examples\n\nIn this example, we have configured paths for the `blog` Collection to set custom upload and static paths.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      uploads: /uploads/blog/\n      static: /assets/\n```",
+      "markdownDescription": "This key defines paths for your Rich Text editors or File inputs.\n\nIf undefined at higher levels of the [configuration cascade](https://cloudcannon.com/documentation/articles/using-the-configuration-cascade/), `paths` will default to any\nvalues configured in the [CloudCannon configuration file](https://cloudcannon.com/documentation/articles/what-is-the-cloudcannon-configuration-file/).\n\n## Examples\n\nIn this example, we have configured paths for the `blog` Collection to set custom upload and static paths.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      uploads: /uploads/blog/\n      static: /assets/\n```"
+    },
+    "paths.static": {
+      "type": "string",
+      "documented": true,
+      "title": "static",
+      "description": "This key defines the path for the location of statically copied assets.\n\n## Examples\n\nIn this example, we have configured the static path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      static: /assets/\n```",
+      "markdownDescription": "This key defines the path for the location of statically copied assets.\n\n## Examples\n\nIn this example, we have configured the static path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      static: /assets/\n```"
+    },
+    "paths.uploads": {
+      "default": "uploads",
+      "type": "string",
+      "documented": true,
+      "title": "uploads",
+      "description": "This key defines the paths for the default location of newly uploaded site files.\n\nYou can use [dynamic placeholders](https://cloudcannon.com/documentation/articles/configure-your-template-strings/) for `uploads` and `dam_uploads`.\n\n## Examples\n\nIn this example, we have configured the uploads path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      uploads: /uploads/blog/\n```",
+      "markdownDescription": "This key defines the paths for the default location of newly uploaded site files.\n\nYou can use [dynamic placeholders](https://cloudcannon.com/documentation/articles/configure-your-template-strings/) for `uploads` and `dam_uploads`.\n\n## Examples\n\nIn this example, we have configured the uploads path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      uploads: /uploads/blog/\n```"
+    },
+    "paths.uploads_filename": {
+      "type": "string",
+      "documented": true,
+      "title": "uploads_filename",
+      "description": "This key defines the path for the name of the uploaded file.\n\n## Examples\n\nIn this example, we have configured the uploads filename path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      uploads_filename: '{filename|slugify}'\n```",
+      "markdownDescription": "This key defines the path for the name of the uploaded file.\n\n## Examples\n\nIn this example, we have configured the uploads filename path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      uploads_filename: '{filename|slugify}'\n```"
+    },
+    "paths.dam_uploads": {
+      "type": "string",
+      "documented": true,
+      "title": "dam_uploads",
+      "description": "This key defines the path for the default location of newly uploaded [DAM](https://cloudcannon.com/documentation/articles/introduction-to-assets-and-dams/)\nfiles.\n\nYou can use [dynamic placeholders](https://cloudcannon.com/documentation/articles/configure-your-template-strings/) for `uploads` and `dam_uploads`.\n\n## Examples\n\nIn this example, we have configured the DAM uploads path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      dam_uploads: /dam/uploads/blog/\n```",
+      "markdownDescription": "This key defines the path for the default location of newly uploaded [DAM](https://cloudcannon.com/documentation/articles/introduction-to-assets-and-dams/)\nfiles.\n\nYou can use [dynamic placeholders](https://cloudcannon.com/documentation/articles/configure-your-template-strings/) for `uploads` and `dam_uploads`.\n\n## Examples\n\nIn this example, we have configured the DAM uploads path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      dam_uploads: /dam/uploads/blog/\n```"
+    },
+    "paths.dam_uploads_filename": {
+      "type": "string",
+      "documented": true,
+      "title": "dam_uploads_filename",
+      "description": "This key defines the path for the name of the uploaded file, when uploading [DAM](https://cloudcannon.com/documentation/articles/introduction-to-assets-and-dams/) files.\n\n## Examples\n\nIn this example, we have configured the DAM uploads filename path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      dam_uploads_filename: '{filename|slugify}'\n```",
+      "markdownDescription": "This key defines the path for the name of the uploaded file, when uploading [DAM](https://cloudcannon.com/documentation/articles/introduction-to-assets-and-dams/) files.\n\n## Examples\n\nIn this example, we have configured the DAM uploads filename path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      dam_uploads_filename: '{filename|slugify}'\n```"
+    },
+    "paths.dam_static": {
+      "type": "string",
+      "documented": true,
+      "title": "dam_static",
+      "description": "This key defines the path for the location of statically copied assets for [DAM](https://cloudcannon.com/documentation/articles/introduction-to-assets-and-dams/) files.\n\n## Examples\n\nIn this example, we have configured the DAM static path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      dam_static: /assets/dam/\n```",
+      "markdownDescription": "This key defines the path for the location of statically copied assets for [DAM](https://cloudcannon.com/documentation/articles/introduction-to-assets-and-dams/) files.\n\n## Examples\n\nIn this example, we have configured the DAM static path for the `blog` Collection.\n\n```yaml\ncollections_config:\n  blog:\n    paths:\n      dam_static: /assets/dam/\n```"
+    },
+    "paths.uploads_use_relative_path": {
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "uploads_use_relative_path",
+      "description": "This key toggles whether CloudCannon will use relative paths instead of absolute paths for uploaded files.\n\nSetting this key to `true` will make CloudCannon use relative paths for uploaded files, which are relative to the file being edited rather than the repository root.\n\n## Examples\n\nIn this example, we have configured uploads to use relative paths for files uploaded in the Content Editor.\n\n```yaml\n_editables:\n  content:\n    paths:\n      uploads_use_relative_path: true\n```",
+      "markdownDescription": "This key toggles whether CloudCannon will use relative paths instead of absolute paths for uploaded files.\n\nSetting this key to `true` will make CloudCannon use relative paths for uploaded files, which are relative to the file being edited rather than the repository root.\n\n## Examples\n\nIn this example, we have configured uploads to use relative paths for files uploaded in the Content Editor.\n\n```yaml\n_editables:\n  content:\n    paths:\n      uploads_use_relative_path: true\n```"
+    },
+    "type._editables.*.bold": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to bold selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to bold selected text.",
+      "default": true,
+      "type": "boolean",
+      "documented": true,
+      "title": "bold",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to bold selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to bold selected text."
+    },
+    "type._editables.*.copyformatting": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to copy formatting from selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to copy formatting from selected text. Applies to `bold`, `italic`, `underline`, `strike`, `subscript`, and `superscript` formatting. Does not copy other styles or formatting.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "copyformatting",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to copy formatting from selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to copy formatting from selected text. Applies to `bold`, `italic`, `underline`, `strike`, `subscript`, and `superscript` formatting. Does not copy other styles or formatting."
+    },
+    "type._editables.*.italic": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to italicize selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to italicize selected text.",
+      "default": true,
+      "type": "boolean",
+      "documented": true,
+      "title": "italic",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to italicize selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to italicize selected text."
+    },
+    "type._editables.*.link": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to create a hyperlink around selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to create a hyperlink around selected text.",
+      "default": true,
+      "type": "boolean",
+      "documented": true,
+      "title": "link",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to create a hyperlink around selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to create a hyperlink around selected text."
+    },
+    "type._editables.*.redo": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to redo recent edits undone with `undo`.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to redo recent edits. Undo is always enabled through standard OS-specific keyboard shortcuts.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "redo",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to redo recent edits undone with `undo`.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to redo recent edits. Undo is always enabled through standard OS-specific keyboard shortcuts."
+    },
+    "type._editables.*.removeformat": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to remove formatting from selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to remove formatting. Applies to `bold`, `italic`, `underline`, `strike`, `subscript`, and `superscript` formatting. Does not remove other styles or formatting.",
+      "default": true,
+      "type": "boolean",
+      "documented": true,
+      "title": "removeformat",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to remove formatting from selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to remove formatting. Applies to `bold`, `italic`, `underline`, `strike`, `subscript`, and `superscript` formatting. Does not remove other styles or formatting."
+    },
+    "type._editables.*.strike": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to strike through selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to strike through selected text.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "strike",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to strike through selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to strike through selected text."
+    },
+    "type._editables.*.subscript": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to subscript selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to subscript selected text.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "subscript",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to subscript selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to subscript selected text."
+    },
+    "type._editables.*.superscript": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to superscript selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to superscript selected text.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "superscript",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to superscript selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to superscript selected text."
+    },
+    "type._editables.*.underline": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to underline selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to underline selected text.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "underline",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to underline selected text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to underline selected text."
+    },
+    "type._editables.*.undo": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to undo recent edits.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to undo recent edits. Undo is always enabled through standard OS-specific keyboard shortcuts.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "undo",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to undo recent edits.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to undo recent edits. Undo is always enabled through standard OS-specific keyboard shortcuts."
+    },
+    "type._editables.*.remove_custom_markup": {
+      "description": "This key toggles whether CloudCannon will allow you to strip custom markup from content edited in a rich text editor, allowing you to clean files of unnecessary HTML content.\n\nSetting this key to `true` will enable stripping custom markup from content. The `remove_custom_markup` key is disabled if `allow_custom_markup` is enabled.",
+      "type": "boolean",
+      "documented": true,
+      "title": "remove_custom_markup",
+      "markdownDescription": "This key toggles whether CloudCannon will allow you to strip custom markup from content edited in a rich text editor, allowing you to clean files of unnecessary HTML content.\n\nSetting this key to `true` will enable stripping custom markup from content. The `remove_custom_markup` key is disabled if `allow_custom_markup` is enabled."
+    },
+    "type._editables.*.allow_custom_markup": {
+      "description": "This key toggles whether CloudCannon will allow you to edit custom markup in rich text editors and explicitly accept the risk of unintentionally deleting elements that cannot be recreated.\n\nSetting this key to `true` will enable editing of custom markup. When using `allow_custom_markup` outside of editable regions, content that uses JavaScript will not be editable for security reasons. These inputs will appear as uneditable snippets.",
+      "type": "boolean",
+      "documented": true,
+      "title": "allow_custom_markup",
+      "markdownDescription": "This key toggles whether CloudCannon will allow you to edit custom markup in rich text editors and explicitly accept the risk of unintentionally deleting elements that cannot be recreated.\n\nSetting this key to `true` will enable editing of custom markup. When using `allow_custom_markup` outside of editable regions, content that uses JavaScript will not be editable for security reasons. These inputs will appear as uneditable snippets."
+    },
+    "type._editables.*.blockquote": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to wrap selected blocks of text in a block quote.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to wrap selected blocks of text in a block quote.",
+      "default": true,
+      "type": "boolean",
+      "documented": true,
+      "title": "blockquote",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to wrap selected blocks of text in a block quote.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to wrap selected blocks of text in a block quote."
+    },
+    "type._editables.*.bulletedlist": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert an unordered list or convert selected text to an unordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert an unordered list or convert selected text to an unordered list.",
+      "default": true,
+      "type": "boolean",
+      "documented": true,
+      "title": "bulletedlist",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert an unordered list or convert selected text to an unordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert an unordered list or convert selected text to an unordered list."
+    },
+    "type._editables.*.center": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to center align selected text by toggling a class name for that text block.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to center align selected text. The value is the class name to align the text. The styles for this class must be defined in the `styles` file.",
+      "type": "string",
+      "documented": true,
+      "title": "center",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to center align selected text by toggling a class name for that text block.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to center align selected text. The value is the class name to align the text. The styles for this class must be defined in the `styles` file."
+    },
+    "type._editables.*.code_inline": {
+      "description": "This key toggles whether CloudCannon will display a control in your WYSIWYG toolbar to create an inline code element, containing any selected text.\n\nSetting this key to `true` will enable a control in your WYSIWYG toolbar to create an inline code element.\n\nBy default, this key is `false` (i.e., the inline code control is not displayed).",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "code_inline",
+      "markdownDescription": "This key toggles whether CloudCannon will display a control in your WYSIWYG toolbar to create an inline code element, containing any selected text.\n\nSetting this key to `true` will enable a control in your WYSIWYG toolbar to create an inline code element.\n\nBy default, this key is `false` (i.e., the inline code control is not displayed)."
+    },
+    "type._editables.*.code_block": {
+      "description": "This key toggles whether CloudCannon will display a control in your WYSIWYG toolbar to insert a code block in editable regions.\n\nSetting this key to `true` will enable a control in your WYSIWYG toolbar to insert a code block.\n\nBy default, this key is `false` (i.e., the code block control is not displayed).",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "code_block",
+      "markdownDescription": "This key toggles whether CloudCannon will display a control in your WYSIWYG toolbar to insert a code block in editable regions.\n\nSetting this key to `true` will enable a control in your WYSIWYG toolbar to insert a code block.\n\nBy default, this key is `false` (i.e., the code block control is not displayed)."
+    },
+    "type._editables.*.code": {
+      "description": "This key toggles whether CloudCannon will display tools in your WYSIWYG toolbar to turn selected text into inline code and selected text into a code block.\n\nSetting this key to `true` will enable two tools in your WYSIWYG toolbar to turn selected text into inline code and selected text into a code block.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "code",
+      "markdownDescription": "This key toggles whether CloudCannon will display tools in your WYSIWYG toolbar to turn selected text into inline code and selected text into a code block.\n\nSetting this key to `true` will enable two tools in your WYSIWYG toolbar to turn selected text into inline code and selected text into a code block."
+    },
+    "type._editables.*.embed": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert a region of raw HTML for YouTube, Vimeo, social media posts, or other media.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert a region of raw HTML. Embedded content is sanitized to mitigate XSS risks, which includes removing `style` tags. Embeds containing `script` tags are not loaded a rich text editor.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "embed",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert a region of raw HTML for YouTube, Vimeo, social media posts, or other media.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert a region of raw HTML. Embedded content is sanitized to mitigate XSS risks, which includes removing `style` tags. Embeds containing `script` tags are not loaded a rich text editor."
+    },
+    "type._editables.*.format": {
+      "description": "This key toggles whether CloudCannon will display a dropdown menu tool in your WYSIWYG toolbar for structured text.\n\nSetting this key to `true` will enable a dropdown menu tool in your WYSIWYG toolbar for structured text. Valid values include for `p`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `pre`, `address`, and `div`. Include a space between each values, e.g. `format: p h1 h2`.",
+      "default": "p h1 h2 h3 h4 h5 h6",
+      "type": "string",
+      "documented": true,
+      "title": "format",
+      "markdownDescription": "This key toggles whether CloudCannon will display a dropdown menu tool in your WYSIWYG toolbar for structured text.\n\nSetting this key to `true` will enable a dropdown menu tool in your WYSIWYG toolbar for structured text. Valid values include for `p`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `pre`, `address`, and `div`. Include a space between each values, e.g. `format: p h1 h2`."
+    },
+    "type._editables.*.horizontalrule": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert a horizontal line.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert a horizontal line.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "horizontalrule",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert a horizontal line.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert a horizontal line."
+    },
+    "type._editables.*.image": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert an image and enter alternative text and title text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert an image. Select an existing image, upload an image, or use an external link.",
+      "default": true,
+      "type": "boolean",
+      "documented": true,
+      "title": "image",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert an image and enter alternative text and title text.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert an image. Select an existing image, upload an image, or use an external link."
+    },
+    "type._editables.*.indent": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to increase the indentation of a list item in an ordered or unordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to increase the indentation of a list item.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "indent",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to increase the indentation of a list item in an ordered or unordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to increase the indentation of a list item."
+    },
+    "type._editables.*.justify": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to justify selected text by toggling a class name for that text block.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to justify selected text. The value is the class name to align the text. The styles for this class must be defined in the `styles` file.",
+      "type": "string",
+      "documented": true,
+      "title": "justify",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to justify selected text by toggling a class name for that text block.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to justify selected text. The value is the class name to align the text. The styles for this class must be defined in the `styles` file."
+    },
+    "type._editables.*.left": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to left align selected text by toggling a class name for that text block.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to left align selected text. The value is the class name to align the text. The styles for this class must be defined in the `styles` file.",
+      "type": "string",
+      "documented": true,
+      "title": "left",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to left align selected text by toggling a class name for that text block.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to left align selected text. The value is the class name to align the text. The styles for this class must be defined in the `styles` file."
+    },
+    "type._editables.*.numberedlist": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert an ordered list or convert selected text to an ordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert an ordered list or convert selected text to an ordered list.",
+      "default": true,
+      "type": "boolean",
+      "documented": true,
+      "title": "numberedlist",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert an ordered list or convert selected text to an ordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert an ordered list or convert selected text to an ordered list."
+    },
+    "type._editables.*.outdent": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to decrease the indentation of a list item in an ordered or unordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to decrease the indentation of a list item.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "outdent",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to decrease the indentation of a list item in an ordered or unordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to decrease the indentation of a list item."
+    },
+    "type._editables.*.right": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to right align selected text by toggling a class name for that text block.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to right align selected text. The value is the class name to align the text. The styles for this class must be defined in the `styles` file.",
+      "type": "string",
+      "documented": true,
+      "title": "right",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to right align selected text by toggling a class name for that text block.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to right align selected text. The value is the class name to align the text. The styles for this class must be defined in the `styles` file."
+    },
+    "type._editables.*.snippet": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert a [Snippet](https://cloudcannon.com/documentation/articles/what-is-a-snippet/), if any are available.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert a Snippet.",
+      "default": true,
+      "type": "boolean",
+      "documented": true,
+      "title": "snippet",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert a [Snippet](https://cloudcannon.com/documentation/articles/what-is-a-snippet/), if any are available.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert a Snippet."
+    },
+    "type._editables.*.styles": {
+      "description": "This key toggles whether CloudCannon will display a dropdown menu in your WYSIWYG toolbar to apply a style to selected text.\n\n## Examples\n\nIn this example, we have enabled a dropdown menu in our WYSIWYG toolbar to apply a style to selected text. The styles are defined in the `/css/styles.css` file.\n\n```yaml\n_editables:\n  content:\n    styles: /css/styles.css\n```\n\nThis example file defines the styles that CloudCannon can add to your WYSIWYG toolbar.\n\n```css\n/* Can be applied to blocks of content */\np.callout {\n  margin: 10px;\n  border: 1px solid #f5f5f5;\n  background-color: #eee;\n}\n\n/* Can be applied to inline content */\nspan.big-blue-text {\n  font-size: 2rem;\n  color: blue;\n}\n\n/* Applied to content, excluded from style dropdown */\nh2 {\n  font-family: cursive;\n}\n\n/* Applied to content, excluded from style dropdown */\n.align-left { text-align: left; }\n.align-center { text-align: center; }\n.align-right { text-align: right; }\n.align-justify { text-align: justify; }\n```",
+      "type": "string",
+      "documented": true,
+      "title": "styles",
+      "markdownDescription": "This key toggles whether CloudCannon will display a dropdown menu in your WYSIWYG toolbar to apply a style to selected text.\n\n## Examples\n\nIn this example, we have enabled a dropdown menu in our WYSIWYG toolbar to apply a style to selected text. The styles are defined in the `/css/styles.css` file.\n\n```yaml\n_editables:\n  content:\n    styles: /css/styles.css\n```\n\nThis example file defines the styles that CloudCannon can add to your WYSIWYG toolbar.\n\n```css\n/* Can be applied to blocks of content */\np.callout {\n  margin: 10px;\n  border: 1px solid #f5f5f5;\n  background-color: #eee;\n}\n\n/* Can be applied to inline content */\nspan.big-blue-text {\n  font-size: 2rem;\n  color: blue;\n}\n\n/* Applied to content, excluded from style dropdown */\nh2 {\n  font-family: cursive;\n}\n\n/* Applied to content, excluded from style dropdown */\n.align-left { text-align: left; }\n.align-center { text-align: center; }\n.align-right { text-align: right; }\n.align-justify { text-align: justify; }\n```"
+    },
+    "type._editables.*.table": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert a table.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert a table. Further table options are available from the table context menu in the rich text editor.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "table",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to insert a table.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to insert a table. Further table options are available from the table context menu in the rich text editor."
+    },
+    "type._editables.*.join_above": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to merge a list item with the item above it in an ordered or unordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to merge a list item with the item above it.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "join_above",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to merge a list item with the item above it in an ordered or unordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to merge a list item with the item above it."
+    },
+    "type._editables.*.join_below": {
+      "description": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to merge a list item with the item below it in an ordered or unordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to merge a list item with the item below it.",
+      "default": false,
+      "type": "boolean",
+      "documented": true,
+      "title": "join_below",
+      "markdownDescription": "This key toggles whether CloudCannon will display a tool in your WYSIWYG toolbar to merge a list item with the item below it in an ordered or unordered list.\n\nSetting this key to `true` will enable a tool in your WYSIWYG toolbar to merge a list item with the item below it."
+    },
+    "BlockEditable": {
+      "title": "Block Editable",
+      "description": "This key defines input options for block Editable Regions.",
+      "type": "object",
+      "properties": {
+        "mime_type": {
+          "$ref": "#/definitions/type._inputs.*.options.mime_type"
+        },
+        "resize_style": {
+          "$ref": "#/definitions/type._inputs.*.options.resize_style"
+        },
+        "width": {
+          "$ref": "#/definitions/type._inputs.*.options.width"
+        },
+        "height": {
+          "$ref": "#/definitions/type._inputs.*.options.height"
+        },
+        "expandable": {
+          "$ref": "#/definitions/type._inputs.*.options.expandable"
+        },
+        "image_size_attributes": {
+          "$ref": "#/definitions/type._inputs.*.options.image_size_attributes"
+        },
+        "allowed_sources": {
+          "$ref": "#/definitions/type._inputs.*.options.allowed_sources"
+        },
+        "prevent_resize_existing_files": {
+          "$ref": "#/definitions/type._inputs.*.options.prevent_resize_existing_files"
+        },
+        "sizes": {
+          "$ref": "#/definitions/type._inputs.*.options.sizes"
+        },
+        "paths": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/type.paths"
+            }
+          ],
+          "documented": false,
+          "title": "paths"
+        },
+        "bold": {
+          "$ref": "#/definitions/type._editables.*.bold"
+        },
+        "copyformatting": {
+          "$ref": "#/definitions/type._editables.*.copyformatting"
+        },
+        "italic": {
+          "$ref": "#/definitions/type._editables.*.italic"
+        },
+        "link": {
+          "$ref": "#/definitions/type._editables.*.link"
+        },
+        "redo": {
+          "$ref": "#/definitions/type._editables.*.redo"
+        },
+        "removeformat": {
+          "$ref": "#/definitions/type._editables.*.removeformat"
+        },
+        "strike": {
+          "$ref": "#/definitions/type._editables.*.strike"
+        },
+        "subscript": {
+          "$ref": "#/definitions/type._editables.*.subscript"
+        },
+        "superscript": {
+          "$ref": "#/definitions/type._editables.*.superscript"
+        },
+        "underline": {
+          "$ref": "#/definitions/type._editables.*.underline"
+        },
+        "undo": {
+          "$ref": "#/definitions/type._editables.*.undo"
+        },
+        "remove_custom_markup": {
+          "$ref": "#/definitions/type._editables.*.remove_custom_markup"
+        },
+        "allow_custom_markup": {
+          "$ref": "#/definitions/type._editables.*.allow_custom_markup"
+        },
+        "blockquote": {
+          "$ref": "#/definitions/type._editables.*.blockquote"
+        },
+        "bulletedlist": {
+          "$ref": "#/definitions/type._editables.*.bulletedlist"
+        },
+        "center": {
+          "$ref": "#/definitions/type._editables.*.center"
+        },
+        "code_inline": {
+          "$ref": "#/definitions/type._editables.*.code_inline"
+        },
+        "code_block": {
+          "$ref": "#/definitions/type._editables.*.code_block"
+        },
+        "code": {
+          "$ref": "#/definitions/type._editables.*.code"
+        },
+        "embed": {
+          "$ref": "#/definitions/type._editables.*.embed"
+        },
+        "format": {
+          "$ref": "#/definitions/type._editables.*.format"
+        },
+        "horizontalrule": {
+          "$ref": "#/definitions/type._editables.*.horizontalrule"
+        },
+        "image": {
+          "$ref": "#/definitions/type._editables.*.image"
+        },
+        "indent": {
+          "$ref": "#/definitions/type._editables.*.indent"
+        },
+        "justify": {
+          "$ref": "#/definitions/type._editables.*.justify"
+        },
+        "left": {
+          "$ref": "#/definitions/type._editables.*.left"
+        },
+        "numberedlist": {
+          "$ref": "#/definitions/type._editables.*.numberedlist"
+        },
+        "outdent": {
+          "$ref": "#/definitions/type._editables.*.outdent"
+        },
+        "right": {
+          "$ref": "#/definitions/type._editables.*.right"
+        },
+        "snippet": {
+          "$ref": "#/definitions/type._editables.*.snippet"
+        },
+        "styles": {
+          "$ref": "#/definitions/type._editables.*.styles"
+        },
+        "table": {
+          "$ref": "#/definitions/type._editables.*.table"
+        },
+        "join_above": {
+          "$ref": "#/definitions/type._editables.*.join_above"
+        },
+        "join_below": {
+          "$ref": "#/definitions/type._editables.*.join_below"
+        }
+      },
+      "additionalProperties": false,
+      "documented": true,
+      "markdownDescription": "This key defines input options for block Editable Regions."
+    },
+    "LinkEditable": {
+      "title": "Link Editable",
+      "description": "This key defines input options for link Editable Regions.",
+      "type": "object",
+      "properties": {
+        "paths": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/type.paths"
+            }
+          ],
+          "documented": false,
+          "title": "paths"
+        }
+      },
+      "additionalProperties": false,
+      "documented": true,
+      "markdownDescription": "This key defines input options for link Editable Regions."
+    },
+    "ImageEditable": {
+      "title": "Image Editable",
+      "description": "This key defines input options for image Editable Regions.",
+      "type": "object",
+      "properties": {
+        "mime_type": {
+          "$ref": "#/definitions/type._inputs.*.options.mime_type"
+        },
+        "resize_style": {
+          "$ref": "#/definitions/type._inputs.*.options.resize_style"
+        },
+        "width": {
+          "$ref": "#/definitions/type._inputs.*.options.width"
+        },
+        "height": {
+          "$ref": "#/definitions/type._inputs.*.options.height"
+        },
+        "expandable": {
+          "$ref": "#/definitions/type._inputs.*.options.expandable"
+        },
+        "image_size_attributes": {
+          "$ref": "#/definitions/type._inputs.*.options.image_size_attributes"
+        },
+        "allowed_sources": {
+          "$ref": "#/definitions/type._inputs.*.options.allowed_sources"
+        },
+        "prevent_resize_existing_files": {
+          "$ref": "#/definitions/type._inputs.*.options.prevent_resize_existing_files"
+        },
+        "sizes": {
+          "$ref": "#/definitions/type._inputs.*.options.sizes"
+        },
+        "paths": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/type.paths"
+            }
+          ],
+          "documented": false,
+          "title": "paths"
+        }
+      },
+      "additionalProperties": false,
+      "documented": true,
+      "markdownDescription": "This key defines input options for image Editable Regions."
+    },
+    "TextEditable": {
+      "title": "Text Editable",
+      "description": "This key defines input options for text Editable Regions.",
+      "type": "object",
+      "properties": {
+        "paths": {
+          "allOf": [
+            {
+              "$ref": "#/definitions/type.paths"
+            }
+          ],
+          "documented": false,
+          "title": "paths"
+        },
+        "bold": {
+          "$ref": "#/definitions/type._editables.*.bold"
+        },
+        "copyformatting": {
+          "$ref": "#/definitions/type._editables.*.copyformatting"
+        },
+        "italic": {
+          "$ref": "#/definitions/type._editables.*.italic"
+        },
+        "link": {
+          "$ref": "#/definitions/type._editables.*.link"
+        },
+        "redo": {
+          "$ref": "#/definitions/type._editables.*.redo"
+        },
+        "removeformat": {
+          "$ref": "#/definitions/type._editables.*.removeformat"
+        },
+        "strike": {
+          "$ref": "#/definitions/type._editables.*.strike"
+        },
+        "subscript": {
+          "$ref": "#/definitions/type._editables.*.subscript"
+        },
+        "superscript": {
+          "$ref": "#/definitions/type._editables.*.superscript"
+        },
+        "underline": {
+          "$ref": "#/definitions/type._editables.*.underline"
+        },
+        "undo": {
+          "$ref": "#/definitions/type._editables.*.undo"
+        },
+        "remove_custom_markup": {
+          "$ref": "#/definitions/type._editables.*.remove_custom_markup"
+        },
+        "allow_custom_markup": {
+          "$ref": "#/definitions/type._editables.*.allow_custom_markup"
+        }
+      },
+      "additionalProperties": false,
+      "documented": true,
+      "markdownDescription": "This key defines input options for text Editable Regions."
+    }
+  },
+  "documented": false,
+  "markdownDescription": "Configuration for editable regions in the Visual Editor, including content, block, link, image, and text editing options."
+}

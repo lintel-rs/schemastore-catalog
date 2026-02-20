@@ -1,0 +1,395 @@
+{
+  "$id": "https://raw.githubusercontent.com/evg4b/uncors/main/schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "definitions": {
+    "Duration": {
+      "description": "Duration in human-readable format. Supported units are 'h' (hours), 'm' (minutes), 's' (seconds), 'ms' (milliseconds), 'us' (microseconds), 'ns' (nanoseconds).",
+      "examples": [
+        "3s",
+        "1m 30s",
+        "500ms",
+        "1h 30m 15s 500ms 100us 200ns"
+      ],
+      "pattern": "^(\\d+h)?\\s*(\\d+m)?\\s*(\\d+s)?\\s*(\\d+ms)?\\s*(\\d+(us|µs))?\\s*(\\d+(ns))?$",
+      "title": "Duration",
+      "type": "string"
+    },
+    "FileMockResponse": {
+      "additionalProperties": false,
+      "description": "Mock response definition based on file content",
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/StatusCode",
+          "description": "HTTP status code which will be sent in the mock response"
+        },
+        "delay": {
+          "$ref": "#/definitions/Duration",
+          "description": "Delay before sending the mock response"
+        },
+        "file": {
+          "description": "Path to the file whose content will be sent in the mock response",
+          "type": "string"
+        },
+        "headers": {
+          "$ref": "#/definitions/Headers",
+          "description": "HTTP headers which will be sent in the mock response"
+        }
+      },
+      "required": [
+        "code",
+        "file"
+      ],
+      "type": "object"
+    },
+    "Headers": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "HTTP headers definition",
+      "minProperties": 1,
+      "type": "object"
+    },
+    "Mapping": {
+      "oneOf": [
+        {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Host mapping definition",
+          "maxProperties": 1,
+          "minProperties": 1,
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "description": "Host mapping definition",
+          "properties": {
+            "cache": {
+              "description": "List the paths that will be cached.",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "from": {
+              "description": "The local host with protocol and port for the resource from which proxying will take place (e.g., http://localhost:8080). Port defaults to 80 for HTTP and 443 for HTTPS if not specified. HTTPS mappings use auto-generated certificates (requires CA certificate generated with 'uncors generate-certs').",
+              "type": "string"
+            },
+            "mocks": {
+              "description": "List the mocked requests",
+              "items": {
+                "$ref": "#/definitions/Mock"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "options-handling": {
+              "$ref": "#/definitions/OptionsHandling"
+            },
+            "rewrites": {
+              "description": "List of paths that will be rewritten.",
+              "items": {
+                "$ref": "#/definitions/Rewrite"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "scripts": {
+              "description": "List of script handlers",
+              "items": {
+                "$ref": "#/definitions/Script"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "statics": {
+              "description": "List of paths that will be served from the directory.",
+              "items": {
+                "$ref": "#/definitions/StaticDirectory"
+              },
+              "minItems": 1,
+              "type": "array"
+            },
+            "to": {
+              "description": "The target host and protocol for the resource that needs to be proxied",
+              "type": "string"
+            }
+          },
+          "required": [
+            "from",
+            "to"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "Method": {
+      "enum": [
+        "GET",
+        "HEAD",
+        "POST",
+        "PUT",
+        "DELETE",
+        "CONNECT",
+        "OPTIONS",
+        "TRACE",
+        "PATCH"
+      ],
+      "type": "string"
+    },
+    "Mock": {
+      "additionalProperties": false,
+      "description": "Mocked request definition",
+      "properties": {
+        "headers": {
+          "$ref": "#/definitions/Headers",
+          "description": "Mocked request headers"
+        },
+        "method": {
+          "$ref": "#/definitions/Method",
+          "description": "Mocked request method"
+        },
+        "path": {
+          "description": "Mocked request path",
+          "type": "string"
+        },
+        "queries": {
+          "$ref": "#/definitions/Queries",
+          "description": "Mocked request queries"
+        },
+        "response": {
+          "description": "Mock response definition",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/RawMockResponse"
+            },
+            {
+              "$ref": "#/definitions/FileMockResponse"
+            }
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "response"
+      ],
+      "type": "object"
+    },
+    "OptionsHandling": {
+      "description": "OPTIONS request handling configuration",
+      "properties": {
+        "disabled": {
+          "default": false,
+          "description": "Disable OPTIONS request handling and all requests will be proxied to the target server",
+          "type": "boolean"
+        },
+        "headers": {
+          "$ref": "#/definitions/Headers",
+          "description": "Custom headers to be sent in response to OPTIONS requests"
+        },
+        "status": {
+          "$ref": "#/definitions/StatusCode",
+          "description": "Custom status code to be sent in response to OPTIONS requests"
+        }
+      },
+      "type": "object"
+    },
+    "Queries": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "HTTP query parameters definition",
+      "minProperties": 1,
+      "type": "object"
+    },
+    "RawMockResponse": {
+      "additionalProperties": false,
+      "description": "Mock response definition based on raw content",
+      "properties": {
+        "code": {
+          "$ref": "#/definitions/StatusCode"
+        },
+        "delay": {
+          "$ref": "#/definitions/Duration",
+          "description": "Delay before sending the mock response"
+        },
+        "headers": {
+          "$ref": "#/definitions/Headers",
+          "description": "HTTP headers which will be sent in the mock response"
+        },
+        "raw": {
+          "description": "Content which will be sent in the mock response",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "raw"
+      ],
+      "type": "object"
+    },
+    "Rewrite": {
+      "additionalProperties": false,
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "host": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ],
+      "type": "object"
+    },
+    "Script": {
+      "additionalProperties": false,
+      "description": "Script request handler definition",
+      "oneOf": [
+        {
+          "not": {
+            "required": [
+              "file"
+            ]
+          },
+          "required": [
+            "script"
+          ]
+        },
+        {
+          "not": {
+            "required": [
+              "script"
+            ]
+          },
+          "required": [
+            "file"
+          ]
+        }
+      ],
+      "properties": {
+        "file": {
+          "description": "Path to script file",
+          "type": "string"
+        },
+        "headers": {
+          "$ref": "#/definitions/Headers",
+          "description": "Request headers to match"
+        },
+        "method": {
+          "$ref": "#/definitions/Method",
+          "description": "Request method to match"
+        },
+        "path": {
+          "description": "Request path to handle with script",
+          "type": "string"
+        },
+        "queries": {
+          "$ref": "#/definitions/Queries",
+          "description": "Request query parameters to match"
+        },
+        "script": {
+          "description": "Inline script code",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "type": "object"
+    },
+    "StaticDirectory": {
+      "additionalProperties": false,
+      "description": "Static serving directory definition",
+      "properties": {
+        "dir": {
+          "description": "Path to the folder from which the static files will be served",
+          "type": "string"
+        },
+        "index": {
+          "default": "",
+          "description": "The file witch will be returned if the requested file is not found. It should be a relative path within the dir folder",
+          "type": "string"
+        },
+        "path": {
+          "description": "Path where the static files will be served",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "dir"
+      ],
+      "type": "object"
+    },
+    "StatusCode": {
+      "description": "HTTP response status code",
+      "examples": [
+        200,
+        404,
+        500
+      ],
+      "maximum": 599,
+      "minimum": 100,
+      "type": "integer"
+    }
+  },
+  "description": "Configuration file for uncors reverse proxy",
+  "properties": {
+    "cache-config": {
+      "additionalProperties": false,
+      "description": "Global cache configuration",
+      "properties": {
+        "clear-time": {
+          "description": "Expired cache clear time",
+          "type": "string"
+        },
+        "expiration-time": {
+          "description": "Cache expiration time",
+          "type": "string"
+        },
+        "methods": {
+          "default": [
+            "GET"
+          ],
+          "description": "List of http methods with can be cached",
+          "items": {
+            "$ref": "#/definitions/Method"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "debug": {
+      "default": false,
+      "description": "Show debug output",
+      "type": "boolean"
+    },
+    "mappings": {
+      "description": "A list of mappings that describe how to forward requests. Ports are specified in the 'from' URL (e.g., http://localhost:8080).",
+      "items": {
+        "$ref": "#/definitions/Mapping"
+      },
+      "minItems": 1,
+      "type": "array"
+    },
+    "proxy": {
+      "description": "HTTP/HTTPS proxy to provide requests to real server (used system by default)",
+      "format": "uri",
+      "type": "string"
+    }
+  },
+  "required": [
+    "mappings"
+  ],
+  "title": "Uncors configuration",
+  "type": "object"
+}

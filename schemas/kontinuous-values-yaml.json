@@ -1,0 +1,240 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "$id": "https://raw.githubusercontent.com/socialgouv/kontinuous/v1/docs/values.schema.json",
+  "title": "schema for .kontinuous/values.yaml",
+  "type": "object",
+  "patternProperties": {
+    "^pg-.*": {
+      "allOf": [{
+          "$ref": "https://raw.githubusercontent.com/socialgouv/kontinuous/v1/plugins/fabrique/charts/pg/kontinuous.values.schema.json"
+        },
+        {
+          "properties": {
+            "~chart": {
+              "type": "string",
+              "const": "pg"
+            }
+          }
+        }
+      ]
+    },
+    "^app-.*": {
+      "allOf": [{
+          "$ref": "https://raw.githubusercontent.com/socialgouv/kontinuous/v1/plugins/contrib/charts/app/kontinuous.values.schema.json"
+        },
+        {
+          "properties": {
+            "~chart": {
+              "type": "string",
+              "const": "app"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "additionalProperties": {
+    "type": "object",
+    "title": "Additional helm chart",
+    "allOf": [{
+        "if": {
+          "required": ["~chart"],
+          "properties": {
+            "~chart": {
+              "const": "app"
+            }
+          }
+        },
+        "then": {
+          "$ref": "https://raw.githubusercontent.com/socialgouv/kontinuous/v1/plugins/contrib/charts/app/kontinuous.values.schema.json"
+        }
+      },
+      {
+        "if": {
+          "required": ["~chart"],
+          "properties": {
+            "~chart": {
+              "const": "pg"
+            }
+          }
+        },
+        "then": {
+          "$ref": "https://raw.githubusercontent.com/socialgouv/kontinuous/v1/plugins/fabrique/charts/pg/kontinuous.values.schema.json"
+        }
+      },
+      {
+        "if": {
+          "required": ["~chart"],
+          "properties": {
+            "~chart": {
+              "const": "jobs"
+            }
+          }
+        },
+        "then": {
+          "$ref": "https://raw.githubusercontent.com/socialgouv/kontinuous/v1/plugins/contrib/charts/jobs/kontinuous.values.schema.json"
+        }
+      },
+      {
+        "if": {
+          "required": ["~chart"]
+        },
+        "then": {
+          "$ref": "#/definitions/chart"
+        }
+      }
+    ]
+  },
+  "properties": {
+    "global": {
+      "description": "Global variables",
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "repositoryName": {
+          "description": "Application name, default to GIT repository name",
+          "type": "string"
+        },
+        "namespace": {
+          "description": "Default namespace",
+          "type": "string"
+        },
+        "registry": {
+          "description": "Default docker registry URL, it is recommended tu use .kontinuous/config.yaml file to setup registry instead of using values",
+          "type": "string",
+          "examples": ["harbor.somewhere.io"]
+        },
+        "rancherProjectId": {
+          "description": "Rancher project ID to put on the",
+          "type": "string",
+          "examples": ["1234:5678"]
+        },
+        "imageProject": {
+          "description": "Default docker project name. ex registry/[imageProject]/image:tag",
+          "type": "string",
+          "default": "",
+          "examples": ["project-x"]
+        },
+        "imageRepository": {
+          "description": "Default docker image repository name. ex registry/project/[imageRepository]image:tag",
+          "type": "string",
+          "default": "",
+          "examples": ["application-x"]
+        },
+        "imageTag": {
+          "description": "Default docker image repository name. ex registry/project/[imageRepository]image:tag",
+          "type": "string",
+          "default": "",
+          "examples": ["v2.3.1"]
+        },
+        "ttl": {
+          "description": "Dev environments janitor namespaces time-to-live. see https://codeberg.org/hjacobs/kube-janitor",
+          "type": "string",
+          "default": "7d",
+          "examples": ["7d"]
+        },
+        "replicas": {
+          "description": "Default number of deployment replicas",
+          "type": "number",
+          "default": 1,
+          "examples": [3]
+        },
+        "host": {
+          "description": "Default host name",
+          "type": "string",
+          "default": "",
+          "examples": ["app.somewhere.io"]
+        },
+        "pgDatabase": {
+          "description": "Default PG database name, defaults to `application-branch`",
+          "type": "string",
+          "default": "",
+          "examples": ["db-demo"]
+        },
+        "pgSecretName": {
+          "description": "Default PG secret name, defaults to `pg-user-branch`",
+          "type": "string",
+          "default": "",
+          "examples": ["pg-demo"]
+        },
+        "pgUser": {
+          "description": "Default PG user name, defaults to `user-branch`",
+          "type": "string",
+          "default": "",
+          "examples": ["user-demo"]
+        },
+        "registrySecretRefName": {
+          "description": "Secret name that hold the docker registry to push images to",
+          "type": "string",
+          "default": "",
+          "examples": ["user-demo"]
+        }
+      }
+    },
+
+    "project": {
+      "type": "object",
+      "additionalProperties": true
+    },
+
+    "jobs": {
+      "$ref": "https://raw.githubusercontent.com/socialgouv/kontinuous/v1/plugins/contrib/charts/jobs/kontinuous.values.schema.json"
+    }
+  },
+  "required": [],
+  "definitions": {
+    "chart": {
+      "type": "object",
+      "properties": {
+        "~chart": {
+          "description": "Kontinuous chart to use",
+          "type": "string",
+          "default": "app",
+          "anyOf": [{
+              "type": "string",
+              "markdownDescription": "Bring your own helm chart. \n\nYou should have an entry with the same name in your `./Chart.yaml`.\n\nSee https://socialgouv.github.io/kontinuous/#/./faq?id=add-a-custom-helm-chart"
+            },
+            {
+              "const": "app",
+              "markdownDescription": "The [app chart](https://github.com/SocialGouv/kontinuous/blob/master/plugins/contrib/charts/app) provides all the resources to deploy a kubernetes application\n\n💡 You can use the [meta `~tpl~` prefix](https://socialgouv.github.io/kontinuous/#/./advanced/build?id=meta-values-plugin-tpl) to make any property a [go template](https://docs.gofiber.io/template/html/TEMPLATES_CHEATSHEET/#template-variables)"
+            },
+            {
+              "const": "pg",
+              "markdownDescription": "The [pg chart](https://github.com/SocialGouv/kontinuous/blob/master/plugins/fabrique/charts/pg) is a wrapper around [cnpg-cluster helm chart](https://github.com/SocialGouv/kontinuous/blob/master/plugins/fabrique/charts/pg)"
+            },
+            {
+              "const": "hasura",
+              "markdownDescription": "The [hasura chart](https://github.com/SocialGouv/kontinuous/blob/master/plugins/contrib/charts/hasura) deploys an [hasura](https://hasura.io) instance"
+            },
+            {
+              "const": "pgweb",
+              "markdownDescription": "The [pgweb chart](https://github.com/SocialGouv/kontinuous/blob/master/plugins/fabrique/charts/pgweb) deploys a [pgweb](https://github.com/sosedoff/pgweb) instance"
+            },
+            {
+              "const": "maildev",
+              "markdownDescription": "The [maildev chart](https://github.com/SocialGouv/kontinuous/blob/master/plugins/fabrique/charts/maildev) deploys a [maildev](https://github.com/maildev/maildev) instance"
+            },
+            {
+              "const": "redis",
+              "markdownDescription": "The [redis chart](https://github.com/SocialGouv/kontinuous/blob/master/plugins/contrib/charts/redis) deploys an [redis](https://oauth2-proxy.github.io/redis/) instance"
+            },
+            {
+              "const": "jobs",
+              "markdownDescription": "The [jobs chart](https://github.com/SocialGouv/kontinuous/blob/master/plugins/contrib/charts/jobs) provides a way to define de define tasks in your deployment pipeline\n\n💡 See [the jobs documentations](https://socialgouv.github.io/kontinuous/#/./advanced/build?id=meta-values-plugin-needs)."
+            }
+          ]
+        },
+        "~needs": {
+          "markdownDescription": "The meta-value `~needs`is used to define dependencies tree between charts and jobs.\n\nYou can target using simple charts or jobs name, or be more specific to avoid collision in more complex cases.\n\nsee [~needs documentation](https://socialgouv.github.io/kontinuous/#https://raw.githubusercontent.com/socialgouv/kontinuous/v1/advanced/build?id=meta-values-plugin-needs)",
+          "title": "Job or deployment dependencies",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "examples": ["[build-app]", "[pg, jobs.build-app]"]
+        }
+      },
+      "required": ["~chart"]
+    }
+  }
+}
