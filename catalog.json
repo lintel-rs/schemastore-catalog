@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://json-stat.org/format/schema/2.0/"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -9124,7 +9124,7 @@
         "taskrc.yml"
       ],
       "name": ".taskrc.yaml",
-      "url": "https://taskfile.dev/schema-taskrc.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/taskrc-yaml.json"
     },
     {
       "description": "hammerkit files",
