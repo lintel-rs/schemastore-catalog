@@ -5364,7 +5364,7 @@
         "nightwatch.json"
       ],
       "name": "Nightwatch.js",
-      "url": "https://www.schemastore.org/nightwatch.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/nightwatch-js.json"
     },
     {
       "description": "A ninjs by the IPTC. News and publishing information. Documentation: https://iptc.org/standards/ninjs/",
@@ -6606,7 +6606,7 @@
         "railpack.json"
       ],
       "name": "Railpack",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/railpack.json"
+      "url": "https://schema.railpack.com"
     },
     {
       "description": "Rattler-build recipe",
@@ -7996,7 +7996,7 @@
         "tstyche.config.json"
       ],
       "name": "TSTyche",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/tstyche.json"
+      "url": "https://tstyche.org/schemas/config.json"
     },
     {
       "description": "Configuration options for tsup",
@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://json-stat.org/format/schema/2.0/"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -10207,7 +10207,7 @@
         "rivet.*.toml"
       ],
       "name": "rivet.yaml (legacy)",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/rivet-yaml-legacy.json"
+      "url": "https://rivet.gg/rivet.schema.json"
     },
     {
       "description": "Rivet configuration file",
