@@ -955,7 +955,7 @@
         "*.cloudcannon.structure-value.json"
       ],
       "name": "CloudCannon Configuration (Structure Value)",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cloudcannon-configuration-structure-value.json"
+      "url": "https://github.com/cloudcannon/configuration-types/releases/latest/download/cloudcannon-structure-value.schema.json"
     },
     {
       "description": "Supporting configuration file for CloudCannon containing Snippet definitions",
@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
+      "url": "https://json-stat.org/format/schema/2.0/"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -9565,7 +9565,7 @@
         "**/updatecli/**/Policy.yaml"
       ],
       "name": "Updatecli Policy Metadata",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-metadata.json"
+      "url": "https://www.updatecli.io/schema/latest/policy/metadata/config.json"
     },
     {
       "description": "GeoJSON format for representing geographic data. Newest version from GeoJSON org",
