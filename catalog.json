@@ -578,7 +578,7 @@
         "*asyncapi*.yaml"
       ],
       "name": "AsyncAPI",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/asyncapi.json"
+      "url": "https://www.asyncapi.com/schema-store/all.schema-store.json"
     },
     {
       "description": "A validating AsyncAPI tool files",
@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://json-stat.org/format/schema/2.0/"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -9124,7 +9124,7 @@
         "taskrc.yml"
       ],
       "name": ".taskrc.yaml",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/taskrc-yaml.json"
+      "url": "https://taskfile.dev/schema-taskrc.json"
     },
     {
       "description": "hammerkit files",
