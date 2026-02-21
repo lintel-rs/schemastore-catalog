@@ -578,7 +578,7 @@
         "*asyncapi*.yaml"
       ],
       "name": "AsyncAPI",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/asyncapi.json"
+      "url": "https://www.asyncapi.com/schema-store/all.schema-store.json"
     },
     {
       "description": "A validating AsyncAPI tool files",
@@ -955,7 +955,7 @@
         "*.cloudcannon.structure-value.json"
       ],
       "name": "CloudCannon Configuration (Structure Value)",
-      "url": "https://github.com/cloudcannon/configuration-types/releases/latest/download/cloudcannon-structure-value.schema.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cloudcannon-configuration-structure-value.json"
     },
     {
       "description": "Supporting configuration file for CloudCannon containing Snippet definitions",
@@ -3442,7 +3442,7 @@
         ".knip.jsonc"
       ],
       "name": "Knip",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/knip.json"
+      "url": "https://unpkg.com/knip@5/schema.json"
     },
     {
       "description": "Configuration for KSail",
@@ -9565,7 +9565,7 @@
         "**/updatecli/**/Policy.yaml"
       ],
       "name": "Updatecli Policy Metadata",
-      "url": "https://www.updatecli.io/schema/latest/policy/metadata/config.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-metadata.json"
     },
     {
       "description": "GeoJSON format for representing geographic data. Newest version from GeoJSON org",
