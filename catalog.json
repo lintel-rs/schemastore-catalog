@@ -5364,7 +5364,7 @@
         "nightwatch.json"
       ],
       "name": "Nightwatch.js",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/nightwatch-js.json"
+      "url": "https://www.schemastore.org/nightwatch.json"
     },
     {
       "description": "A ninjs by the IPTC. News and publishing information. Documentation: https://iptc.org/standards/ninjs/",
@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
+      "url": "https://json-stat.org/format/schema/2.0/"
     },
     {
       "description": "The .version file format for KSP-AVC",
