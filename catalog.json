@@ -578,7 +578,7 @@
         "*asyncapi*.yaml"
       ],
       "name": "AsyncAPI",
-      "url": "https://www.asyncapi.com/schema-store/all.schema-store.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/asyncapi.json"
     },
     {
       "description": "A validating AsyncAPI tool files",
@@ -3442,7 +3442,7 @@
         ".knip.jsonc"
       ],
       "name": "Knip",
-      "url": "https://unpkg.com/knip@5/schema.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/knip.json"
     },
     {
       "description": "Configuration for KSail",
@@ -9557,7 +9557,7 @@
         "updatecli.yaml"
       ],
       "name": "Updatecli Policy Manifest",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-manifest.json"
+      "url": "https://www.updatecli.io/schema/latest/policy/manifest/config.json"
     },
     {
       "description": "Updatecli Policy Metadata",

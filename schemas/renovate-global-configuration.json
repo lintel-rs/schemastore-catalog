@@ -1,7 +1,7 @@
 {
-  "title": "JSON schema for Renovate 43.30.0 global self-hosting configuration (https://renovatebot.com/)",
+  "title": "JSON schema for Renovate 43.31.0 global self-hosting configuration (https://renovatebot.com/)",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "x-renovate-version": "43.30.0",
+  "x-renovate-version": "43.31.0",
   "allowComments": true,
   "type": "object",
   "properties": {
@@ -2739,7 +2739,7 @@
     "dockerSidecarImage": {
       "description": "Change this value to override the default Renovate sidecar image.",
       "type": "string",
-      "default": "ghcr.io/renovatebot/base-image:13.10.5"
+      "default": "ghcr.io/renovatebot/base-image:13.11.0"
     },
     "dockerUser": {
       "description": "Set the `UID` and `GID` for Docker-based binaries if you use `binarySource=docker`.",
