@@ -578,7 +578,7 @@
         "*asyncapi*.yaml"
       ],
       "name": "AsyncAPI",
-      "url": "https://www.asyncapi.com/schema-store/all.schema-store.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/asyncapi.json"
     },
     {
       "description": "A validating AsyncAPI tool files",
@@ -7996,7 +7996,7 @@
         "tstyche.config.json"
       ],
       "name": "TSTyche",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/tstyche.json"
+      "url": "https://tstyche.org/schemas/config.json"
     },
     {
       "description": "Configuration options for tsup",
@@ -9113,7 +9113,7 @@
         "Taskfile.dist.yml"
       ],
       "name": "Taskfile config",
-      "url": "https://taskfile.dev/schema.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/taskfile-config.json"
     },
     {
       "description": "Taskfile configuration files",
