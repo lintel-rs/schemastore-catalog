@@ -36,7 +36,7 @@
         "**/.upsun/*.yaml"
       ],
       "name": "Upsun config",
-      "url": "https://meta.upsun.com/schema/upsun"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/upsun-config.json"
     },
     {
       "description": "Platform.sh application configuration file",
