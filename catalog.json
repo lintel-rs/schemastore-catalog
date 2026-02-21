@@ -9557,7 +9557,7 @@
         "updatecli.yaml"
       ],
       "name": "Updatecli Policy Manifest",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-manifest.json"
+      "url": "https://www.updatecli.io/schema/latest/policy/manifest/config.json"
     },
     {
       "description": "Updatecli Policy Metadata",
@@ -9565,7 +9565,7 @@
         "**/updatecli/**/Policy.yaml"
       ],
       "name": "Updatecli Policy Metadata",
-      "url": "https://www.updatecli.io/schema/latest/policy/metadata/config.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-metadata.json"
     },
     {
       "description": "GeoJSON format for representing geographic data. Newest version from GeoJSON org",
