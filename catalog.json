@@ -578,7 +578,7 @@
         "*asyncapi*.yaml"
       ],
       "name": "AsyncAPI",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/asyncapi.json"
+      "url": "https://www.asyncapi.com/schema-store/all.schema-store.json"
     },
     {
       "description": "A validating AsyncAPI tool files",
@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
+      "url": "https://json-stat.org/format/schema/2.0/"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -9557,7 +9557,7 @@
         "updatecli.yaml"
       ],
       "name": "Updatecli Policy Manifest",
-      "url": "https://www.updatecli.io/schema/latest/policy/manifest/config.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-manifest.json"
     },
     {
       "description": "Updatecli Policy Metadata",
