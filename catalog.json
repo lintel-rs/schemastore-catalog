@@ -942,7 +942,7 @@
         "*.cloudcannon.inputs.json"
       ],
       "name": "CloudCannon Configuration (Inputs)",
-      "url": "https://github.com/cloudcannon/configuration-types/releases/latest/download/cloudcannon-inputs.schema.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cloudcannon-configuration-inputs.json"
     },
     {
       "description": "Supporting configuration file for CloudCannon containing a single Structure Value definition",
@@ -9124,7 +9124,7 @@
         "taskrc.yml"
       ],
       "name": ".taskrc.yaml",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/taskrc-yaml.json"
+      "url": "https://taskfile.dev/schema-taskrc.json"
     },
     {
       "description": "hammerkit files",
@@ -11521,6 +11521,16 @@
       ],
       "name": "Bento",
       "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/bento.json"
+    },
+    {
+      "description": "Business Model Markup Language - a YAML format for describing business models based on Alexander Osterwalder's Business Model Canvas",
+      "fileMatch": [
+        "*.bmml",
+        "*.bmml.yaml",
+        "*.bmml.yml"
+      ],
+      "name": "BMML",
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/bmml.json"
     },
     {
       "description": "pgxgen configuration file",
