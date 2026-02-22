@@ -578,7 +578,7 @@
         "*asyncapi*.yaml"
       ],
       "name": "AsyncAPI",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/asyncapi.json"
+      "url": "https://www.asyncapi.com/schema-store/all.schema-store.json"
     },
     {
       "description": "A validating AsyncAPI tool files",
