@@ -36,7 +36,7 @@
         "**/.upsun/*.yaml"
       ],
       "name": "Upsun config",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/upsun-config.json"
+      "url": "https://meta.upsun.com/schema/upsun"
     },
     {
       "description": "Platform.sh application configuration file",
@@ -8421,7 +8421,7 @@
         "webjobs-list.json"
       ],
       "name": "webjobs-list.json",
-      "url": "https://www.schemastore.org/webjobs-list.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/webjobs-list-json.json"
     },
     {
       "description": "Azure Webjobs publish settings file",
@@ -9545,7 +9545,7 @@
         "updatecli-compose.yaml"
       ],
       "name": "Updatecli Compose",
-      "url": "https://www.updatecli.io/schema/latest/compose/config.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-compose.json"
     },
     {
       "description": "Updatecli Policy Manifest",
@@ -9565,7 +9565,7 @@
         "**/updatecli/**/Policy.yaml"
       ],
       "name": "Updatecli Policy Metadata",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-metadata.json"
+      "url": "https://www.updatecli.io/schema/latest/policy/metadata/config.json"
     },
     {
       "description": "GeoJSON format for representing geographic data. Newest version from GeoJSON org",
