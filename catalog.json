@@ -773,7 +773,7 @@
         "biome.jsonc"
       ],
       "name": "Biome Formatter Config",
-      "url": "https://biomejs.dev/schemas/latest/schema.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/biome-formatter-config.json"
     },
     {
       "description": "Configuration file for bottom",
@@ -942,7 +942,7 @@
         "*.cloudcannon.inputs.json"
       ],
       "name": "CloudCannon Configuration (Inputs)",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/cloudcannon-configuration-inputs.json"
+      "url": "https://github.com/cloudcannon/configuration-types/releases/latest/download/cloudcannon-inputs.schema.json"
     },
     {
       "description": "Supporting configuration file for CloudCannon containing a single Structure Value definition",
@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://json-stat.org/format/schema/2.0/"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -9557,7 +9557,7 @@
         "updatecli.yaml"
       ],
       "name": "Updatecli Policy Manifest",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-manifest.json"
+      "url": "https://www.updatecli.io/schema/latest/policy/manifest/config.json"
     },
     {
       "description": "Updatecli Policy Metadata",
