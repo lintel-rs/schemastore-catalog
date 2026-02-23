@@ -103,7 +103,8 @@
             "properties": {
                 "type": {
                     "const": "BSCCO_2212_LBNL",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "f_scaling_Jc_BSCCO2212": {
                     "oneOf": [
@@ -129,7 +130,8 @@
             "properties": {
                 "type": {
                     "const": "Bordini",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "Tc0_Bordini": {
                     "oneOf": [
@@ -191,7 +193,8 @@
             "properties": {
                 "type": {
                     "const": "Bottura",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "Tc0_Bottura": {
                     "oneOf": [
@@ -289,24 +292,17 @@
             "properties": {
                 "type": {
                     "const": "CACCC",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "geometry": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCGeometry"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCGeometry",
                     "default": {
                         "air_radius": null
                     }
                 },
                 "mesh": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCMesh"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCMesh",
                     "default": {
                         "HTS_n_elem_width": null,
                         "HTS_n_elem_thickness": null,
@@ -320,11 +316,7 @@
                     }
                 },
                 "solve": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCSolve"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCSolve",
                     "default": {
                         "pro_template": "CAC_CC_template.pro",
                         "conductor_name": null,
@@ -374,11 +366,7 @@
                     }
                 },
                 "postproc": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCPostproc"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCPostproc",
                     "default": {
                         "pos_files": {
                             "quantities": [],
@@ -575,11 +563,7 @@
             "description": "Post-processing options for CACCC",
             "properties": {
                 "pos_files": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCPostprocPosFiles"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCPostprocPosFiles",
                     "default": {
                         "quantities": [],
                         "regions": []
@@ -587,11 +571,7 @@
                     "description": "Entries controlling output of .pos files.If None or empty lists are given, no .pos files are written.Note that not all combinations of quantities and regions make sense."
                 },
                 "cleanup": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CWSStrandPostprocCleanup"
-                        }
-                    ],
+                    "$ref": "#/$defs/CWSStrandPostprocCleanup",
                     "default": {
                         "remove_pre_file": false,
                         "remove_res_file": false,
@@ -671,33 +651,21 @@
                     "title": "Conductor Name"
                 },
                 "general_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCGeneralparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCGeneralparameters",
                     "default": {
                         "temperature": 1.9,
                         "noOfMPITasks": false
                     }
                 },
                 "initial_conditions": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCSolveInitialconditions"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCSolveInitialconditions",
                     "default": {
                         "init_type": "virgin",
                         "solution_to_init_from": null
                     }
                 },
                 "source_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCSolveSourceparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCSolveSourceparameters",
                     "default": {
                         "source_type": "sine",
                         "sine": {
@@ -718,11 +686,7 @@
                     }
                 },
                 "numerical_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCSolveNumericalparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCSolveNumericalparameters",
                     "default": {
                         "relative_tolerance": 1e-06,
                         "voltage_per_meter_stopping_criterion": null,
@@ -829,22 +793,14 @@
                     "title": "Relaxation Factors"
                 },
                 "sine": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCSolveNumericalparametersSine"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCSolveNumericalparametersSine",
                     "default": {
                         "timesteps_per_period": null,
                         "number_of_periods_to_simulate": null
                     }
                 },
                 "piecewise": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCSolveNumericalparametersPiecewise"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCSolveNumericalparametersPiecewise",
                     "default": {
                         "time_to_simulate": null,
                         "timesteps_per_time_to_simulate": null,
@@ -982,11 +938,7 @@
                     "type": "string"
                 },
                 "sine": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCSolveSourceparametersSine"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCSolveSourceparametersSine",
                     "default": {
                         "frequency": null,
                         "field_amplitude": null,
@@ -994,11 +946,7 @@
                     }
                 },
                 "piecewise": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACCCSolveSourceparametersPiecewise"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACCCSolveSourceparametersPiecewise",
                     "default": {
                         "source_csv_file": null,
                         "times": null,
@@ -1184,14 +1132,11 @@
             "properties": {
                 "type": {
                     "const": "CACRutherford",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "geometry": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordGeometry"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordGeometry",
                     "default": {
                         "io_settings": {
                             "load": {
@@ -1217,11 +1162,7 @@
                     }
                 },
                 "mesh": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordMesh"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordMesh",
                     "default": {
                         "scaling_global": 1.0,
                         "strand_mesh_size_ratio": 1.0,
@@ -1230,11 +1171,7 @@
                     }
                 },
                 "solve": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolve"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolve",
                     "default": {
                         "pro_template": null,
                         "conductor_name": null,
@@ -1313,11 +1250,7 @@
                     }
                 },
                 "postproc": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordPostproc"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordPostproc",
                     "default": {
                         "generate_pos_files": true,
                         "plot_instantaneous_power": {
@@ -1471,11 +1404,7 @@
             "description": "Level 2: Class for cable geometry parameters",
             "properties": {
                 "io_settings": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordIOsettings"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordIOsettings",
                     "default": {
                         "load": {
                             "filename": null,
@@ -1566,11 +1495,7 @@
                     "title": "Keep Strand Area"
                 },
                 "excitation_coils": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordExcitationCoils"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordExcitationCoils",
                     "default": {
                         "centers": null,
                         "widths": null,
@@ -1585,22 +1510,14 @@
             "description": "Level 3: Class for Input/Output settings for the cable geometry",
             "properties": {
                 "load": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordIOsettingsLoad"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordIOsettingsLoad",
                     "default": {
                         "load_from_yaml": null,
                         "filename": null
                     }
                 },
                 "save": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordIOsettingsSave"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordIOsettingsSave",
                     "default": {
                         "save_to_yaml": null,
                         "filename": null
@@ -1745,11 +1662,7 @@
                     "type": "boolean"
                 },
                 "plot_instantaneous_power": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordPostprocPlotInstPower"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordPostprocPlotInstPower",
                     "default": {
                         "show": false,
                         "title": "Instantaneous Power",
@@ -1790,11 +1703,7 @@
                     "title": "Save Last Magnetic Field"
                 },
                 "cleanup": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordPostprocCleanup"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordPostprocCleanup",
                     "default": {
                         "remove_pre_file": false,
                         "remove_res_file": false,
@@ -1802,11 +1711,7 @@
                     }
                 },
                 "batch_postproc": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordPostprocBatchpostproc"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordPostprocBatchpostproc",
                     "default": {
                         "postProc_csv": null,
                         "output_folder": null,
@@ -1908,33 +1813,21 @@
                     "title": "Output Folder"
                 },
                 "filter": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocFilter"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocFilter",
                     "default": {
                         "apply_filter": false,
                         "filter_criterion": null
                     }
                 },
                 "sort": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocSort"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocSort",
                     "default": {
                         "apply_sort": false,
                         "sort_key": null
                     }
                 },
                 "loss_map": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocLossMap"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocLossMap",
                     "default": {
                         "produce_loss_map": false,
                         "save_plot": false,
@@ -1975,11 +1868,7 @@
                     }
                 },
                 "plot2d": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocPlot2d"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocPlot2d",
                     "default": {
                         "produce_plot2d": false,
                         "combined_plot": false,
@@ -2186,11 +2075,7 @@
                     "type": "boolean"
                 },
                 "cross_section": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocLossMapCrossSection"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocLossMapCrossSection",
                     "default": {
                         "plot_cross_section": false,
                         "save_plot": false,
@@ -2202,11 +2087,7 @@
                     }
                 },
                 "cross_section_sweep": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocLossMapCrossSectionSweep"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordPostprocBatchpostprocLossMapCrossSectionSweep",
                     "default": {
                         "animate_cross_section_sweep": false,
                         "save_plot": false,
@@ -2584,11 +2465,7 @@
                     "title": "Conductor Name"
                 },
                 "formulation_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveFormulationparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveFormulationparameters",
                     "default": {
                         "stranded_strands": true,
                         "rohm": true,
@@ -2596,11 +2473,7 @@
                     }
                 },
                 "general_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveGeneralparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveGeneralparameters",
                     "default": {
                         "temperature": 1.9,
                         "superconductor_n_value": 30.0,
@@ -2614,22 +2487,14 @@
                     }
                 },
                 "initial_conditions": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveInitialConditions"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveInitialConditions",
                     "default": {
                         "init_from_pos_file": false,
                         "pos_file_to_init_from": null
                     }
                 },
                 "frequency_domain_solver": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveFrequencydomainsolver"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveFrequencydomainsolver",
                     "default": {
                         "enable": false,
                         "frequency_sweep": {
@@ -2641,11 +2506,7 @@
                     }
                 },
                 "source_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveSourceparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveSourceparameters",
                     "default": {
                         "source_type": "sine",
                         "parallel_resistor": false,
@@ -2677,11 +2538,7 @@
                     }
                 },
                 "numerical_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveNumericalparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveNumericalparameters",
                     "default": {
                         "sine": {
                             "number_of_periods_to_simulate": null,
@@ -2736,11 +2593,7 @@
                     "type": "boolean"
                 },
                 "frequency_sweep": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveFrequencydomainsolverFrequencysweep"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveFrequencydomainsolverFrequencysweep",
                     "default": {
                         "run_sweep": false,
                         "start_frequency": 1.0,
@@ -2933,22 +2786,14 @@
             "description": "Level 3: Class for numerical parameters",
             "properties": {
                 "sine": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveNumericalparametersSine"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveNumericalparametersSine",
                     "default": {
                         "timesteps_per_period": null,
                         "number_of_periods_to_simulate": null
                     }
                 },
                 "piecewise": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveNumericalparametersPiecewise"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveNumericalparametersPiecewise",
                     "default": {
                         "time_to_simulate": null,
                         "timesteps_per_time_to_simulate": null,
@@ -3108,11 +2953,7 @@
                     "type": "string"
                 },
                 "sine": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveSourceparametersSine"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveSourceparametersSine",
                     "default": {
                         "frequency": null,
                         "field_amplitude": null,
@@ -3125,11 +2966,7 @@
                     }
                 },
                 "piecewise": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveSourceparametersPiecewise"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveSourceparametersPiecewise",
                     "default": {
                         "source_csv_file": null,
                         "times": null,
@@ -3142,11 +2979,7 @@
                     }
                 },
                 "excitation_coils": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveSourceparametersExcitationCoils"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveSourceparametersExcitationCoils",
                     "default": {
                         "enable": false,
                         "source_csv_file": null
@@ -3365,11 +3198,7 @@
                     "title": "Field Angle"
                 },
                 "superimposed_DC": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACRutherfordSolveSourceparametersSineSuperimposedDC"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACRutherfordSolveSourceparametersSineSuperimposedDC",
                     "default": {
                         "field_magnitude": 0.0,
                         "current_magnitude": 0.0
@@ -3417,14 +3246,11 @@
             "properties": {
                 "type": {
                     "const": "CACStrand",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "geometry": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandGeometry"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandGeometry",
                     "default": {
                         "io_settings": {
                             "load": {
@@ -3446,11 +3272,7 @@
                     }
                 },
                 "mesh": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandMesh"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandMesh",
                     "default": {
                         "scaling_global": 1.0,
                         "filaments": {
@@ -3476,11 +3298,7 @@
                     }
                 },
                 "solve": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolve"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolve",
                     "default": {
                         "pro_template": "CAC_Strand_template.pro",
                         "conductor_name": null,
@@ -3558,11 +3376,7 @@
                     }
                 },
                 "postproc": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostproc"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostproc",
                     "default": {
                         "pos_files": {
                             "quantities": [],
@@ -3680,11 +3494,7 @@
             "description": "Level 2: Class for strand geometry parameters",
             "properties": {
                 "io_settings": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandGeometryIOsettings"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandGeometryIOsettings",
                     "default": {
                         "load": {
                             "filename": null,
@@ -3793,22 +3603,14 @@
             "description": "Level 2: Class for Input/Output settings for the cable geometry",
             "properties": {
                 "load": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandIOsettingsLoad"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandIOsettingsLoad",
                     "default": {
                         "load_from_yaml": false,
                         "filename": null
                     }
                 },
                 "save": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandIOsettingsSave"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandIOsettingsSave",
                     "default": {
                         "save_to_yaml": false,
                         "filename": null
@@ -3901,11 +3703,7 @@
                     "title": "Scaling Global"
                 },
                 "filaments": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandMeshFilaments"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandMeshFilaments",
                     "default": {
                         "boundary_mesh_size_ratio": null,
                         "center_mesh_size_ratio": null,
@@ -3915,11 +3713,7 @@
                     }
                 },
                 "matrix": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandMeshMatrix"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandMeshMatrix",
                     "default": {
                         "mesh_size_matrix_ratio_inner": null,
                         "mesh_size_matrix_ratio_middle": null,
@@ -3932,11 +3726,7 @@
                     }
                 },
                 "air": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandMeshAir"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandMeshAir",
                     "default": {
                         "max_mesh_size_ratio": null
                     }
@@ -4152,11 +3942,7 @@
             "description": "Level 2: Class for FiQuS ConductorAC",
             "properties": {
                 "pos_files": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocPosFiles"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocPosFiles",
                     "default": {
                         "quantities": [],
                         "regions": []
@@ -4196,11 +3982,7 @@
                     "title": "Generate Report"
                 },
                 "cleanup": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocCleanup"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocCleanup",
                     "default": {
                         "remove_pre_file": false,
                         "remove_res_file": false,
@@ -4208,11 +3990,7 @@
                     }
                 },
                 "plot_flux": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocPlotFlux"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocPlotFlux",
                     "default": {
                         "show": false,
                         "rohf": false,
@@ -4222,11 +4000,7 @@
                     }
                 },
                 "plot_instantaneous_power": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocPlotInstPower"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocPlotInstPower",
                     "default": {
                         "show": false,
                         "title": "Instantaneous Power",
@@ -4235,11 +4009,7 @@
                     }
                 },
                 "batch_postproc": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocBatchpostproc"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocBatchpostproc",
                     "default": {
                         "simulations_csv": null,
                         "fluxmodels_csv": null,
@@ -4353,33 +4123,21 @@
                     "title": "Fluxmodels Csv"
                 },
                 "filter": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocBatchpostprocFilter"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocBatchpostprocFilter",
                     "default": {
                         "apply_filter": false,
                         "filter_criterion": null
                     }
                 },
                 "sort": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocBatchpostprocSort"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocBatchpostprocSort",
                     "default": {
                         "apply_sort": false,
                         "sort_key": null
                     }
                 },
                 "loss_map": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocBatchpostprocLossMap"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocBatchpostprocLossMap",
                     "default": {
                         "produce_loss_map": false,
                         "save_plot": false,
@@ -4420,11 +4178,7 @@
                     }
                 },
                 "rohf_on_grid": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocBatchpostprocROHFgrid"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocBatchpostprocROHFgrid",
                     "default": {
                         "produce_error_map": false,
                         "interpolate_error_map": false,
@@ -4435,11 +4189,7 @@
                     }
                 },
                 "plot2d": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocBatchpostprocPlot2d"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocBatchpostprocPlot2d",
                     "default": {
                         "produce_plot2d": false,
                         "combined_plot": false,
@@ -4650,11 +4400,7 @@
                     "type": "boolean"
                 },
                 "cross_section": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocBatchpostprocLossMapCrossSection"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocBatchpostprocLossMapCrossSection",
                     "default": {
                         "plot_cross_section": false,
                         "save_plot": false,
@@ -4666,11 +4412,7 @@
                     }
                 },
                 "cross_section_sweep": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandPostprocBatchpostprocLossMapCrossSectionSweep"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandPostprocBatchpostprocLossMapCrossSectionSweep",
                     "default": {
                         "animate_cross_section_sweep": false,
                         "save_plot": false,
@@ -5264,11 +5006,7 @@
                     "title": "Conductor Name"
                 },
                 "formulation_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveFormulationparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveFormulationparameters",
                     "default": {
                         "formulation": "CATI",
                         "dynamic_correction": true,
@@ -5277,11 +5015,7 @@
                     }
                 },
                 "general_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveGeneralparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveGeneralparameters",
                     "default": {
                         "temperature": 1.9,
                         "superconductor_linear": false,
@@ -5289,22 +5023,14 @@
                     }
                 },
                 "initial_conditions": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveInitialconditions"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveInitialconditions",
                     "default": {
                         "init_type": "virgin",
                         "solution_to_init_from": null
                     }
                 },
                 "diffusion_barriers": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveDiffusionBarriers"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveDiffusionBarriers",
                     "default": {
                         "enable": false,
                         "load_data_from_yaml": false,
@@ -5313,11 +5039,7 @@
                     }
                 },
                 "global_diffusion_barrier": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveDiffusionBarriers"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveDiffusionBarriers",
                     "default": {
                         "enable": false,
                         "load_data_from_yaml": false,
@@ -5327,11 +5049,7 @@
                     "description": "Additional diffusion barrier around all filaments together (global).This is created on a line between two strand matrix regions.One around the filaments and the other for the external ring."
                 },
                 "source_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveSourceparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveSourceparameters",
                     "default": {
                         "source_type": "sine",
                         "sine": {
@@ -5360,11 +5078,7 @@
                     }
                 },
                 "numerical_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveNumericalparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveNumericalparameters",
                     "default": {
                         "sine": {
                             "number_of_periods_to_simulate": null,
@@ -5589,22 +5303,14 @@
             "description": "Level 3: Class for numerical parameters",
             "properties": {
                 "sine": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveNumericalparametersSine"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveNumericalparametersSine",
                     "default": {
                         "timesteps_per_period": null,
                         "number_of_periods_to_simulate": null
                     }
                 },
                 "piecewise": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveNumericalparametersPiecewise"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveNumericalparametersPiecewise",
                     "default": {
                         "time_to_simulate": null,
                         "timesteps_per_time_to_simulate": null,
@@ -5615,11 +5321,7 @@
                     }
                 },
                 "rotating": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveNumericalparametersRotating"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveNumericalparametersRotating",
                     "default": {
                         "timesteps_per_period": null,
                         "number_of_periods_to_simulate": null
@@ -5787,11 +5489,7 @@
                     "type": "string"
                 },
                 "sine": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveSourceparametersSine"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveSourceparametersSine",
                     "default": {
                         "frequency": null,
                         "field_amplitude": null,
@@ -5803,11 +5501,7 @@
                     }
                 },
                 "piecewise": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveSourceparametersPiecewise"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveSourceparametersPiecewise",
                     "default": {
                         "source_csv_file": null,
                         "times": null,
@@ -5819,11 +5513,7 @@
                     }
                 },
                 "rotating": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveSourceparametersRotating"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveSourceparametersRotating",
                     "default": {
                         "frequency": null,
                         "field_magnitude": null
@@ -6029,11 +5719,7 @@
                     "title": "Current Amplitude"
                 },
                 "superimposed_DC": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CACStrandSolveSourceparametersSineSuperimposedDC"
-                        }
-                    ],
+                    "$ref": "#/$defs/CACStrandSolveSourceparametersSineSuperimposedDC",
                     "default": {
                         "field_magnitude": 0.0,
                         "current_magnitude": 0.0
@@ -6081,7 +5767,8 @@
             "properties": {
                 "type": {
                     "const": "CC",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "HTS_thickness": {
                     "oneOf": [
@@ -6150,11 +5837,7 @@
                     "title": "Substrate Thickness"
                 },
                 "copper_thickness": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Copper_thickness"
-                        }
-                    ],
+                    "$ref": "#/$defs/Copper_thickness",
                     "default": {
                         "left": null,
                         "right": null,
@@ -6164,11 +5847,7 @@
                     "description": "Copper thickness in meters"
                 },
                 "silver_thickness": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Silver_thickness"
-                        }
-                    ],
+                    "$ref": "#/$defs/Silver_thickness",
                     "default": {
                         "top": null,
                         "bottom": null
@@ -6217,8 +5896,8 @@
                 "minimum_jc_fraction": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
-                            "maximum": 1.0,
+                            "exclusiveMinimum": 0,
+                            "maximum": 1,
                             "type": "number"
                         },
                         {
@@ -6645,14 +6324,11 @@
                 "type": {
                     "const": "CCT_straight",
                     "default": "CCT_straight",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "geometry": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/GeometryCCTFiQuS"
-                        }
-                    ],
+                    "$ref": "#/$defs/GeometryCCTFiQuS",
                     "default": {
                         "windings": {
                             "alphas": null,
@@ -6695,11 +6371,7 @@
                     }
                 },
                 "mesh": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MeshCCT"
-                        }
-                    ],
+                    "$ref": "#/$defs/MeshCCT",
                     "default": {
                         "MaxAspectWindings": null,
                         "ThresholdSizeMin": null,
@@ -6709,11 +6381,7 @@
                     }
                 },
                 "solve": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/SolveCCT"
-                        }
-                    ],
+                    "$ref": "#/$defs/SolveCCT",
                     "default": {
                         "windings": {
                             "currents": null,
@@ -6740,11 +6408,7 @@
                     }
                 },
                 "postproc": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/PostprocCCTFiQuS"
-                        }
-                    ],
+                    "$ref": "#/$defs/PostprocCCTFiQuS",
                     "default": {
                         "windings_wwns": null,
                         "windings_whns": null,
@@ -6885,7 +6549,8 @@
             "properties": {
                 "type": {
                     "const": "CUDI1",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "Tc0_CUDI1": {
                     "oneOf": [
@@ -6947,7 +6612,8 @@
             "properties": {
                 "type": {
                     "const": "CUDI3",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "Tc0_CUDI3": {
                     "oneOf": [
@@ -7301,7 +6967,8 @@
             "properties": {
                 "type": {
                     "const": "Constant Jc",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "Jc_constant": {
                     "oneOf": [
@@ -7521,11 +7188,7 @@
                     "title": "Source Type"
                 },
                 "sine": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/SourceSine"
-                        }
-                    ],
+                    "$ref": "#/$defs/SourceSine",
                     "default": {
                         "frequency": null,
                         "current_amplitude": null,
@@ -7535,11 +7198,7 @@
                     "description": "Definition of sine current source parameters."
                 },
                 "piecewise": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/SourcePiecewise"
-                        }
-                    ],
+                    "$ref": "#/$defs/SourcePiecewise",
                     "default": {
                         "csv_file": null,
                         "times": null,
@@ -8294,7 +7953,8 @@
             "properties": {
                 "type": {
                     "const": "Fujikura",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "Jc_factor": {
                     "oneOf": [
@@ -8340,11 +8000,7 @@
             "description": "Level 2: Class for FiQuS CCT for FiQuS input",
             "properties": {
                 "windings": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Winding_gFiQuS"
-                        }
-                    ],
+                    "$ref": "#/$defs/Winding_gFiQuS",
                     "default": {
                         "names": null,
                         "r_wms": null,
@@ -8359,11 +8015,7 @@
                     }
                 },
                 "fqpls": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/FQPL_g"
-                        }
-                    ],
+                    "$ref": "#/$defs/FQPL_g",
                     "default": {
                         "names": [],
                         "fndpls": null,
@@ -8378,11 +8030,7 @@
                     }
                 },
                 "formers": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Former_gFiQuS"
-                        }
-                    ],
+                    "$ref": "#/$defs/Former_gFiQuS",
                     "default": {
                         "names": null,
                         "r_ins": null,
@@ -8392,11 +8040,7 @@
                     }
                 },
                 "air": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Air_g"
-                        }
-                    ],
+                    "$ref": "#/$defs/Air_g",
                     "default": {
                         "name": null,
                         "sh_type": null,
@@ -8414,7 +8058,8 @@
             "properties": {
                 "type": {
                     "const": "Homogenized",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "diameter": {
                     "oneOf": [
@@ -8658,11 +8303,7 @@
                     "title": "Excitation Coils"
                 },
                 "air": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Circle"
-                        }
-                    ],
+                    "$ref": "#/$defs/Circle",
                     "default": {
                         "center_position": null,
                         "radius": null
@@ -8672,14 +8313,11 @@
                     "const": "circle",
                     "default": "circle",
                     "description": "Type of model geometry which will be generated. Supported options are only circle for now",
-                    "title": "Air Form"
+                    "title": "Air Form",
+                    "type": "string"
                 },
                 "io_settings": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorGeometryIOsettings"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorGeometryIOsettings",
                     "default": {
                         "load": {
                             "filename": null,
@@ -8699,22 +8337,14 @@
             "description": "Level 2: Class for Input/Output settings for the cable geometry",
             "properties": {
                 "load": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorIOsettingsLoad"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorIOsettingsLoad",
                     "default": {
                         "load_from_yaml": false,
                         "filename": null
                     }
                 },
                 "save": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorIOsettingsSave"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorIOsettingsSave",
                     "default": {
                         "save_to_yaml": false,
                         "filename": null
@@ -9008,11 +8638,7 @@
                     "title": "Save Last Magnetic Field"
                 },
                 "cleanup": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorPostprocCleanup"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorPostprocCleanup",
                     "default": {
                         "remove_pre_file": false,
                         "remove_res_file": false,
@@ -9020,11 +8646,7 @@
                     }
                 },
                 "sample_line": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorFormulationparametersSampleLine"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorFormulationparametersSampleLine",
                     "default": {
                         "start_point": null,
                         "end_point": null,
@@ -9104,7 +8726,8 @@
                 "pro_template": {
                     "oneOf": [
                         {
-                            "const": "HomogenizedConductor_template.pro"
+                            "const": "HomogenizedConductor_template.pro",
+                            "type": "string"
                         },
                         {
                             "type": "null"
@@ -9115,11 +8738,7 @@
                     "title": "Pro Template"
                 },
                 "general_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorSolveGeneralparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorSolveGeneralparameters",
                     "default": {
                         "superconductor_linear": false,
                         "noOfMPITasks": false,
@@ -9130,21 +8749,13 @@
                     }
                 },
                 "formulation_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorFormulationparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorFormulationparameters",
                     "default": {
                         "hphia": false
                     }
                 },
                 "discc": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorFormulationparametersDISCC"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorFormulationparametersDISCC",
                     "default": {
                         "gamma_c": 0.43,
                         "gamma_a": 0.53,
@@ -9154,22 +8765,14 @@
                     }
                 },
                 "rohf": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/fiqus__data__DataFiQuSHomogenizedConductor__HomogenizedConductorFormulationparametersROHF"
-                        }
-                    ],
+                    "$ref": "#/$defs/fiqus__data__DataFiQuSHomogenizedConductor__HomogenizedConductorFormulationparametersROHF",
                     "default": {
                         "enable": false,
                         "parameter_csv_file": null
                     }
                 },
                 "rohm": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/fiqus__data__DataFiQuSHomogenizedConductor__HomogenizedConductorFormulationparametersROHM"
-                        }
-                    ],
+                    "$ref": "#/$defs/fiqus__data__DataFiQuSHomogenizedConductor__HomogenizedConductorFormulationparametersROHM",
                     "default": {
                         "enable": false,
                         "parameter_csv_file": null,
@@ -9178,11 +8781,7 @@
                     }
                 },
                 "current_sharing": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorFormulationparametersCS"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorFormulationparametersCS",
                     "default": {
                         "superconductor_n_value": 30.0,
                         "superconductor_Ic": 350.0,
@@ -9190,22 +8789,14 @@
                     }
                 },
                 "initial_conditions": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorSolveInitialconditions"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorSolveInitialconditions",
                     "default": {
                         "init_from_pos_file": false,
                         "pos_file_to_init_from": null
                     }
                 },
                 "source_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorSolveSourceparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorSolveSourceparameters",
                     "default": {
                         "boundary_condition_type": "Natural",
                         "source_type": "sine",
@@ -9236,11 +8827,7 @@
                     }
                 },
                 "numerical_parameters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorSolveNumericalparameters"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorSolveNumericalparameters",
                     "default": {
                         "sine": {
                             "number_of_periods_to_simulate": null,
@@ -9257,11 +8844,7 @@
                     }
                 },
                 "frequency_domain_solver": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorSolveFrequencyDomain"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorSolveFrequencyDomain",
                     "default": {
                         "enable": false,
                         "frequency_sweep": {
@@ -9293,11 +8876,7 @@
                     "title": "Enable"
                 },
                 "frequency_sweep": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorSolveFrequencyDomainSweep"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorSolveFrequencyDomainSweep",
                     "default": {
                         "run_sweep": false,
                         "start_frequency": 1.0,
@@ -9486,22 +9065,14 @@
             "description": "Level 3: Class for numerical parameters",
             "properties": {
                 "sine": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorNumericalparametersSine"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorNumericalparametersSine",
                     "default": {
                         "timesteps_per_period": null,
                         "number_of_periods_to_simulate": null
                     }
                 },
                 "piecewise": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorNumericalparametersPiecewise"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorNumericalparametersPiecewise",
                     "default": {
                         "time_to_simulate": null,
                         "timesteps_per_time_to_simulate": null,
@@ -9555,21 +9126,13 @@
                     "title": "Resistor parallel to the cable(s)"
                 },
                 "excitation_coils": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/SolveExcitationCoils"
-                        }
-                    ],
+                    "$ref": "#/$defs/SolveExcitationCoils",
                     "default": {
                         "enable": false
                     }
                 },
                 "sine": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/SolveSineSource"
-                        }
-                    ],
+                    "$ref": "#/$defs/SolveSineSource",
                     "default": {
                         "frequency": null,
                         "field_amplitude": null,
@@ -9581,11 +9144,7 @@
                     }
                 },
                 "piecewise": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/SolvePiecewiseSource"
-                        }
-                    ],
+                    "$ref": "#/$defs/SolvePiecewiseSource",
                     "default": {
                         "source_csv_file": null,
                         "times": null,
@@ -9634,7 +9193,8 @@
             "properties": {
                 "type": {
                     "const": "Ic_A_NbTi",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "Jc_5T_4_2K": {
                     "oneOf": [
@@ -9727,7 +9287,8 @@
             "properties": {
                 "type": {
                     "const": "Mono",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "bare_cable_width": {
                     "oneOf": [
@@ -9922,7 +9483,8 @@
                 "which": {
                     "oneOf": [
                         {
-                            "const": "all"
+                            "const": "all",
+                            "type": "string"
                         },
                         {
                             "items": {},
@@ -10000,14 +9562,11 @@
                 "type": {
                     "const": "multipole",
                     "default": "multipole",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "geometry": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleGeometry"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleGeometry",
                     "default": {
                         "geom_file_path": null,
                         "plot_preview": false,
@@ -10029,11 +9588,7 @@
                     "description": "This dictionary contains the geometry information."
                 },
                 "mesh": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleMesh"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleMesh",
                     "default": {
                         "electromagnetics": {
                             "bore_field": {
@@ -10173,11 +9728,7 @@
                     "description": "This dictionary contains the mesh information."
                 },
                 "solve": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolve"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolve",
                     "default": {
                         "coil_windings": {
                             "conductor_to_group": [],
@@ -10346,11 +9897,7 @@
                     "description": "This dictionary contains the solution information."
                 },
                 "postproc": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipolePostProc"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipolePostProc",
                     "default": {
                         "electromagnetics": {
                             "compare_to_ROXIE": null,
@@ -10418,11 +9965,7 @@
                     "title": "Plot Preview"
                 },
                 "electromagnetics": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleGeometryElectromagnetics"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleGeometryElectromagnetics",
                     "default": {
                         "create": true,
                         "with_wedges": true,
@@ -10432,11 +9975,7 @@
                     "description": "This dictionary contains the geometry information for the electromagnetic solution."
                 },
                 "thermal": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleGeometryThermal"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleGeometryThermal",
                     "default": {
                         "create": true,
                         "with_wedges": true,
@@ -10607,11 +10146,7 @@
             "description": "Level 2: Class for FiQuS Multipole",
             "properties": {
                 "electromagnetics": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleMeshElectromagnetics"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleMeshElectromagnetics",
                     "default": {
                         "create": true,
                         "conductors": {
@@ -10675,11 +10210,7 @@
                     "description": "This dictionary contains the mesh information for the electromagnetic solution."
                 },
                 "thermal": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleMeshThermal"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleMeshThermal",
                     "default": {
                         "create": true,
                         "conductors": {
@@ -11383,11 +10914,7 @@
             "description": "Level 3: Class for FiQuS Multipole",
             "properties": {
                 "transfinite": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleMeshTransfinite"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleMeshTransfinite",
                     "default": {
                         "enabled_for": null,
                         "curve_target_size_height": 1.0,
@@ -11396,11 +10923,7 @@
                     "description": "This dictionary contains the mesh information for transfinite curves."
                 },
                 "field": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleMeshThreshold"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleMeshThreshold",
                     "default": {
                         "enabled": false,
                         "SizeMin": null,
@@ -11418,11 +10941,7 @@
             "description": "Level 2: Class for FiQuS Multipole",
             "properties": {
                 "electromagnetics": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipolePostProcElectromagnetics"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipolePostProcElectromagnetics",
                     "default": {
                         "output_time_steps_pos": true,
                         "output_time_steps_txt": true,
@@ -11436,11 +10955,7 @@
                     "description": "This dictionary contains the post-processing information for the electromagnetic solution."
                 },
                 "thermal": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipolePostProcThermal"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipolePostProcThermal",
                     "default": {
                         "output_time_steps_pos": true,
                         "output_time_steps_txt": true,
@@ -11458,11 +10973,7 @@
                     "description": "This dictionary contains the post-processing information for the thermal solution."
                 },
                 "circuit_coupling": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CCPostProc"
-                        }
-                    ],
+                    "$ref": "#/$defs/CCPostProc",
                     "default": {
                         "variables_I": [],
                         "variables_U": [],
@@ -11785,11 +11296,7 @@
                     "description": "This dictionary contains the information pertaining the number of coils and electrical order necessary to generate the associated electrical circuit"
                 },
                 "electromagnetics": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolveElectromagnetics"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolveElectromagnetics",
                     "default": {
                         "non_linear_solver": {
                             "abs_tolerance": 0.1,
@@ -11816,11 +11323,7 @@
                     "description": "This dictionary contains the solver information for the electromagnetic solution."
                 },
                 "thermal": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolveThermal"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolveThermal",
                     "default": {
                         "non_linear_solver": {
                             "abs_tolerance": 0.1,
@@ -11886,11 +11389,7 @@
                     "description": "This dictionary contains the solver information for the thermal solution."
                 },
                 "wedges": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolveSpecificMaterial"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolveSpecificMaterial",
                     "default": {
                         "material": null,
                         "RRR": null,
@@ -11900,11 +11399,7 @@
                     "description": "This dictionary contains the material information of wedges."
                 },
                 "collar": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolveSpecificMaterial"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolveSpecificMaterial",
                     "default": {
                         "material": null,
                         "RRR": null,
@@ -11914,11 +11409,7 @@
                     "description": "This dictionary contains the material information of the collar region."
                 },
                 "iron_yoke": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolveSpecificMaterial"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolveSpecificMaterial",
                     "default": {
                         "material": null,
                         "RRR": null,
@@ -11928,11 +11419,7 @@
                     "description": "This dictionary contains the material information of the iron yoke region."
                 },
                 "poles": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolveSpecificMaterial"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolveSpecificMaterial",
                     "default": {
                         "material": null,
                         "RRR": null,
@@ -12260,11 +11747,7 @@
             "description": "Level 3: Class for FiQuS Multipole",
             "properties": {
                 "non_linear_solver": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolveNonLinearSolver"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolveNonLinearSolver",
                     "default": {
                         "rel_tolerance": 0.0001,
                         "abs_tolerance": 0.1,
@@ -12559,11 +12042,7 @@
             "description": "Level 3: Class for FiQuS Multipole",
             "properties": {
                 "block_to_block": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolveInsulationBlockToBlock"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolveInsulationBlockToBlock",
                     "default": {
                         "material": null,
                         "blocks_connection_overwrite": [],
@@ -12816,11 +12295,7 @@
             "description": "Level 3: Class for FiQuS Multipole",
             "properties": {
                 "non_linear_solver": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolveNonLinearSolver"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolveNonLinearSolver",
                     "default": {
                         "rel_tolerance": 0.0001,
                         "abs_tolerance": 0.1,
@@ -12874,11 +12349,7 @@
                     "description": "This dictionary contains the information about the materials and thicknesses of the insulation regions modeled via thin-shell approximation."
                 },
                 "He_cooling": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolveHeCooling"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolveHeCooling",
                     "default": {
                         "enabled": false,
                         "sides": "outer",
@@ -12887,11 +12358,7 @@
                     "description": "This dictionary contains the information about the Robin boundary condition for generic groups of boundaries."
                 },
                 "collar_cooling": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipleSolveCollarHeCooling"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipleSolveCollarHeCooling",
                     "default": {
                         "enabled": false,
                         "which": "all",
@@ -12918,11 +12385,7 @@
                     "description": "This dictionary contains the information about boundary conditions for explicitly specified boundaries."
                 },
                 "time_stepping": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/MultipoleSolveTransientThermal"
-                        }
-                    ],
+                    "$ref": "#/$defs/MultipoleSolveTransientThermal",
                     "default": {
                         "initial_time": 0.0,
                         "final_time": 0.0,
@@ -13549,7 +13012,8 @@
             "properties": {
                 "type": {
                     "const": "Nb3Sn_HFM",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "Tc0_Nb3Sn_HFM": {
                     "oneOf": [
@@ -13647,44 +13111,29 @@
             "properties": {
                 "type": {
                     "const": "Pancake3D",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "geometry": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DGeometry"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DGeometry",
                     "default": null,
                     "description": "This dictionary contains the geometry information.",
                     "title": "Geometry"
                 },
                 "mesh": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DMesh"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DMesh",
                     "default": null,
                     "description": "This dictionary contains the mesh information.",
                     "title": "Mesh"
                 },
                 "solve": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DSolve"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DSolve",
                     "default": null,
                     "description": "This dictionary contains the solve information.",
                     "title": "Solve"
                 },
                 "postproc": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DPostprocess"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DPostprocess",
                     "default": {
                         "timeSeriesPlots": null,
                         "magneticFieldOnCutPlane": null
@@ -13722,34 +13171,22 @@
                 },
                 "gapBetweenPancakes": {
                     "description": "Gap distance between the pancake coils.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Gap Between Pancakes",
                     "type": "number"
                 },
                 "winding": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DGeometryWinding"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DGeometryWinding",
                     "description": "This dictionary contains the winding geometry information.",
                     "title": "Winding Geometry"
                 },
                 "contactLayer": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DGeometryContactLayer"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DGeometryContactLayer",
                     "description": "This dictionary contains the contact layer geometry information.",
                     "title": "Contact Layer Geometry"
                 },
                 "terminals": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DGeometryTerminals"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DGeometryTerminals",
                     "description": "This dictionary contains the terminals geometry information.",
                     "title": "Terminals Geometry"
                 },
@@ -13775,7 +13212,7 @@
                 "dimensionTolerance": {
                     "default": 1e-08,
                     "description": "dimension tolerance (CAD related, not physical)",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Dimensiontolerance",
                     "type": "number"
                 },
@@ -13807,7 +13244,7 @@
             "properties": {
                 "axialMargin": {
                     "description": "Axial margin between the ends of the air and first/last pancake coils.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Axial Margin of the Air",
                     "type": "number"
                 },
@@ -13863,12 +13300,13 @@
                 "type": {
                     "const": "cuboid",
                     "default": "cuboid",
-                    "title": "Air Type"
+                    "title": "Air Type",
+                    "type": "string"
                 },
                 "sideLength": {
                     "default": null,
                     "description": "Side length of the air (for cuboid type air).",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Air Side Length",
                     "type": "number"
                 }
@@ -13883,7 +13321,7 @@
             "properties": {
                 "axialMargin": {
                     "description": "Axial margin between the ends of the air and first/last pancake coils.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Axial Margin of the Air",
                     "type": "number"
                 },
@@ -13939,12 +13377,13 @@
                 "type": {
                     "const": "cylinder",
                     "default": "cylinder",
-                    "title": "Air Type"
+                    "title": "Air Type",
+                    "type": "string"
                 },
                 "radius": {
                     "default": null,
                     "description": "Radius of the air (for cylinder type air).",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Air Radius",
                     "type": "number"
                 }
@@ -13964,7 +13403,7 @@
                 },
                 "thickness": {
                     "description": "Thickness of the contact layer.It is the total thickness of the contact or insulation layer.In particular, for perfect insulation this would be the sum of the insulation layer of the two adjacent CC with an insulation layer of thickness t/2 on each side.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Contact Layer Thickness",
                     "type": "number"
                 },
@@ -13989,7 +13428,7 @@
             "properties": {
                 "thickness": {
                     "description": "Thickness of the terminal's tube.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Terminal Thickness",
                     "type": "number"
                 },
@@ -14014,7 +13453,7 @@
             "properties": {
                 "thickness": {
                     "description": "Thickness of the terminal's tube.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Terminal Thickness",
                     "type": "number"
                 },
@@ -14067,25 +13506,25 @@
             "properties": {
                 "innerRadius": {
                     "description": "Inner radius of the winding.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Inner Radius",
                     "type": "number"
                 },
                 "thickness": {
                     "description": "Thickness of the winding.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Winding Thickness",
                     "type": "number"
                 },
                 "numberOfTurns": {
                     "description": "Number of turns of the winding.",
-                    "minimum": 3.0,
+                    "minimum": 3,
                     "title": "Number of Turns",
                     "type": "number"
                 },
                 "height": {
                     "description": "Height/width of the winding.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Winding Height",
                     "type": "number"
                 },
@@ -14119,29 +13558,17 @@
         "Pancake3DMesh": {
             "properties": {
                 "winding": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DMeshWinding"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DMeshWinding",
                     "description": "This dictionary contains the winding mesh information.",
                     "title": "Winding Mesh"
                 },
                 "contactLayer": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DMeshContactLayer"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DMeshContactLayer",
                     "description": "This dictionary contains the contact layer mesh information.",
                     "title": "Contact Layer Mesh"
                 },
                 "terminals": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DMeshAirAndTerminals"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DMeshAirAndTerminals",
                     "default": {
                         "structured": false,
                         "radialElementSize": 1.0
@@ -14150,11 +13577,7 @@
                     "title": "Terminal Mesh"
                 },
                 "air": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DMeshAirAndTerminals"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DMeshAirAndTerminals",
                     "default": {
                         "structured": false,
                         "radialElementSize": 1.0
@@ -14170,13 +13593,13 @@
                 },
                 "minimumElementSize": {
                     "description": "The minimum mesh element size in terms of the largest mesh size in the winding. This mesh size will be used in the regions close the the winding, and then the mesh size will increate to maximum mesh element size as it gets away from the winding.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Minimum Element Size",
                     "type": "number"
                 },
                 "maximumElementSize": {
                     "description": "The maximum mesh element size in terms of the largest mesh size in the winding. This mesh size will be used in the regions close the the winding, and then the mesh size will increate to maximum mesh element size as it gets away from the winding.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Maximum Element Size",
                     "type": "number"
                 }
@@ -14201,7 +13624,7 @@
                 "radialElementSize": {
                     "default": 1,
                     "description": "If structured mesh is used, the radial element size can be set. It is the radial element size in terms of the winding's radial element size.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Radial Element Size",
                     "type": "number"
                 }
@@ -14284,13 +13707,13 @@
                     "oneOf": [
                         {
                             "items": {
-                                "exclusiveMinimum": 0.0,
+                                "exclusiveMinimum": 0,
                                 "type": "number"
                             },
                             "type": "array"
                         },
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         }
                     ],
@@ -14656,54 +14079,35 @@
                     "title": "Nonlinear Solver Settings"
                 },
                 "winding": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DSolveWindingMaterial"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DSolveWindingMaterial",
                     "description": "This dictionary contains the winding material properties.",
                     "title": "Winding Properties"
                 },
                 "contactLayer": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DSolveContactLayerMaterial"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DSolveContactLayerMaterial",
                     "description": "This dictionary contains the contact layer material properties.",
                     "title": "Contact Layer Properties"
                 },
                 "terminals": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DSolveTerminalMaterialAndBoundaryCondition"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DSolveTerminalMaterialAndBoundaryCondition",
                     "description": "This dictionary contains the terminals material properties and cooling condition.",
                     "title": "Terminals Properties"
                 },
                 "air": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DSolveAir"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DSolveAir",
                     "description": "This dictionary contains the air material properties.",
                     "title": "Air Properties"
                 },
                 "initialConditions": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DSolveInitialConditions"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DSolveInitialConditions",
                     "description": "Initial conditions of the problem.",
                     "title": "Initial Conditions"
                 },
                 "boundaryConditions": {
                     "oneOf": [
                         {
-                            "const": "vanishingTangentialElectricField"
+                            "const": "vanishingTangentialElectricField",
+                            "type": "string"
                         },
                         {
                             "$ref": "#/$defs/Pancake3DSolveImposedField"
@@ -14740,11 +14144,7 @@
                     "type": "string"
                 },
                 "localDefects": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DSolveLocalDefects"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DSolveLocalDefects",
                     "default": {
                         "criticalCurrentDensity": null
                     },
@@ -14853,7 +14253,7 @@
                         }
                     ],
                     "default": {
-                        "heatTransferCoefficient": 0.0,
+                        "heatTransferCoefficient": 0,
                         "exteriorBathTemperature": 4.2
                     },
                     "description": "This dictionary contains the convective cooling settings.",
@@ -14960,19 +14360,19 @@
                 },
                 "initialStep": {
                     "description": "Initial step for adaptive time stepping",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Initial Step for Adaptive Time Stepping",
                     "type": "number"
                 },
                 "minimumStep": {
                     "description": "The simulation will be aborted if a finer time step is required than this minimum step value.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Minimum Step for Adaptive Time Stepping",
                     "type": "number"
                 },
                 "maximumStep": {
                     "description": "Bigger steps than this won't be allowed",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Maximumstep",
                     "type": "number"
                 },
@@ -15015,7 +14415,7 @@
             "properties": {
                 "permeability": {
                     "description": "Permeability of air.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Permeability of Air",
                     "type": "number"
                 }
@@ -15031,11 +14431,12 @@
                 "resistivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
-                            "const": "perfectlyInsulating"
+                            "const": "perfectlyInsulating",
+                            "type": "string"
                         }
                     ],
                     "default": null,
@@ -15045,7 +14446,7 @@
                 "thermalConductivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -15059,7 +14460,7 @@
                 "specificHeatCapacity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -15099,11 +14500,12 @@
                 "heatTransferCoefficient": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
-                            "const": "nitrogenBath"
+                            "const": "nitrogenBath",
+                            "type": "string"
                         },
                         {
                             "type": "null"
@@ -15116,7 +14518,7 @@
                 "exteriorBathTemperature": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -15136,7 +14538,7 @@
                 "inductanceInSeriesWithPancakeCoil": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -15156,7 +14558,7 @@
                 "ResistanceEnergyExtractionOpenSwitch": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -15170,7 +14572,7 @@
                 "ResistanceEnergyExtractionClosedSwitch": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -15184,7 +14586,7 @@
                 "ResistanceCrowbarOpenSwitch": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -15198,7 +14600,7 @@
                 "ResistanceCrowbarClosedSwitch": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -15212,7 +14614,7 @@
                 "stopSimulationAtCurrent": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -15226,7 +14628,7 @@
                 "stopSimulationWaitingTime": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -15240,7 +14642,7 @@
                 "TurnOffDeltaTimePowerSupply": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -15259,19 +14661,19 @@
             "properties": {
                 "startTime": {
                     "description": "Start time of the interval.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Start Time of the Interval",
                     "type": "number"
                 },
                 "endTime": {
                     "description": "End time of the interval.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "End Time of the Interval",
                     "type": "number"
                 },
                 "step": {
                     "description": "Time step for the interval",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Step for the Interval",
                     "type": "number"
                 }
@@ -15288,7 +14690,7 @@
             "properties": {
                 "step": {
                     "description": "Time step for fixed time stepping.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Step for Fixed Time Stepping",
                     "type": "number"
                 }
@@ -15317,20 +14719,20 @@
                 "RRR": {
                     "default": 100,
                     "description": "Residual-resistivity ratio (also known as Residual-resistance ratio or just RRR) is the ratio of the resistivity of a material at reference temperature and at 0 K.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Residual Resistance Ratio",
                     "type": "number"
                 },
                 "RRRRefTemp": {
                     "default": 295,
                     "description": "Reference temperature for residual resistance ratio",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Residual Resistance Ratio Reference Temperature",
                     "type": "number"
                 },
                 "relativeThickness": {
                     "description": "Winding tapes generally consist of more than one material. Therefore, when materials are given as a list in winding, their relative thickness, (thickness of the material) / (thickness of the bare conductor), should be specified.",
-                    "maximum": 1.0,
+                    "maximum": 1,
                     "title": "Relative Thickness (only for winding)",
                     "type": "number"
                 }
@@ -15361,22 +14763,22 @@
                 "RRR": {
                     "default": 100,
                     "description": "Residual-resistivity ratio (also known as Residual-resistance ratio or just RRR) is the ratio of the resistivity of a material at reference temperature and at 0 K.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Residual Resistance Ratio",
                     "type": "number"
                 },
                 "RRRRefTemp": {
                     "default": 295,
                     "description": "Reference temperature for residual resistance ratio",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Residual Resistance Ratio Reference Temperature",
                     "type": "number"
                 },
                 "relativeHeight": {
                     "default": 0.0,
                     "description": "HTS 2G coated conductor are typically plated, usually  using copper. The relative height of the shunt layer is the  width of the shunt layer divided by the width of the tape.  0 means no shunt layer.",
-                    "maximum": 1.0,
-                    "minimum": 0.0,
+                    "maximum": 1,
+                    "minimum": 0,
                     "title": "Relative Height of the Shunt Layer",
                     "type": "number"
                 }
@@ -15398,28 +14800,28 @@
                 "RRR": {
                     "default": 100,
                     "description": "Residual-resistivity ratio (also known as Residual-resistance ratio or just RRR) is the ratio of the resistivity of a material at reference temperature and at 0 K.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Residual Resistance Ratio",
                     "type": "number"
                 },
                 "RRRRefTemp": {
                     "default": 295,
                     "description": "Reference temperature for residual resistance ratio",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Residual Resistance Ratio Reference Temperature",
                     "type": "number"
                 },
                 "nValue": {
                     "default": 30,
                     "description": "N-value for E-J power law.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Nvalue",
                     "type": "number"
                 },
                 "IcAtTAndBref": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -15439,41 +14841,41 @@
                 "electricFieldCriterion": {
                     "default": 0.0001,
                     "description": "The electric field that defines the critical current density, i.e., the electric field at which the current density reaches the critical current density.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Electric Field Criterion",
                     "type": "number"
                 },
                 "jCriticalScalingNormalToWinding": {
                     "default": 1,
                     "description": "Critical current scaling normal to winding, i.e., along the c_axis.  We have Jc_cAxis = scalingFactor * Jc_abPlane. A factor of 1 means no scaling such that the HTS layer is isotropic.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Critical Current Scaling Normal to Winding",
                     "type": "number"
                 },
                 "IcReferenceTemperature": {
                     "default": 77,
                     "description": "Critical current reference temperature in Kelvin.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Critical Current Reference Temperature",
                     "type": "number"
                 },
                 "IcReferenceBmagnitude": {
                     "default": 0.0,
                     "description": "Critical current reference magnetic field magnitude in Tesla.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Critical Current Reference Magnetic Field Magnitude",
                     "type": "number"
                 },
                 "IcReferenceBangle": {
                     "default": 90.0,
                     "description": "Critical current reference magnetic field angle in degrees.0 degrees means the magnetic field is normal to the tape's wide surfaceand 90 degrees means the magnetic field is parallel to the tape's widesurface.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Critical Current Reference Magnetic Field Angle",
                     "type": "number"
                 },
                 "relativeThickness": {
                     "description": "Winding tapes generally consist of more than one material. Therefore, when materials are given as a list in winding, their relative thickness, (thickness of the material) / (thickness of the bare conductor), should be specified.",
-                    "maximum": 1.0,
+                    "maximum": 1,
                     "title": "Relative Thickness (only for winding)",
                     "type": "number"
                 }
@@ -15564,7 +14966,7 @@
             "properties": {
                 "temperature": {
                     "description": "Initial temperature of the pancake coils.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Initial Temperature",
                     "type": "number"
                 }
@@ -15579,32 +14981,32 @@
             "properties": {
                 "value": {
                     "description": "Value of the local defect.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Value",
                     "type": "number"
                 },
                 "startTurn": {
                     "description": "Start turn of the local defect.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Start Turn",
                     "type": "number"
                 },
                 "endTurn": {
                     "description": "End turn of the local defect.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "End Turn",
                     "type": "number"
                 },
                 "startTime": {
                     "description": "Start time of the local defect.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Start Time",
                     "type": "number"
                 },
                 "transitionDuration": {
                     "default": 0,
                     "description": "Transition duration of the local defect. If not given, the transition will be instantly.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Transition Duration",
                     "type": "number"
                 },
@@ -15656,7 +15058,7 @@
                 "resistivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -15670,7 +15072,7 @@
                 "thermalConductivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -15684,7 +15086,7 @@
                 "specificHeatCapacity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -15775,7 +15177,7 @@
                 "relaxationFactor": {
                     "default": 0.7,
                     "description": "Calculated step changes of the solution vector will be multiplied with this value for better convergence.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Relaxation Factor",
                     "type": "number"
                 }
@@ -15804,14 +15206,14 @@
                 "RRR": {
                     "default": 100,
                     "description": "Residual-resistivity ratio (also known as Residual-resistance ratio or just RRR) is the ratio of the resistivity of a material at reference temperature and at 0 K.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Residual Resistance Ratio",
                     "type": "number"
                 },
                 "RRRRefTemp": {
                     "default": 295,
                     "description": "Reference temperature for residual resistance ratio",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Residual Resistance Ratio Reference Temperature",
                     "type": "number"
                 }
@@ -15854,13 +15256,13 @@
                 },
                 "relative": {
                     "description": "Relative tolerance for the quantity.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Relative Tolerance",
                     "type": "number"
                 },
                 "absolute": {
                     "description": "Absolute tolerance for the quantity",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Absolute Tolerance",
                     "type": "number"
                 },
@@ -15916,13 +15318,13 @@
                 },
                 "relative": {
                     "description": "Relative tolerance for the quantity.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Relative Tolerance",
                     "type": "number"
                 },
                 "absolute": {
                     "description": "Absolute tolerance for the quantity",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Absolute Tolerance",
                     "type": "number"
                 },
@@ -15966,7 +15368,7 @@
                 "power": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -15980,7 +15382,7 @@
                 "startTime": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -15994,7 +15396,7 @@
                 "endTime": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -16008,7 +15410,7 @@
                 "startArcLength": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -16022,7 +15424,7 @@
                 "endArcLength": {
                     "oneOf": [
                         {
-                            "minimum": 0.0,
+                            "minimum": 0,
                             "type": "number"
                         },
                         {
@@ -16111,7 +15513,7 @@
                 "resistivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16125,7 +15527,7 @@
                 "thermalConductivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16139,7 +15541,7 @@
                 "specificHeatCapacity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16189,7 +15591,7 @@
                 "resistivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16203,7 +15605,7 @@
                 "thermalConductivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16217,7 +15619,7 @@
                 "specificHeatCapacity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16293,20 +15695,12 @@
                     "title": "Cryocooler Boundary Condition"
                 },
                 "transitionNotch": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DSolveMaterial"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DSolveMaterial",
                     "description": "Material properties of the transition notch volume.",
                     "title": "Transition Notch Properties"
                 },
                 "terminalContactLayer": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DSolveMaterial"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DSolveMaterial",
                     "description": "Material properties of the transition layer between terminals and windings.",
                     "title": "Transition Layer Properties"
                 }
@@ -16345,14 +15739,11 @@
                 "timeSteppingType": {
                     "const": "adaptive",
                     "default": "adaptive",
-                    "title": "Timesteppingtype"
+                    "title": "Timesteppingtype",
+                    "type": "string"
                 },
                 "adaptiveSteppingSettings": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DSolveAdaptiveTimeLoopSettings"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DSolveAdaptiveTimeLoopSettings",
                     "description": "Adaptive time loop settings (only used if stepping type is adaptive).",
                     "title": "Adaptive Time Loop Settings"
                 }
@@ -16392,7 +15783,8 @@
                 "timeSteppingType": {
                     "const": "fixed",
                     "default": "fixed",
-                    "title": "Timesteppingtype"
+                    "title": "Timesteppingtype",
+                    "type": "string"
                 },
                 "fixedSteppingSettings": {
                     "oneOf": [
@@ -16423,7 +15815,7 @@
                 "resistivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16437,7 +15829,7 @@
                 "thermalConductivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16451,7 +15843,7 @@
                 "specificHeatCapacity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16501,11 +15893,7 @@
                     "title": "Materials of HTS CC"
                 },
                 "shuntLayer": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DSolveShuntLayerMaterial"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DSolveShuntLayerMaterial",
                     "default": {
                         "resistivity": null,
                         "thermalConductivity": null,
@@ -16548,14 +15936,14 @@
                 "minimumPossibleResistivity": {
                     "default": 1e-20,
                     "description": "The resistivity of the winding won't be lower than this value, no matter what.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Minimum Possible Resistivity",
                     "type": "number"
                 },
                 "maximumPossibleResistivity": {
                     "default": 0.01,
                     "description": "The resistivity of the winding won't be higher than this value, no matter what.",
-                    "exclusiveMinimum": 0.0,
+                    "exclusiveMinimum": 0,
                     "title": "Maximum Possible Resistivity",
                     "type": "number"
                 }
@@ -16568,23 +15956,19 @@
                 "coolingPowerMultiplier": {
                     "default": 1,
                     "description": "Multiplier for the cooling power. It can be used to scale the cooling power given by the coldhead capacity map by a non-negative float factor.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Cooling Power Multiplier",
                     "type": "number"
                 },
                 "staticHeatLoadPower": {
                     "default": 0,
                     "description": "Static heat load power in W. It can be used to add a static heat load to the cryocooler, i.e., decrease the power available for cooling.  The actual cooling power is P(t) = P_cryocooler(T) - P_staticLoad.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Static Heat Load Power",
                     "type": "number"
                 },
                 "lumpedMass": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Pancake3DTerminalCryocoolerLumpedMass"
-                        }
-                    ],
+                    "$ref": "#/$defs/Pancake3DTerminalCryocoolerLumpedMass",
                     "default": {
                         "resistivity": null,
                         "thermalConductivity": null,
@@ -16621,7 +16005,7 @@
                 "resistivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16635,7 +16019,7 @@
                 "thermalConductivity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16649,7 +16033,7 @@
                 "specificHeatCapacity": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
+                            "exclusiveMinimum": 0,
                             "type": "number"
                         },
                         {
@@ -16692,7 +16076,7 @@
                 "volume": {
                     "default": 0,
                     "description": "Volume of the lumped thermal mass between second stage of the cryocooler and pancake coil in m^3. A zero value effectively disables the lumped thermal mass between second stage of the cryocooler and pancake coil.",
-                    "minimum": 0.0,
+                    "minimum": 0,
                     "title": "Cryocooler Lumped Block Volume",
                     "type": "number"
                 },
@@ -17059,7 +16443,8 @@
             "properties": {
                 "type": {
                     "const": "ProDefined",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "Tc0": {
                     "oneOf": [
@@ -17514,11 +16899,7 @@
             "description": "Level 2: Class for FiQuS",
             "properties": {
                 "energy_extraction": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/EnergyExtraction"
-                        }
-                    ],
+                    "$ref": "#/$defs/EnergyExtraction",
                     "default": {
                         "t_trigger": 99999.0,
                         "R_EE": 0.0,
@@ -17545,11 +16926,7 @@
                     }
                 },
                 "quench_heaters": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/QuenchHeater"
-                        }
-                    ],
+                    "$ref": "#/$defs/QuenchHeater",
                     "default": {
                         "N_strips": null,
                         "t_trigger": [],
@@ -17576,11 +16953,7 @@
                     }
                 },
                 "cliq": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/CLIQ_Class"
-                        }
-                    ],
+                    "$ref": "#/$defs/CLIQ_Class",
                     "default": {
                         "t_trigger": 99999.0,
                         "current_direction": [],
@@ -17594,11 +16967,7 @@
                     }
                 },
                 "esc": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/ESC_Class"
-                        }
-                    ],
+                    "$ref": "#/$defs/ESC_Class",
                     "default": {
                         "t_trigger": [],
                         "U0": [],
@@ -17611,11 +16980,7 @@
                     }
                 },
                 "e_cliq": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/E_CLIQ_Class"
-                        }
-                    ],
+                    "$ref": "#/$defs/E_CLIQ_Class",
                     "default": {
                         "t_trigger": [],
                         "R_leads": null,
@@ -17703,7 +17068,8 @@
             "properties": {
                 "type": {
                     "const": "Rectangular",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "bare_width": {
                     "oneOf": [
@@ -17831,8 +17197,8 @@
                 "minimum_jc_fraction": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
-                            "maximum": 1.0,
+                            "exclusiveMinimum": 0,
+                            "maximum": 1,
                             "type": "number"
                         },
                         {
@@ -17993,7 +17359,8 @@
             "properties": {
                 "type": {
                     "const": "Ribbon",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "n_strands": {
                     "oneOf": [
@@ -18211,7 +17578,8 @@
             "properties": {
                 "type": {
                     "const": "Round",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "fil_twist_pitch": {
                     "oneOf": [
@@ -18364,8 +17732,8 @@
                 "minimum_jc_fraction": {
                     "oneOf": [
                         {
-                            "exclusiveMinimum": 0.0,
-                            "maximum": 1.0,
+                            "exclusiveMinimum": 0,
+                            "maximum": 1,
                             "type": "number"
                         },
                         {
@@ -18656,7 +18024,8 @@
             "properties": {
                 "type": {
                     "const": "Rutherford",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "n_strands": {
                     "oneOf": [
@@ -19014,11 +18383,7 @@
             "description": "Level 2: Class for FiQuS CCT",
             "properties": {
                 "windings": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Winding_s"
-                        }
-                    ],
+                    "$ref": "#/$defs/Winding_s",
                     "default": {
                         "currents": null,
                         "sigmas": null,
@@ -19026,11 +18391,7 @@
                     }
                 },
                 "fqpls": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/FQPL_s"
-                        }
-                    ],
+                    "$ref": "#/$defs/FQPL_s",
                     "default": {
                         "currents": [],
                         "sigmas": [],
@@ -19038,22 +18399,14 @@
                     }
                 },
                 "formers": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Former_s"
-                        }
-                    ],
+                    "$ref": "#/$defs/Former_s",
                     "default": {
                         "sigmas": null,
                         "mu_rs": null
                     }
                 },
                 "air": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/Air_s"
-                        }
-                    ],
+                    "$ref": "#/$defs/Air_s",
                     "default": {
                         "sigma": null,
                         "mu_r": null
@@ -19290,11 +18643,7 @@
                     "title": "Current Amplitude"
                 },
                 "superimposed_DC": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/SolveSineSourceSuperimposedDC"
-                        }
-                    ],
+                    "$ref": "#/$defs/SolveSineSourceSuperimposedDC",
                     "default": {
                         "field_magnitude": 0.0,
                         "current_magnitude": 0.0
@@ -19479,7 +18828,8 @@
             "properties": {
                 "type": {
                     "const": "Succi_fixed",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "Jc_factor": {
                     "oneOf": [
@@ -19507,7 +18857,8 @@
             "properties": {
                 "type": {
                     "const": "Summers",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "Tc0_Summers": {
                     "oneOf": [
@@ -19557,7 +18908,8 @@
             "properties": {
                 "type": {
                     "const": "TSTC",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "stack_layout": {
                     "oneOf": [
@@ -20048,14 +19400,11 @@
             "properties": {
                 "type": {
                     "const": "HomogenizedConductor",
-                    "title": "Type"
+                    "title": "Type",
+                    "type": "string"
                 },
                 "geometry": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorGeometry"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorGeometry",
                     "default": {
                         "cables_definition": {
                             "center_position": null,
@@ -20081,11 +19430,7 @@
                     }
                 },
                 "mesh": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorMesh"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorMesh",
                     "default": {
                         "scaling_global": 1.0,
                         "air_boundary_mesh_size_ratio": 1.0,
@@ -20093,11 +19438,7 @@
                     }
                 },
                 "solve": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorSolve"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorSolve",
                     "default": {
                         "pro_template": "HomogenizedConductor_template.pro",
                         "general_parameters": {
@@ -20191,11 +19532,7 @@
                     }
                 },
                 "postproc": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorPostproc"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorPostproc",
                     "default": {
                         "generate_pos_files": true,
                         "output_folder": null,
@@ -20330,11 +19667,7 @@
                     "title": "Enabled"
                 },
                 "run_type": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/HomogenizedConductorRunType"
-                        }
-                    ],
+                    "$ref": "#/$defs/HomogenizedConductorRunType",
                     "default": {
                         "mode": "ramp",
                         "ramp_file": null
@@ -20342,11 +19675,7 @@
                     "description": "Type of simulation to run with homogenized conductors (ramp - real cooling conditions, isothermal_ramp - unlimited cooling, quench - non-zero initial conditions)"
                 },
                 "rohm": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/fiqus__data__DataFiQuSMultipole__HomogenizedConductorFormulationparametersROHM"
-                        }
-                    ],
+                    "$ref": "#/$defs/fiqus__data__DataFiQuSMultipole__HomogenizedConductorFormulationparametersROHM",
                     "default": {
                         "enabled": false,
                         "parameter_csv_file": null,
@@ -20357,11 +19686,7 @@
                     "description": "This dictionary contains the information about the parameters for the ROHM model."
                 },
                 "rohf": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/fiqus__data__DataFiQuSMultipole__HomogenizedConductorFormulationparametersROHF"
-                        }
-                    ],
+                    "$ref": "#/$defs/fiqus__data__DataFiQuSMultipole__HomogenizedConductorFormulationparametersROHF",
                     "default": {
                         "enabled": false,
                         "parameter_csv_file": null,
@@ -20495,21 +19820,13 @@
     "description": "Class for FiQuS",
     "properties": {
         "general": {
-            "allOf": [
-                {
-                    "$ref": "#/$defs/GeneralFiQuS"
-                }
-            ],
+            "$ref": "#/$defs/GeneralFiQuS",
             "default": {
                 "magnet_name": null
             }
         },
         "run": {
-            "allOf": [
-                {
-                    "$ref": "#/$defs/RunFiQuS"
-                }
-            ],
+            "$ref": "#/$defs/RunFiQuS",
             "default": {
                 "type": "start_from_yaml",
                 "geometry": null,
@@ -20915,11 +20232,7 @@
             "title": "Magnet"
         },
         "circuit": {
-            "allOf": [
-                {
-                    "$ref": "#/$defs/Circuit_Class"
-                }
-            ],
+            "$ref": "#/$defs/Circuit_Class",
             "default": {
                 "field_circuit": false,
                 "R_circuit": null,
@@ -20928,11 +20241,7 @@
             }
         },
         "power_supply": {
-            "allOf": [
-                {
-                    "$ref": "#/$defs/PowerSupplyClass"
-                }
-            ],
+            "$ref": "#/$defs/PowerSupplyClass",
             "default": {
                 "I_initial": null,
                 "t_off": null,
@@ -20954,11 +20263,7 @@
             }
         },
         "quench_protection": {
-            "allOf": [
-                {
-                    "$ref": "#/$defs/QuenchProtection"
-                }
-            ],
+            "$ref": "#/$defs/QuenchProtection",
             "default": {
                 "energy_extraction": {
                     "C": 0.0,
@@ -21060,11 +20365,7 @@
             }
         },
         "quench_detection": {
-            "allOf": [
-                {
-                    "$ref": "#/$defs/QuenchDetection"
-                }
-            ],
+            "$ref": "#/$defs/QuenchDetection",
             "default": {
                 "voltage_thresholds": null,
                 "discrimination_times": null,

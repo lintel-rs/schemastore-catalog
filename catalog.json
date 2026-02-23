@@ -32,8 +32,8 @@
     {
       "description": "Upsun configuration file",
       "fileMatch": [
-        "**/.upsun/*.yml",
-        "**/.upsun/*.yaml"
+        "**/.upsun/config.yml",
+        "**/.upsun/config.yaml"
       ],
       "name": "Upsun config",
       "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/upsun-config.json"
@@ -3339,6 +3339,16 @@
       ],
       "name": "FiQuS",
       "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/fiqus.json"
+    },
+    {
+      "description": "flatpak-builder manifest files",
+      "fileMatch": [
+        "**/*.flatpak.json",
+        "**/*.flatpak.yaml",
+        "**/*.flatpak.yml"
+      ],
+      "name": "Flatpak Builder Manifest",
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/flatpak-builder-manifest.json"
     },
     {
       "description": "FlexGet config file",
@@ -7827,6 +7837,14 @@
       ],
       "name": "Tombi",
       "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/tombi.json"
+    },
+    {
+      "description": "tox configuration for automating Python testing and task management",
+      "fileMatch": [
+        "tox.toml"
+      ],
+      "name": "tox",
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/tox.json"
     },
     {
       "description": "Language grammar description files for TextMate and compatible editors",

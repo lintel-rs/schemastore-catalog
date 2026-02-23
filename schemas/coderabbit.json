@@ -449,7 +449,7 @@
 									},
 									"maxItems": 5,
 									"default": [],
-									"description": "Custom Recipes | (Pre-Early Access) Define up to 5 custom finishing touch recipes. Trigger a recipe with `@coderabbitai run <recipe name>`."
+									"description": "Custom Recipes | Define up to 5 custom finishing touch recipes. Trigger a recipe with `@coderabbitai run <recipe name>`."
 								}
 							},
 							"additionalProperties": false,
@@ -601,7 +601,7 @@
 									},
 									"additionalProperties": false,
 									"default": {},
-									"description": "Enable ast-grep | ast-grep is a code analysis tool that helps you to find patterns in your codebase using abstract syntax trees patterns. | v0.40.5"
+									"description": "Enable ast-grep | ast-grep is a code analysis tool that helps you to find patterns in your codebase using abstract syntax trees patterns. | v0.41.0"
 								},
 								"shellcheck": {
 									"type": "object",
@@ -622,7 +622,7 @@
 										"enabled": {
 											"type": "boolean",
 											"default": true,
-											"description": "Enable Ruff | Ruff is a Python linter and code formatter. |  Enable Ruff integration. | v0.15.1"
+											"description": "Enable Ruff | Ruff is a Python linter and code formatter. |  Enable Ruff integration. | v0.15.2"
 										}
 									},
 									"additionalProperties": false,
@@ -724,7 +724,7 @@
 										"enabled": {
 											"type": "boolean",
 											"default": true,
-											"description": "Enable Biome | Biome is a fast formatter, linter, and analyzer for web projects. | Enable Biome integration. | v2.4.2"
+											"description": "Enable Biome | Biome is a fast formatter, linter, and analyzer for web projects. | Enable Biome integration. | v2.4.4"
 										}
 									},
 									"additionalProperties": false,
@@ -868,7 +868,7 @@
 										"enabled": {
 											"type": "boolean",
 											"default": true,
-											"description": "Enable TruffleHog | TruffleHog is a secret scanner with verification capabilities. | Enable TruffleHog integration. | v3.93.3"
+											"description": "Enable TruffleHog | TruffleHog is a secret scanner with verification capabilities. | Enable TruffleHog integration. | v3.93.4"
 										}
 									},
 									"additionalProperties": false,
@@ -1058,7 +1058,7 @@
 										"enabled": {
 											"type": "boolean",
 											"default": true,
-											"description": "Enable OpenGrep | OpenGrep is a high-performance static code analysis engine for finding security vulnerabilities and bugs across 17+ languages. | v1.16.0"
+											"description": "Enable OpenGrep | OpenGrep is a high-performance static code analysis engine for finding security vulnerabilities and bugs across 17+ languages. | v1.16.1"
 										}
 									},
 									"additionalProperties": false,
@@ -1071,7 +1071,7 @@
 										"enabled": {
 											"type": "boolean",
 											"default": true,
-											"description": "Enable Semgrep | Semgrep is a static analysis tool designed to scan code for security vulnerabilities and code quality issues. | Enable Semgrep integration. | v1.151.0"
+											"description": "Enable Semgrep | Semgrep is a static analysis tool designed to scan code for security vulnerabilities and code quality issues. | Enable Semgrep integration. | v1.152.0"
 										},
 										"config_file": {
 											"type": "string",
@@ -1153,7 +1153,7 @@
 										"enabled": {
 											"type": "boolean",
 											"default": true,
-											"description": "Enable Pylint | Pylint is a Python static code analysis tool. | v4.0.4"
+											"description": "Enable Pylint | Pylint is a Python static code analysis tool. | v4.0.5"
 										}
 									},
 									"additionalProperties": false,
@@ -1166,7 +1166,7 @@
 										"enabled": {
 											"type": "boolean",
 											"default": true,
-											"description": "Enable Oxlint | Oxlint is a JavaScript/TypeScript linter for OXC written in Rust. | v1.48.0"
+											"description": "Enable Oxlint | Oxlint is a JavaScript/TypeScript linter for OXC written in Rust. | v1.49.0"
 										}
 									},
 									"additionalProperties": false,

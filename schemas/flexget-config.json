@@ -6979,21 +6979,21 @@
             "items": {
               "type": "string",
               "enum": [
-                "xvid",
-                "hdser",
-                "dvdser_hun",
-                "hd",
-                "dvd_hun",
-                "dvd",
                 "xvidser",
-                "hdser_hun",
-                "dvd9",
+                "hd",
+                "dvd",
+                "dvdser_hun",
                 "dvd9_hun",
+                "xvid_hun",
+                "xvidser_hun",
+                "hdser",
+                "dvdser",
+                "dvd9",
+                "hdser_hun",
+                "xvid",
                 "hd_hun",
                 "all",
-                "xvidser_hun",
-                "dvdser",
-                "xvid_hun"
+                "dvd_hun"
               ]
             },
             "default": []
