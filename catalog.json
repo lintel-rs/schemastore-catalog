@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://json-stat.org/format/schema/2.0/"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -9113,7 +9113,7 @@
         "Taskfile.dist.yml"
       ],
       "name": "Taskfile config",
-      "url": "https://taskfile.dev/schema.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/taskfile-config.json"
     },
     {
       "description": "Taskfile configuration files",
@@ -9557,7 +9557,7 @@
         "updatecli.yaml"
       ],
       "name": "Updatecli Policy Manifest",
-      "url": "https://www.updatecli.io/schema/latest/policy/manifest/config.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-manifest.json"
     },
     {
       "description": "Updatecli Policy Metadata",
