@@ -9124,7 +9124,7 @@
         "taskrc.yml"
       ],
       "name": ".taskrc.yaml",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/taskrc-yaml.json"
+      "url": "https://taskfile.dev/schema-taskrc.json"
     },
     {
       "description": "hammerkit files",
