@@ -578,7 +578,7 @@
         "*asyncapi*.yaml"
       ],
       "name": "AsyncAPI",
-      "url": "https://www.asyncapi.com/schema-store/all.schema-store.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/asyncapi.json"
     },
     {
       "description": "A validating AsyncAPI tool files",
@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://json-stat.org/format/schema/2.0/"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -9557,7 +9557,7 @@
         "updatecli.yaml"
       ],
       "name": "Updatecli Policy Manifest",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-manifest.json"
+      "url": "https://www.updatecli.io/schema/latest/policy/manifest/config.json"
     },
     {
       "description": "Updatecli Policy Metadata",
@@ -11210,7 +11210,7 @@
         "openstatus.toml"
       ],
       "name": "OpenStatus",
-      "url": "https://github.com/openstatusHQ/json-schema/releases/download/v1.0.0/schema.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/openstatus.json"
     },
     {
       "description": "Power Pages configuration file for Bring Your Own Code (BYOC) sites",
