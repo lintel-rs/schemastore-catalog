@@ -9545,7 +9545,7 @@
         "updatecli-compose.yaml"
       ],
       "name": "Updatecli Compose",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-compose.json"
+      "url": "https://www.updatecli.io/schema/latest/compose/config.json"
     },
     {
       "description": "Updatecli Policy Manifest",
