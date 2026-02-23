@@ -1923,7 +1923,7 @@
         "**/debian/upstream/metadata"
       ],
       "name": "Debian Upstream Metadata file",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/debian-upstream-metadata-file.json"
+      "url": "https://salsa.debian.org/debian/debian-json-schemas/-/raw/main/schemas/debian-upstream-metadata/debian-upstream-metadata-latest.json"
     },
     {
       "description": "Deck is a tool for creating presentation using Markdown and Google Slides",
