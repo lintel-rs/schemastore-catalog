@@ -9113,7 +9113,7 @@
         "Taskfile.dist.yml"
       ],
       "name": "Taskfile config",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/taskfile-config.json"
+      "url": "https://taskfile.dev/schema.json"
     },
     {
       "description": "Taskfile configuration files",
@@ -9124,7 +9124,7 @@
         "taskrc.yml"
       ],
       "name": ".taskrc.yaml",
-      "url": "https://taskfile.dev/schema-taskrc.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/taskrc-yaml.json"
     },
     {
       "description": "hammerkit files",
@@ -9557,7 +9557,7 @@
         "updatecli.yaml"
       ],
       "name": "Updatecli Policy Manifest",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-policy-manifest.json"
+      "url": "https://www.updatecli.io/schema/latest/policy/manifest/config.json"
     },
     {
       "description": "Updatecli Policy Metadata",
