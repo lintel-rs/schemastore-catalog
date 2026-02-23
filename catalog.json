@@ -8463,7 +8463,7 @@
     {
       "description": "JSON-stat 2.0",
       "name": "JSON-stat 2.0",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/json-stat-2-0.json"
+      "url": "https://json-stat.org/format/schema/2.0/"
     },
     {
       "description": "The .version file format for KSP-AVC",
@@ -9545,7 +9545,7 @@
         "updatecli-compose.yaml"
       ],
       "name": "Updatecli Compose",
-      "url": "https://www.updatecli.io/schema/latest/compose/config.json"
+      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/updatecli-compose.json"
     },
     {
       "description": "Updatecli Policy Manifest",
@@ -11210,7 +11210,7 @@
         "openstatus.toml"
       ],
       "name": "OpenStatus",
-      "url": "https://raw.githubusercontent.com/lintel-rs/schemastore-catalog/main/schemas/openstatus.json"
+      "url": "https://github.com/openstatusHQ/json-schema/releases/download/v1.0.0/schema.json"
     },
     {
       "description": "Power Pages configuration file for Bring Your Own Code (BYOC) sites",
